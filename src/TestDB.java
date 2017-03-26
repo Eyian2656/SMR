@@ -6,6 +6,7 @@ import java.util.List;
 import logic.SchemaComparator;
 import logic.SchemaCrawler;
 import model.Column;
+import model.Difference;
 
 public class TestDB {
 
@@ -19,7 +20,7 @@ public class TestDB {
 
 		SchemaCrawler crawler = new SchemaCrawler();
 		SchemaComparator comparator = new SchemaComparator();
-
+		
 		List<String> toBeCheckedTable = new ArrayList<String>();
 		toBeCheckedTable.add("ATTRIBUT");
 		toBeCheckedTable.add("KANTENTYP");
@@ -42,7 +43,7 @@ public class TestDB {
 				List<Column> attributColumn = crawler.crawlColumns(conn1, string);
 				List<Column> attributColumn2 = crawler.crawlColumns(conn2, string);
 
-				comparator.differColumn(attributColumn, attributColumn2);
+				List<Difference> differColumn = comparator.differColumn(attributColumn, attributColumn2);
 				System.out.println("=============================");
 			}
 

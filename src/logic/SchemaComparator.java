@@ -1,34 +1,44 @@
 package logic;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.Diff;
 
 import model.Column;
+import model.Difference;
 
 public class SchemaComparator {
 
 	// Iterate
-	public void differColumn(List<Column> cols1, List<Column> cols2) throws SQLException {
+	public List<Difference> differColumn(List<Column> colsOld, List<Column> colsNew) throws SQLException {
+		List<Difference> diffs = new ArrayList<Difference>();
+
+		Difference a = new Difference();
+		
 		// Check the size
-		if (cols1.size() != cols2.size()) {
+		if (colsOld.size() != colsNew.size()) {
+			a.setTyp("SIZE_OF_COLUMN");
 			System.out.println("Different size of column");
 		}
 
 		// Check the same type & size
-		for (Column column : cols1) {
-			Column toBeCompared = findByName(cols2, column.getName());
+		for (Column column : colsOld) {
+			Column toBeCompared = findByName(colsNew, column.getName());
+			// Wenn die column nicht gefunden in der neuen Tabelle
 			if (toBeCompared == null) {
+				Difference diff = new Difference();
 				System.out.println("Column " + column.getName() + " could not be found in the second table");
 				System.out.println("Now looking for the nearest similarity");
-				Column similarColumn = findTheLowestDifference(cols2, column.getName());
+				Column similarColumn = findTheLowestDifference(colsNew, column.getName());
 				if (similarColumn != null) {
 					// TODO Check if the column is in the old table.
-					Column similarColumnInOldTable = findByName(cols1, similarColumn.getName());
-					if(similarColumnInOldTable != null){
+					Column similarColumnInOldTable = findByName(colsOld, similarColumn.getName());
+					if (similarColumnInOldTable != null) {
 						System.out.println("It is possible that the column is dropped");
-					} else{
+					} else {
 						System.out.println("Found similar column with name " + similarColumn.getName());
 					}
 				}
@@ -44,6 +54,7 @@ public class SchemaComparator {
 				}
 			}
 		}
+		return diffs;
 	}
 
 	protected Column findByName(List<Column> columns, String columnName) {
