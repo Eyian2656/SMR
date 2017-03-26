@@ -7,9 +7,9 @@ import java.sql.*;
  *
  */
 public class AccessV1DB {
-	private static final String URL = "jdbc:oracle:thin:@//localhost:1521/xe";
-	private static final String USER = "IAN_OLD_EPOSDB";
-	private static final String PASSWORT = "EPOSDev";
+	private static final String URL = "jdbc:oracle:thin:@xe";
+	private static final String USER = "xerath";
+	private static final String PASSWORT = "123";
 	private Connection connection;
 	private boolean connected;
 
@@ -27,6 +27,8 @@ public class AccessV1DB {
 	}
 
 	public boolean connect() {
+	    System.setProperty("oracle.net.tns_admin", "C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
+
 		connected = false;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -41,6 +43,10 @@ public class AccessV1DB {
 		}
 		System.out.println("DB 1 ist verbunden = " + connected);
 		return connected;
+	}
+	
+	public Connection getConnection() {
+		return this.connection;
 	}
 
 	public ResultSet executeQuery(String query) throws SQLException {
