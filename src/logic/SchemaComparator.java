@@ -25,7 +25,12 @@ public class SchemaComparator {
 				Column similarColumn = findTheLowestDifference(cols2, column.getName());
 				if (similarColumn != null) {
 					// TODO Check if the column is in the old table.
-					System.out.println("Found similar column with name " + similarColumn.getName());
+					Column similarColumnInOldTable = findByName(cols1, similarColumn.getName());
+					if(similarColumnInOldTable != null){
+						System.out.println("It is possible that the column is dropped");
+					} else{
+						System.out.println("Found similar column with name " + similarColumn.getName());
+					}
 				}
 			} else {
 				if (!StringUtils.equals(column.getType(), toBeCompared.getType())) {
