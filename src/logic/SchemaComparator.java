@@ -17,7 +17,6 @@ public class SchemaComparator {
 		List<Difference> diffs = new ArrayList<Difference>();
 		return diffs;
 	}
-
 	
 /**
  * Diese Funktion überprüft ob eine Spalte zuviel ist und löscht dieses anschließend
@@ -60,7 +59,7 @@ public class SchemaComparator {
 				// hier kommt die Funktion zum hinzufügen des Namens oder eine
 				// Übergabe des Columns als String um diese ins Skript zu
 				// schreiben
-				System.out.println("Die anzuhängende Spalte ist: " + columnNameNew.getName());
+				System.out.println("Die anzuhängende Spalte ist: " + columnNameNew.getName()+ " Mit dem Datentyp" + columnNameNew.getType());
 			}
 		}
 	}
@@ -103,7 +102,7 @@ public class SchemaComparator {
 				}
 			}
 			if (nullableWrong == true) {
-				// hier muss der columnName geholt werden und an der stelle den Datatyp geändert werden müssen
+				// der boolean check muss richtige gesetzt werden je nach dem soll die funktion nullable oder nciht nullabel sein
 				System.out.println("Typ von: " + columnNullableOld.getName() + "muss zu"+ changeTo + "geändert werden");
 			}
 		}
