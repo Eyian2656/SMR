@@ -9,9 +9,9 @@ import java.sql.*;
  *
  */
 public class AccessV2DB {
-	private static final String URL = "jdbc:oracle:thin:@xe";
-	private static final String USER = "paul";
-	private static final String PASSWORT = "123";
+	private static final String URL = "jdbc:oracle:thin:@//localhost:1521/xe";
+	private static final String USER = "IAN_NEW_EPOSDB";
+	private static final String PASSWORT = "EPOSDev";
 	private Connection connection;
 	private boolean connected;
 

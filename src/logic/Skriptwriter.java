@@ -18,7 +18,7 @@ public class Skriptwriter {
 	}
 	//TODO die Syso wegmachen , else statment löschen 
 	public void findSkript() throws IOException{
-		Path path = Paths.get("C:/Users/Ian/Test/file.sql");
+		Path path = Paths.get("C:/Users/Dev/Abschlussprüfung Ian/file.sql");
 		if(Files.notExists(path)){
 			this.createScript();
 		}
@@ -28,7 +28,7 @@ public class Skriptwriter {
 	}
 	
 	public void createScript() throws IOException {
-		File file = new File("C:/Users/Ian/Test/file.sql");
+		File file = new File("C:/Users/Dev/Abschlussprüfung Ian/file.sql");
 		file.createNewFile();
 		System.out.println("File wurde erstellt");
 	}

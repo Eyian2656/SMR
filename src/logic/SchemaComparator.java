@@ -3,9 +3,7 @@ package logic;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.Diff;
 
 import model.Column;
 import model.Difference;
@@ -15,6 +13,13 @@ public class SchemaComparator {
 	// Iterate
 	public List<Difference> differColumn(List<Column> columnOld, List<Column> columnNew) throws SQLException {
 		List<Difference> diffs = new ArrayList<Difference>();
+		
+		unwantedColumn(columnOld, columnNew);
+		missingColumn(columnOld, columnNew);
+		wrongDatatyp(columnOld, columnNew);
+		nullable(columnOld, columnNew);
+		
+		
 		return diffs;
 	}
 	
@@ -59,58 +64,49 @@ public class SchemaComparator {
 				// hier kommt die Funktion zum hinzufügen des Namens oder eine
 				// Übergabe des Columns als String um diese ins Skript zu
 				// schreiben
-				System.out.println("Die anzuhängende Spalte ist: " + columnNameNew.getName()+ " Mit dem Datentyp" + columnNameNew.getType());
+				System.out.println("Die anzuhängende Spalte ist: " + columnNameNew.getName()+ " Mit dem Datentyp " + columnNameNew.getType() + " " + columnNameNew.getSize());
 			}
 		}
 	}
 	
-	protected void wrongDatatyp(List<Column> datatypOld, List<Column> datatypNew) {
-		boolean datatypWrong = false;
-		String changeTo = "";
-		
-		for (Column columnDatatypOld : datatypOld) {
-			
-			for (Column columnDatatypNew : datatypNew) {
-				if (StringUtils.equals(columnDatatypOld.getType(), columnDatatypNew.getType())) {
-					datatypWrong = false;
+	protected void wrongDatatyp(List<Column> columnOld, List<Column> columnNew) {
+		for (Column columnNameOld : columnOld) {
+			for (Column columnNameNew : columnNew) {
+				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
+					if (!StringUtils.equals(columnNameNew.getType(), columnNameOld.getType()) || (columnNameNew.getSize()!= columnNameOld.getSize())) {
+						// hier muss der columnName geholt werden und an der
+						// stelle den Datatyp geändert werden müssen
+						System.out.println("Typ von: " + columnNameOld.getName() + " muss zu " + columnNameNew.getType() + " mit der Größe " +columnNameNew.getSize()
+								+ " geändert werden");
+						break;
+					}
 					break;
-				} else {
-					datatypWrong = true;
-					changeTo = columnDatatypNew.getType();
 				}
 			}
-			if (datatypWrong == true) {
-				// hier muss der columnName geholt werden und an der stelle den Datatyp geändert werden müssen
-				System.out.println("Typ von: " + columnDatatypOld.getName() + "muss zu"+ changeTo + "geändert werden");
-			}
+
 		}
 	}
-	
-	protected void nullable(List<Column> nullableOld, List<Column> nullableNew) {
-		boolean nullableWrong = false;
-		boolean changeTo = false;
-		
-		for (Column columnNullableOld : nullableOld) {
-			
-			for (Column columnNullableNew : nullableNew) {
-				if (columnNullableOld.isNullable() == columnNullableNew.isNullable()) {
-					nullableWrong = false;
+
+	protected void nullable(List<Column> columnOld, List<Column> columnNew) {
+
+		for (Column columnNameOld : columnOld) {
+			for (Column columnNameNew : columnNew) {
+				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
+					if (columnNameNew.isNullable() != columnNameOld.isNullable()) {
+						// der boolean check muss richtige gesetzt werden je nach dem soll die funktion nullable oder nciht nullabel sein
+						System.out.println("Typ von: " + columnNameNew.getName() + "muss zu "+ columnNameNew.isNullable() + " geändert werden ");
+						break;
+					}
 					break;
-				} else {
-					nullableWrong = true;
-					changeTo = columnNullableNew.isNullable();
 				}
 			}
-			if (nullableWrong == true) {
-				// der boolean check muss richtige gesetzt werden je nach dem soll die funktion nullable oder nciht nullabel sein
-				System.out.println("Typ von: " + columnNullableOld.getName() + "muss zu"+ changeTo + "geändert werden");
-			}
+
 		}
 	}
-	
-	
-	
 }
+	
+	
+	
 
 
 //Difference a = new Difference();	

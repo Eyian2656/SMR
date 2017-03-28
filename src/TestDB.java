@@ -6,7 +6,7 @@ import java.util.List;
 import logic.SchemaComparator;
 import logic.SchemaCrawler;
 import model.Column;
-import model.Difference;
+
 
 public class TestDB {
 
@@ -35,6 +35,7 @@ public class TestDB {
 		toBeCheckedTable.add("PANEL2ATTRIBUT");
 		toBeCheckedTable.add("PANEL2PANEL");
 		toBeCheckedTable.add("PANEL2ABATTRIBUT");
+		toBeCheckedTable.add("TABELLENATTRIBUT");
 
 		try {
 			for (String string : toBeCheckedTable) {
@@ -43,7 +44,7 @@ public class TestDB {
 				List<Column> attributColumn = crawler.crawlColumns(conn1, string);
 				List<Column> attributColumn2 = crawler.crawlColumns(conn2, string);
 
-				List<Difference> differColumn = comparator.differColumn(attributColumn, attributColumn2);
+		 comparator.differColumn(attributColumn, attributColumn2);
 				System.out.println("=============================");
 			}
 
