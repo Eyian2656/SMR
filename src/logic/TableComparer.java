@@ -1,40 +1,54 @@
 package logic;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 import model.Column;
+import model.Data;
 import model.Difference;
 
-public class SchemaComparator {
+public class TableComparer {
 
+	public String tablename; 
+	
 	// Iterate
-	public List<Difference> differColumn(List<Column> columnOld, List<Column> columnNew) throws SQLException {
-		List<Difference> diffs = new ArrayList<Difference>();
+	public Data differColumn(List<Column> columnOld, List<Column> columnNew, Connection conn, String tableName) throws SQLException {
+
+		tablename = tableName;
+		Data datamodel = new Data();
 		
-		unwantedColumn(columnOld, columnNew);
-		missingColumn(columnOld, columnNew);
-		wrongDatatyp(columnOld, columnNew);
-		nullable(columnOld, columnNew);
+		datamodel = unwantedColumn(columnOld, columnNew);
+//		missingColumn(columnOld, columnNew);
+//		wrongDatatypSize(columnOld, columnNew);
+//		nullable(columnOld, columnNew);
 		
 		
-		return diffs;
+		return datamodel;
 	}
 	
 /**
  * Diese Funktion überprüft ob eine Spalte zuviel ist und löscht dieses anschließend
  * @param columnOld
  * @param columnNew
+ * @throws SQLException 
  */
-	protected void unwantedColumn(List<Column> columnOld, List<Column> columnNew) {
+	protected Data unwantedColumn(List<Column> columnOld, List<Column> columnNew) {
 		boolean columnNotThere = false;
+		Data datamodel = new Data();
+		List<String> holder = new ArrayList<String>();	
 
 		for (Column columnNameOld : columnOld) {
 			for (Column columnNameNew : columnNew) {
+			
+				holder.add(columnNameNew.getName());
+				datamodel.setColumnName(holder);
+				
 				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
-					columnNotThere = false;
+					columnNotThere = false;					
 					break;
 				} else {
 					columnNotThere = true;
@@ -45,8 +59,28 @@ public class SchemaComparator {
 				System.out.println("Die zu löschende Spalte ist: " + columnNameOld.getName());
 			}
 		}
+
+		return datamodel;
 	}
 
+	
+	
+//	protected void infos4DataComp(List<Column> columnNew, Connection conn, String tableName ) throws SQLException {
+//		Data datamodel = new Data();
+//		DataComparer comparer = new DataComparer();
+//		List<String> holder = new ArrayList<String>();	
+//			for (Column columnNameNew : columnNew) {
+//				holder.add(columnNameNew.getName());
+//				datamodel.setColumnName(holder);
+//			}
+//			comparer.crawlData(conn, datamodel, tablename);
+//		}
+//	
+	
+	
+	
+	
+	
 	protected void missingColumn(List<Column> columnOld, List<Column> columnNew) {
 		boolean columnNotThere = false;
 		
@@ -68,15 +102,15 @@ public class SchemaComparator {
 			}
 		}
 	}
-	
-	protected void wrongDatatyp(List<Column> columnOld, List<Column> columnNew) {
+	//TODO hier muss nur die Größe veränder werden und NICHT der Datentyp noch anpassen
+	protected void wrongDatatypSize(List<Column> columnOld, List<Column> columnNew) {
 		for (Column columnNameOld : columnOld) {
 			for (Column columnNameNew : columnNew) {
 				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
 					if (!StringUtils.equals(columnNameNew.getType(), columnNameOld.getType()) || (columnNameNew.getSize()!= columnNameOld.getSize())) {
 						// hier muss der columnName geholt werden und an der
 						// stelle den Datatyp geändert werden müssen
-						System.out.println("Typ von: " + columnNameOld.getName() + " muss zu " + columnNameNew.getType() + " mit der Größe " +columnNameNew.getSize()
+						System.out.println("Typ von: " + columnNameOld.getName() + " muss zu  " + columnNameNew.getType() + " mit der Größe " +columnNameNew.getSize()
 								+ " geändert werden");
 						break;
 					}
@@ -94,7 +128,7 @@ public class SchemaComparator {
 				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
 					if (columnNameNew.isNullable() != columnNameOld.isNullable()) {
 						// der boolean check muss richtige gesetzt werden je nach dem soll die funktion nullable oder nciht nullabel sein
-						System.out.println("Typ von: " + columnNameNew.getName() + "muss zu "+ columnNameNew.isNullable() + " geändert werden ");
+						System.out.println("Typ von: " + columnNameNew.getName() + " muss zu "+ columnNameNew.isNullable() + " geändert werden ");
 						break;
 					}
 					break;

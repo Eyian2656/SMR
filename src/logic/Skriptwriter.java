@@ -9,15 +9,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Skriptwriter {
-
-
-
-
 	public Skriptwriter(){
 		
 	}
 	//TODO die Syso wegmachen , else statment löschen 
-	public void findSkript() throws IOException{
+	public void findScript() throws IOException{
 		Path path = Paths.get("C:/Users/Dev/Abschlussprüfung Ian/file.sql");
 		if(Files.notExists(path)){
 			this.createScript();
@@ -34,7 +30,7 @@ public class Skriptwriter {
 	}
 	
 	
-	public void writeScript(String skriptCmd) {
+	public void writeScript(String scriptCmd) {
 		try {
 			FileWriter outputStream = new FileWriter("C:/Users/Ian/Test/file.sql", true);
 			BufferedWriter bw = new BufferedWriter(outputStream);
@@ -42,7 +38,7 @@ public class Skriptwriter {
 			
 			bw.flush();
 			bw.write(n);
-			bw.write(skriptCmd);
+			bw.write(scriptCmd);
 			bw.close();
 			
 		} catch (IOException e) {

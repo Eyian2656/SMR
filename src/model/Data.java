@@ -1,10 +1,12 @@
 package model;
 
+import java.util.List;
+
 public class Data {
 
 	int rowNumber;
 	String data;
-	String columnName;
+	List<String> columnName;
 
 	// Getters & Setters \\
 	public int getRowNumber() {
@@ -19,10 +21,10 @@ public class Data {
 	public void setData(String data) {
 		this.data = data;
 	}
-	public String getColumnName() {
+	public List<String> getColumnName() {
 		return columnName;
 	}
-	public void setColumnName(String columnName) {
+	public void setColumnName(List<String> columnName) {
 		this.columnName = columnName;
 	}
 

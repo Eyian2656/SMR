@@ -3,9 +3,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.SchemaComparator;
+import logic.DataComparer;
 import logic.SchemaCrawler;
+import logic.TableComparer;
 import model.Column;
+import model.Data;
 
 
 public class TestDB {
@@ -19,23 +21,25 @@ public class TestDB {
 		Connection conn2 = AccessV2DB.getInstance().getConnection();
 
 		SchemaCrawler crawler = new SchemaCrawler();
-		SchemaComparator comparator = new SchemaComparator();
+		TableComparer comparator = new TableComparer();
+		Data datamodell= new Data();
+		DataComparer comparer = new DataComparer();
 		
 		List<String> toBeCheckedTable = new ArrayList<String>();
-		toBeCheckedTable.add("ATTRIBUT");
-		toBeCheckedTable.add("KANTENTYP");
-		toBeCheckedTable.add("KANTENTYP2ATTRIBUT");
-		toBeCheckedTable.add("KANTENTYP2PANEL");
-		toBeCheckedTable.add("KANTENTYP2ABATTRIBUT");
-		toBeCheckedTable.add("KNOTENTYP");
-		toBeCheckedTable.add("KNOTENTYP2ATTRIBUT");
-		toBeCheckedTable.add("KNOTENTYP2PANEL");
-		toBeCheckedTable.add("KANTENTYP2ABATTRIBUT");
+//		toBeCheckedTable.add("ATTRIBUT");
+//		toBeCheckedTable.add("KANTENTYP");
+//		toBeCheckedTable.add("KANTENTYP2ATTRIBUT");
+//		toBeCheckedTable.add("KANTENTYP2PANEL");
+//		toBeCheckedTable.add("KANTENTYP2ABATTRIBUT");
+//		toBeCheckedTable.add("KNOTENTYP");
+//		toBeCheckedTable.add("KNOTENTYP2ATTRIBUT");
+//		toBeCheckedTable.add("KNOTENTYP2PANEL");
+//		toBeCheckedTable.add("KANTENTYP2ABATTRIBUT");
 		toBeCheckedTable.add("PANEL");
-		toBeCheckedTable.add("PANEL2ATTRIBUT");
-		toBeCheckedTable.add("PANEL2PANEL");
-		toBeCheckedTable.add("PANEL2ABATTRIBUT");
-		toBeCheckedTable.add("TABELLENATTRIBUT");
+//		toBeCheckedTable.add("PANEL2ATTRIBUT");
+//		toBeCheckedTable.add("PANEL2PANEL");
+//		toBeCheckedTable.add("PANEL2ABATTRIBUT");
+//		toBeCheckedTable.add("TABELLENATTRIBUT");
 
 		try {
 			for (String string : toBeCheckedTable) {
@@ -43,9 +47,10 @@ public class TestDB {
 				// Crawl the column and convert to a list of column object
 				List<Column> attributColumn = crawler.crawlColumns(conn1, string);
 				List<Column> attributColumn2 = crawler.crawlColumns(conn2, string);
-
-		 comparator.differColumn(attributColumn, attributColumn2);
+				datamodell = comparator.differColumn(attributColumn, attributColumn2, conn1, string);
 				System.out.println("=============================");
+				
+				comparer.crawlData(conn1, conn2, datamodell, string);
 			}
 
 			conn1.close();
