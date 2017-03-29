@@ -37,4 +37,5 @@ public class Column {
 	public void setNullable(boolean isNullable) {
 		this.isNullable = isNullable;
 	}
+	
 }
