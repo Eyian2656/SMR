@@ -3,10 +3,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.DataComparer;
 import logic.DataCrawler;
 import logic.TableComparer;
 import logic.TableCrawler;
 import model.Column;
+import model.Data;
 
 
 public class TestDB {
@@ -22,7 +24,8 @@ public class TestDB {
 		TableCrawler tableCrawler = new TableCrawler();
 		TableComparer tableComparer = new TableComparer();
 		List<String> allTableNames= new ArrayList<String>();
-		//DataComparer dataComparer = new DataComparer();
+		
+		DataComparer dataComparer = new DataComparer();
 		DataCrawler dataCrawler = new DataCrawler();
 		
 		List<String> toBeCheckedTable = new ArrayList<String>();
@@ -43,17 +46,22 @@ public class TestDB {
 
 		try {
 			// Hier werden alle Tabellen durchiteriert um diese als string an die einzelnen Methoden zu übergeben
-			for (String string : toBeCheckedTable) {
-				System.out.println("Now checking table " + string);
+			for (String tableName : toBeCheckedTable) {
+				System.out.println("Now checking table " + tableName);
 				
 				// mittels TableCrawler werden die Metadaten aus einer Tabelle geyogen in in ein Objekt gespeicher welches
 				// dann verglichen werden kann um die unterschiede festzustellen
-				List<Column> oldColumn = tableCrawler.crawlColumns(conn1, string);
-				List<Column> newColumn = tableCrawler.crawlColumns(conn2, string);
-				allTableNames = tableComparer.differColumn(oldColumn, newColumn, string);
+				List<Column> oldColumn = tableCrawler.crawlColumns(conn1, tableName);
+				List<Column> newColumn = tableCrawler.crawlColumns(conn2, tableName);
+				allTableNames = tableComparer.differColumn(oldColumn, newColumn, tableName);
 				System.out.println("=============================");
 				
-				dataCrawler.crawlData(conn1, allTableNames, string, oldColumn);
+				//daten werden in eine Liste gespeichert damit sie verglichen werden können
+				//es werden nur die Daten rausgezogen die auch in der newColumn gefunden werden können
+				List<Data> oldDatas = dataCrawler.crawlData(conn1, allTableNames,tableName, newColumn);
+				List<Data> newDatas = dataCrawler.crawlData(conn2, allTableNames,tableName, newColumn);
+				
+				dataComparer.compareData(oldDatas, newDatas, newColumn);
 			
 			}
 

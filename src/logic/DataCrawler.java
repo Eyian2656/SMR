@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import model.Column;
 import model.Data;
 
@@ -27,15 +29,23 @@ public class DataCrawler {
 		while(rs.next()){
 			
 			Data tableData = new Data();
-			tableData.addRow(key, value);
-				
+			for (Column column : columnMetaData) {
+				if (StringUtils.equals(column.getType(), "NUMBER")) {
+					tableData.addRow(column.getName(), rs.getInt(column.getName()));
+				}
+				if (StringUtils.equals(column.getType(), "VARCHAR2")) {
+					tableData.addRow(column.getName(), rs.getString(column.getName()));
+				}
+				if (StringUtils.equals(column.getType(), "DATE")) {
+					tableData.addRow(column.getName(), rs.getDate(column.getName()));
+				}
+				dataInsideTable.add(tableData);
 			}
-		}
 		
+	}
 		
 		return dataInsideTable;
 	}
-
 	/**
 	 * Hier wird ein String erstellt für das SQL Statement, es sollen nicht alle Spalten gezogen werden sondern nur die
 	 * die auch in dem neuen Schema enthalten sind.
