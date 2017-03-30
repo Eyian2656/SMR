@@ -3,11 +3,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.DataComparer;
-import logic.SchemaCrawler;
+import logic.DataCrawler;
 import logic.TableComparer;
+import logic.TableCrawler;
 import model.Column;
-import model.Data;
 
 
 public class TestDB {
@@ -20,10 +19,11 @@ public class TestDB {
 		Connection conn1 = AccessV1DB.getInstance().getConnection();
 		Connection conn2 = AccessV2DB.getInstance().getConnection();
 
-		SchemaCrawler crawler = new SchemaCrawler();
-		TableComparer comparator = new TableComparer();
-		Data datamodell= new Data();
-		DataComparer comparer = new DataComparer();
+		TableCrawler tableCrawler = new TableCrawler();
+		TableComparer tableComparer = new TableComparer();
+		List<String> allTableNames= new ArrayList<String>();
+		//DataComparer dataComparer = new DataComparer();
+		DataCrawler dataCrawler = new DataCrawler();
 		
 		List<String> toBeCheckedTable = new ArrayList<String>();
 //		toBeCheckedTable.add("ATTRIBUT");
@@ -42,15 +42,19 @@ public class TestDB {
 //		toBeCheckedTable.add("TABELLENATTRIBUT");
 
 		try {
+			// Hier werden alle Tabellen durchiteriert um diese als string an die einzelnen Methoden zu übergeben
 			for (String string : toBeCheckedTable) {
 				System.out.println("Now checking table " + string);
-				// Crawl the column and convert to a list of column object
-				List<Column> attributColumn = crawler.crawlColumns(conn1, string);
-				List<Column> attributColumn2 = crawler.crawlColumns(conn2, string);
-				datamodell = comparator.differColumn(attributColumn, attributColumn2, conn1, string);
+				
+				// mittels TableCrawler werden die Metadaten aus einer Tabelle geyogen in in ein Objekt gespeicher welches
+				// dann verglichen werden kann um die unterschiede festzustellen
+				List<Column> oldColumn = tableCrawler.crawlColumns(conn1, string);
+				List<Column> newColumn = tableCrawler.crawlColumns(conn2, string);
+				allTableNames = tableComparer.differColumn(oldColumn, newColumn, string);
 				System.out.println("=============================");
 				
-				comparer.crawlData(conn1, conn2, datamodell, string);
+				dataCrawler.crawlData(conn1, allTableNames, string, oldColumn);
+			
 			}
 
 			conn1.close();

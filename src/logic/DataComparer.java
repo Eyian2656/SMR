@@ -14,7 +14,7 @@ import model.Data;
 
 public class DataComparer {
 
-	public List<Column> crawlData(Connection conn1, Connection conn2, Data data, String tableName) throws SQLException {
+	public List<Column> crawlData(Connection conn1, Connection conn2, String data, String tableName) throws SQLException {
 
 		Statement smt1 = conn1.createStatement();
 		Statement smt2 = conn2.createStatement();

@@ -9,7 +9,7 @@ import java.util.List;
 
 import model.Column;
 
-public class SchemaCrawler {
+public class TableCrawler {
 
 	public List<Column> crawlColumns(Connection conn, String tableName) throws SQLException {
 
