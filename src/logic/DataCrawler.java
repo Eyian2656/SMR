@@ -20,27 +20,24 @@ import model.Data;
  */
 public class DataCrawler {
 	
-	public List<Data> crawlData(Connection conn, List<String> allColumnNames, String tablename, List<Column> columnMetaData) throws SQLException{
+	public List<Data> crawlData(Connection conn, String columnName, String tablename) throws SQLException{
 		List<Data> dataInsideTable = new ArrayList<Data>();
 		Statement stmt = conn.createStatement();
-		String sqlStmt = createSQLStmt(allColumnNames, tablename);
+		String sqlStmt = "SELECT NR, " +  columnName + " FROM " + tablename;
 		ResultSet rs = stmt.executeQuery(sqlStmt);
+		
+		
 		
 		while(rs.next()){
 			
 			Data tableData = new Data();
-			for (Column column : columnMetaData) {
-				if (StringUtils.equals(column.getType(), "NUMBER")) {
-					tableData.addRow(column.getName(), rs.getInt(column.getName()));
-				}
-				if (StringUtils.equals(column.getType(), "VARCHAR2")) {
-					tableData.addRow(column.getName(), rs.getString(column.getName()));
-				}
-				if (StringUtils.equals(column.getType(), "DATE")) {
-					tableData.addRow(column.getName(), rs.getDate(column.getName()));
-				}
+
+				tableData.setNr((Integer) rs.getObject(0));
+				tableData.setValue((String) rs.getObject(1));
+				tableData.setColumnName(columnName);
+				System.out.println(tableData);
 				dataInsideTable.add(tableData);
-			}
+				
 		
 	}
 		

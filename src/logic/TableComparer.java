@@ -12,6 +12,8 @@ import model.Data;
 import model.Difference;
 
 public class TableComparer {
+List<Data> allTableData = new ArrayList<Data>();
+DataCrawler dataCrawler = new DataCrawler();
 
 	public String tablename;
 
@@ -31,9 +33,9 @@ public class TableComparer {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<String> differColumn(List<Column> columnOld, List<Column> columnNew,  String tableName) throws SQLException {
+	public List<String> differColumn(List<Column> columnOld, List<Column> columnNew,  String tableName, Connection oldSchema, Connection newSchema) throws SQLException {
 
-		// missingColumn(columnOld, columnNew);
+		unwantedColumn(columnOld, columnNew, tableName, oldSchema);
 		// wrongDatatypSize(columnOld, columnNew);
 		// nullable(columnOld, columnNew);
 		
@@ -50,12 +52,13 @@ public class TableComparer {
 	 * @param columnNew
 	 * @throws SQLException
 	 */
-	protected void unwantedColumn(List<Column> columnOld, List<Column> columnNew) {
+	protected void unwantedColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema) throws SQLException {
 		boolean columnNotThere = false;
 		for (Column columnNameOld : columnOld) {
 			for (Column columnNameNew : columnNew) {
 				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
 					columnNotThere = false;
+					dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName);
 					break;
 				} else {
 					columnNotThere = true;

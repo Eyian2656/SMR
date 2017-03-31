@@ -1,29 +1,32 @@
 package model;
 
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class Data {
 	
-	private Map<String, Object> rows;
+int nr;
+String value;
+String columnName;
 
-	public Map<String, Object> getRows() {
-		return rows;
-	}
+// Getters & Setters \\
+public int getNr() {
+	return nr;
+}
+public void setNr(int nr) {
+	this.nr = nr;
+}
+public String getValue() {
+	return value;
+}
+public void setValue(String value) {
+	this.value = value;
+}
+public String getColumnName() {
+	return columnName;
+}
+public void setColumnName(String columnName) {
+	this.columnName = columnName;
+}
 
-	public void setRows(Map<String, Object> rows) {
-		this.rows = rows;
-	}
-	
-	public void addRow(String key, Object value) {
-		if (this.rows == null) {
-			this.rows = new HashMap<String, Object>();
-		}
-		rows.put(key, value);
-	}
-
-	public Object getValue(String columnName){
-		return this.rows.get(columnName);
-	}
 	
 }

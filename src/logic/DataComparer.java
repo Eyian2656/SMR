@@ -10,6 +10,7 @@ import model.Data;
 
 public class DataComparer {
 
+	
 	public void compareData(List<Data> oldDataRows, List<Data> newDataRows, List<Column> newColumns) {
 
 		for (Data oldDataRow : oldDataRows) {
