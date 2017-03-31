@@ -36,8 +36,9 @@ public class DataComparer {
 			String oldValue = (String) oldData.getValue(columnName);
 			String newValue = (String) newData.getValue(columnName);
 			if (!StringUtils.equals(oldValue, newValue)) {
-				System.out.println("STRING DIFF-Daten aus row nr " + oldData.getValue("NR")
-						+ " hat unterschiedliche Werte. Old hat " + oldValue + " und die neue hat " + newValue);
+				System.out.println(column.getName() +" = "+ column.getType() +" = "+ column.getSize() +" +++ "+ oldValue.toString() +" = "+ newValue.toString());
+//				System.out.println("STRING DIFF-Daten aus row nr " + oldData.getValue("NR")
+//						+ " hat unterschiedliche Werte. Old hat " + oldValue + " und die neue hat " + newValue);
 			}
 		}
 
