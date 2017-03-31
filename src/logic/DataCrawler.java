@@ -33,6 +33,7 @@ public class DataCrawler {
 			Data tableData = new Data();
 			tableData.setNr((Integer) rs.getObject(0));
 
+			// Überprüfung des Datentyps 
 			if (StringUtils.equals(datatype, "NUMBER")) {
 				tableData.setValue( rs.getInt(1));
 			}
