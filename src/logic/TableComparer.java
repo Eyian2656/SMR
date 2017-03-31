@@ -58,7 +58,7 @@ DataCrawler dataCrawler = new DataCrawler();
 			for (Column columnNameNew : columnNew) {
 				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
 					columnNotThere = false;
-					dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName);
+					dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName, columnNameOld.getType());
 					break;
 				} else {
 					columnNotThere = true;

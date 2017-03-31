@@ -20,7 +20,7 @@ import model.Data;
  */
 public class DataCrawler {
 	
-	public List<Data> crawlData(Connection conn, String columnName, String tablename) throws SQLException{
+	public List<Data> crawlData(Connection conn, String columnName, String tablename, String datatype) throws SQLException{
 		List<Data> dataInsideTable = new ArrayList<Data>();
 		Statement stmt = conn.createStatement();
 		String sqlStmt = "SELECT NR, " +  columnName + " FROM " + tablename;
@@ -31,11 +31,20 @@ public class DataCrawler {
 		while(rs.next()){
 			
 			Data tableData = new Data();
+			tableData.setNr((Integer) rs.getObject(0));
 
-				tableData.setNr((Integer) rs.getObject(0));
-				tableData.setValue((String) rs.getObject(1));
+			if (StringUtils.equals(datatype, "NUMBER")) {
+				tableData.setValue( rs.getInt(1));
+			}
+			if (StringUtils.equals(datatype, "VARCHAR2")) {
+				tableData.setValue( rs.getString(1));
+			}
+			if (StringUtils.equals(datatype, "DATE")) {
+				tableData.setValue( rs.getDate(1));
+			}	
+
 				tableData.setColumnName(columnName);
-				System.out.println(tableData);
+				System.out.println(tableData.getColumnName() + " = " +  tableData.getNr() + " = " + tableData.getValue());
 				dataInsideTable.add(tableData);
 				
 		
