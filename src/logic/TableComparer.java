@@ -71,7 +71,7 @@ public class TableComparer {
 						listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName,
 								columnNameNew.getType());
 						dataComparer.compareData(listOfOldData, listOfnewData, tableName);
-						
+			
 					break;
 				} else {
 					columnNotThere = true;

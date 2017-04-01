@@ -21,9 +21,6 @@ public class TestDB {
 
 		TableCrawler tableCrawler = new TableCrawler();
 		TableComparer tableComparer = new TableComparer();
-		List<String> allTableNames= new ArrayList<String>();
-		//DataComparer dataComparer = new DataComparer();
-		DataCrawler dataCrawler = new DataCrawler();
 		
 		List<String> toBeCheckedTable = new ArrayList<String>();
 //		toBeCheckedTable.add("ATTRIBUT");
