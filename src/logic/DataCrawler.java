@@ -25,13 +25,13 @@ public class DataCrawler {
 	public List<Data> crawlData(Connection conn, String columnName, String tablename, String datatype) throws SQLException{
 		List<Data> dataInsideTable = new ArrayList<Data>();
 		Statement stmt = conn.createStatement();
-		String sqlStmt = "SELECT NR "+ columnName +  " FROM " + tablename;
+		String sqlStmt = "SELECT NR , " + columnName + " FROM " + tablename;
 		ResultSet rs = stmt.executeQuery(sqlStmt);
 		
 		
 		
 		while(rs.next()){
-			System.out.println(rs.getInt(1) + " , "+ rs.getString(2));
+			//System.out.println(rs.getInt(1) + " , " + rs.getString(2));
 			Data tableData = new Data();
 			tableData.setNr( rs.getBigDecimal(1).intValueExact());
 
@@ -46,7 +46,7 @@ public class DataCrawler {
 				tableData.setValue( df.format(rs.getDate(2)));
 			}	
 				tableData.setColumnName(columnName);
-				//ystem.out.println(tableData.getColumnName() + " = " +  tableData.getNr() + " = " + tableData.getValue());
+			System.out.println(tableData.getColumnName() + " = " +  tableData.getNr() + " = " + tableData.getValue());
 				dataInsideTable.add(tableData);	
 	}
 		return dataInsideTable;
