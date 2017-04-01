@@ -12,18 +12,17 @@ import model.Data;
 import model.Difference;
 
 public class TableComparer {
-List<Data> allTableData = new ArrayList<Data>();
-DataCrawler dataCrawler = new DataCrawler();
+	List<Data> allTableData = new ArrayList<Data>();
+	DataCrawler dataCrawler = new DataCrawler();
 
 	public String tablename;
 
 	/**
-	 * Die aufzurufende Funktion der Klasse TableComparer zu starten. Sie enthält alle
-	 * Daten um in weiter Methoden um herauszufinden welche Strukturen angepasst
-	 * werden müssen.Anschließend werden die Unterschiede an die Klasse
-	 * SQLStatements geschickt. 
-	 * Returned werden die TableNames der neuen Tabelle welches gebraucht wird 
-	 * um den Daten zu vergleiche.
+	 * Die aufzurufende Funktion der Klasse TableComparer zu starten. Sie
+	 * enthält alle Daten um in weiter Methoden um herauszufinden welche
+	 * Strukturen angepasst werden müssen.Anschließend werden die Unterschiede
+	 * an die Klasse SQLStatements geschickt. Returned werden die TableNames der
+	 * neuen Tabelle welches gebraucht wird um den Daten zu vergleiche.
 	 * 
 	 * @param columnOld
 	 * @param columnNew
@@ -33,13 +32,12 @@ DataCrawler dataCrawler = new DataCrawler();
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<String> differColumn(List<Column> columnOld, List<Column> columnNew,  String tableName, Connection oldSchema, Connection newSchema) throws SQLException {
+	public List<String> differColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
+			Connection oldSchema, Connection newSchema) throws SQLException {
 
-		
 		unwantedColumn(columnOld, columnNew, tableName, oldSchema, newSchema);
 		// wrongDatatypSize(columnOld, columnNew);
 		// nullable(columnOld, columnNew);
-		
 
 		return dataCrawlerNames(columnNew);
 
@@ -53,22 +51,24 @@ DataCrawler dataCrawler = new DataCrawler();
 	 * @param columnNew
 	 * @throws SQLException
 	 */
-	protected void unwantedColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema, Connection newSchema) throws SQLException {
+	protected void unwantedColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
+			Connection oldSchema, Connection newSchema) throws SQLException {
 		boolean columnNotThere = false;
-		List<Data>  listOfOldData = new ArrayList<Data>();
-		List<Data>  listOfnewData = new ArrayList<Data>();
+		List<Data> listOfOldData = new ArrayList<Data>();
+		List<Data> listOfnewData = new ArrayList<Data>();
 		DataComparer dataComparer = new DataComparer();
 
-		
 		for (Column columnNameOld : columnOld) {
 
 			for (Column columnNameNew : columnNew) {
 				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
 					columnNotThere = false;
-					if(columnNameOld.getName().equals("NAME") ){
-						listOfOldData = dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName, columnNameOld.getType());
-						listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName, columnNameNew.getType());
-						}
+					if (columnNameOld.getName().equals("NAME")) {
+						listOfOldData = dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName,
+								columnNameOld.getType());
+						listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName,
+								columnNameNew.getType());
+					}
 					break;
 				} else {
 					columnNotThere = true;
@@ -81,15 +81,17 @@ DataCrawler dataCrawler = new DataCrawler();
 				System.out.println("Die zu löschende Spalte ist: " + columnNameOld.getName());
 			}
 		}
-		// Nachdem die Struktur Änderung einer Tabelle abeschlossen sind werden die Daten geprüft.
+		// Nachdem die Struktur Änderung einer Tabelle abeschlossen sind werden
+		// die Daten geprüft.
 		dataComparer.compareData(listOfOldData, listOfnewData, tableName);
 	}
 
-	protected void missingColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema, Connection newSchema) throws SQLException {
+	protected void missingColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema,
+			Connection newSchema) throws SQLException {
 		boolean columnNotThere = false;
-		List<Data>  listOfnewData = new ArrayList<Data>();
+		List<Data> listOfnewData = new ArrayList<Data>();
 		DataComparer dataComparer = new DataComparer();
-		
+
 		for (Column columnNameNew : columnNew) {
 
 			for (Column columnNameOld : columnOld) {
@@ -97,7 +99,7 @@ DataCrawler dataCrawler = new DataCrawler();
 					columnNotThere = false;
 					break;
 				} else {
-					
+
 					columnNotThere = true;
 				}
 			}
@@ -107,9 +109,12 @@ DataCrawler dataCrawler = new DataCrawler();
 				// schreiben
 				System.out.println("Die anzuhängende Spalte ist: " + columnNameNew.getName() + " Mit dem Datentyp "
 						+ columnNameNew.getType() + " " + columnNameNew.getSize());
-				
-				// Die neue Zeile braucht Daten. oldColumn daten werden null sein ( da sie noch nicht existiert) und müssen mit newColumn Daten überschrieben werden.
-				listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName, columnNameNew.getType());
+
+				// Die neue Zeile braucht Daten. oldColumn daten werden null
+				// sein ( da sie noch nicht existiert) und müssen mit newColumn
+				// Daten überschrieben werden.
+				listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName,
+						columnNameNew.getType());
 				dataComparer.newColumnData(listOfnewData, tableName);
 			}
 		}
@@ -165,42 +170,3 @@ DataCrawler dataCrawler = new DataCrawler();
 		return allTableNames;
 	}
 }
-
-// Difference a = new Difference();
-
-//// Check the same type & size
-//
-// // Wenn die column nicht gefunden in der neuen Tabelle
-// if (toBeCompared == null) {
-// Difference diff = new Difference();
-// System.out.println("Column " + column.getName() + " could not be found in the
-//// second table");
-// System.out.println("Now looking for the nearest similarity");
-// Column similarColumn = findTheLowestDifference(colsNew, column.getName());
-// if (similarColumn != null) {
-// // TODO Check if the column is in the old table.
-// Column similarColumnInOldTable = findByName(columnOld,
-//// similarColumn.getName());
-// if (similarColumnInOldTable != null) {
-// System.out.println("It is possible that the column is dropped");
-// } else {
-// System.out.println("Found similar column with name " +
-//// similarColumn.getName());
-// }
-// }
-// } else {
-// if (!StringUtils.equals(column.getType(), toBeCompared.getType())) {
-// System.out.println(column.getName() + " has a different type now");
-// } else if (column.getSize() != toBeCompared.getSize()) {
-// System.out.println(column.getName() + " has a different size now. It changed
-//// from "
-// + column.getSize() + " to " + toBeCompared.getSize());
-// } else if (column.isNullable() != toBeCompared.isNullable()) {
-// System.out.println(column.getName() + " has a different nullable now. It
-//// changed from "
-// + column.isNullable() + " to " + toBeCompared.isNullable());
-// }
-// }
-// }
-// return diffs;
-// }
