@@ -68,7 +68,6 @@ DataCrawler dataCrawler = new DataCrawler();
 					if(columnNameOld.getName().equals("NAME") ){
 						listOfOldData = dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName, columnNameOld.getType());
 						listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName, columnNameNew.getType());
-						dataComparer.compareData(listOfOldData, listOfnewData);
 						}
 					break;
 				} else {
@@ -82,12 +81,15 @@ DataCrawler dataCrawler = new DataCrawler();
 				System.out.println("Die zu löschende Spalte ist: " + columnNameOld.getName());
 			}
 		}
-
+		// Nachdem die Struktur Änderung einer Tabelle abeschlossen sind werden die Daten geprüft.
+		dataComparer.compareData(listOfOldData, listOfnewData, tableName);
 	}
 
-	protected void missingColumn(List<Column> columnOld, List<Column> columnNew) {
+	protected void missingColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema, Connection newSchema) throws SQLException {
 		boolean columnNotThere = false;
-
+		List<Data>  listOfnewData = new ArrayList<Data>();
+		DataComparer dataComparer = new DataComparer();
+		
 		for (Column columnNameNew : columnNew) {
 
 			for (Column columnNameOld : columnOld) {
@@ -95,6 +97,7 @@ DataCrawler dataCrawler = new DataCrawler();
 					columnNotThere = false;
 					break;
 				} else {
+					
 					columnNotThere = true;
 				}
 			}
@@ -104,6 +107,10 @@ DataCrawler dataCrawler = new DataCrawler();
 				// schreiben
 				System.out.println("Die anzuhängende Spalte ist: " + columnNameNew.getName() + " Mit dem Datentyp "
 						+ columnNameNew.getType() + " " + columnNameNew.getSize());
+				
+				// Die neue Zeile braucht Daten. oldColumn daten werden null sein ( da sie noch nicht existiert) und müssen mit newColumn Daten überschrieben werden.
+				listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName, columnNameNew.getType());
+				dataComparer.newColumnData(listOfnewData, tableName);
 			}
 		}
 	}
