@@ -13,15 +13,21 @@ public class DataComparer {
 		for (Data oldData : oldDataList) {
 			for (Data newData : newDataList) {
 				System.out.println(oldData.getValue() + " ** "+ newData.getValue() + " ** "+ oldData.getColumnName() + " ** "+  newData.getColumnName());
-//				if (!oldData.getValue().equals(newData.getValue())) {
-//					System.out.println("Update "+ tableName + " SET " +
-//					oldData.getColumnName() + " = " + newData.getValue()
-//					+ " WHERE NR = " + oldData.getNr());
-//				}
-				break;
+				
+				if (oldData.getValue().equals(newData.getValue())) {
+					break;
+				}
+				if (!oldData.getValue().equals(newData.getValue())) {
+					System.out.println("Update "+ tableName + " SET " +
+					oldData.getColumnName() + " = " + newData.getValue()
+					+ " WHERE NR = " + oldData.getNr());
+					break;
+				}
+				
 			}
 			break;
 		}
+		System.out.println(">>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<");
 	}
 
 	/**
