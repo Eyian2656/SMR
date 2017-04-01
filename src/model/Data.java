@@ -5,7 +5,7 @@ package model;
 public class Data {
 	
 int nr;
-Object value;
+String value;
 String columnName;
 
 // Getters & Setters \\
@@ -15,10 +15,10 @@ public int getNr() {
 public void setNr(int nr) {
 	this.nr = nr;
 }
-public Object getValue() {
+public String getValue() {
 	return value;
 }
-public void setValue(Object value) {
+public void setValue(String value) {
 	this.value = value;
 }
 public String getColumnName() {

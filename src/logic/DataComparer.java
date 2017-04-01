@@ -14,7 +14,6 @@ public class DataComparer {
 		
 		for (Data oldData : oldDataList ) {
 			for (Data newData : newDataList) {
-				
 				if (oldData.getNr() == newData.getNr() && !StringUtils.equals(oldData.getValue(), newData.getValue())) {
 					System.out.println("Update "+ tableName + " SET " +
 					oldData.getColumnName() + " = " + newData.getValue()
