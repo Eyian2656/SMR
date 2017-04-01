@@ -10,21 +10,25 @@ public class DataComparer {
 
 		for (Data oldData : oldDataList) {
 			for (Data newData : newDataList) {
+				System.out.println(oldData.getValue() + " ** "+ newData.getValue());
 				if (!oldData.getValue().equals(newData.getValue())) {
-					System.out.println("Update "+ tableName + " SET " + oldData.getColumnName() + " = " + newData.getValue()
-							+ " WHERE NR = " + oldData.getNr());
+					System.out.println("Update "+ tableName + " SET " +
+					oldData.getColumnName() + " = " + newData.getValue()
+					+ " WHERE NR = " + oldData.getNr());
 				}
 				break;
-
 			}
+			break;
 		}
 	}
+
 	/**
 	 * Hier werden die Daten einer kürzlich erstellten Reihe hizugefügt.
 	 */
-	public void newColumnData(List<Data> newDataList,String tableName){
-		for(Data newData : newDataList){
-			System.out.println("INSERT INTO " + tableName +" ("+ newData.getColumnName() + ") VALUES " + " ( " + newData.getValue() + " );");
+	public void newColumnData(List<Data> newDataList, String tableName) {
+		for (Data newData : newDataList) {
+			System.out.println("INSERT INTO " + tableName + " (" + newData.getColumnName() + ") VALUES " + " ( "
+					+ newData.getValue() + " );");
 		}
 	}
 }

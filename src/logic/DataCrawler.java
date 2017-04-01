@@ -46,6 +46,7 @@ public class DataCrawler {
 				tableData.setValue(df.format(rs.getDate(2)));
 			}
 			tableData.setColumnName(columnName);
+			dataInsideTable.add(tableData);
 		}
 		return dataInsideTable;
 	}

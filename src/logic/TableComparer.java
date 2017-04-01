@@ -63,12 +63,15 @@ public class TableComparer {
 			for (Column columnNameNew : columnNew) {
 				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
 					columnNotThere = false;
-					if (columnNameOld.getName().equals("NAME")) {
+					
+					// Nachdem die Struktur Änderung einer Tabelle abeschlossen sind werden
+					// die Daten geprüft.
 						listOfOldData = dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName,
 								columnNameOld.getType());
 						listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName,
 								columnNameNew.getType());
-					}
+						dataComparer.compareData(listOfOldData, listOfnewData, tableName);
+						
 					break;
 				} else {
 					columnNotThere = true;
@@ -81,9 +84,7 @@ public class TableComparer {
 				System.out.println("Die zu löschende Spalte ist: " + columnNameOld.getName());
 			}
 		}
-		// Nachdem die Struktur Änderung einer Tabelle abeschlossen sind werden
-		// die Daten geprüft.
-		dataComparer.compareData(listOfOldData, listOfnewData, tableName);
+		
 	}
 
 	protected void missingColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema,
