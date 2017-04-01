@@ -36,7 +36,7 @@ DataCrawler dataCrawler = new DataCrawler();
 	public List<String> differColumn(List<Column> columnOld, List<Column> columnNew,  String tableName, Connection oldSchema, Connection newSchema) throws SQLException {
 
 		
-		unwantedColumn(columnOld, columnNew, tableName, oldSchema);
+		unwantedColumn(columnOld, columnNew, tableName, oldSchema, newSchema);
 		// wrongDatatypSize(columnOld, columnNew);
 		// nullable(columnOld, columnNew);
 		
@@ -58,6 +58,7 @@ DataCrawler dataCrawler = new DataCrawler();
 		List<Data>  listOfOldData = new ArrayList<Data>();
 		List<Data>  listOfnewData = new ArrayList<Data>();
 		DataComparer dataComparer = new DataComparer();
+
 		
 		for (Column columnNameOld : columnOld) {
 
