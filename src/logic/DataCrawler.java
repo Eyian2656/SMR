@@ -43,7 +43,11 @@ public class DataCrawler {
 				tableData.setValue(rs.getString(2));
 			}
 			if (StringUtils.equals(datatype, "DATE")) {
+				if(rs.getDate(2)== null){
+					tableData.setValue("null");
+				}else {
 				tableData.setValue(df.format(rs.getDate(2)));
+				}
 			}
 			tableData.setColumnName(columnName);
 			dataInsideTable.add(tableData);

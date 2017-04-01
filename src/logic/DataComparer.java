@@ -2,6 +2,8 @@ package logic;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import model.Data;
 
 public class DataComparer {
@@ -12,9 +14,8 @@ public class DataComparer {
 		
 		for (Data oldData : oldDataList ) {
 			for (Data newData : newDataList) {
-				System.out.println(oldData.getValue() + " ** "+ newData.getValue() + " ** "+ oldData.getColumnName() + " ** "+  newData.getColumnName());
-		
-				if (!oldData.getValue().equals(newData.getValue())) {
+				
+				if (oldData.getNr() == newData.getNr() && !StringUtils.equals(oldData.getValue(), newData.getValue())) {
 					System.out.println("Update "+ tableName + " SET " +
 					oldData.getColumnName() + " = " + newData.getValue()
 					+ " WHERE NR = " + oldData.getNr());
