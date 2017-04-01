@@ -17,12 +17,9 @@ public class DataComparer {
 				if (oldData.getNr() == newData.getNr() && !StringUtils.equals(oldData.getValue(), newData.getValue())) {
 					System.out.println("Update "+ tableName + " SET " +
 					oldData.getColumnName() + " = " + newData.getValue()
-					+ " WHERE NR = " + oldData.getNr());
-					
-				}
-				
+					+ " WHERE NR = " + oldData.getNr());	
+				}	
 			}
-			
 		}
 		System.out.println(">>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<");
 	}
