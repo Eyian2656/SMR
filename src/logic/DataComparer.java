@@ -11,21 +11,16 @@ import model.Data;
 public class DataComparer {
 
 	
-	public void compareData(List<Data> oldDataRows, List<Data> newDataRows, List<Column> newColumns) {
+	public void compareData(List<Data> oldDataList, List<Data> newDataList) {
 
-		for (Data oldDataRow : oldDataRows) {
-			Data newDataRow = findRow(newDataRows, (Integer) oldDataRow.getValue("NR"));
-			// Die daten würde gefunden, für jede spalten werden die rows
-			// gecheckt
-			if (newDataRow != null) {
-				for (Column column : newColumns) {
-					compareByColumnName(oldDataRow, newDataRow, column);
+		for (Data oldData : oldDataList) {
+			for(Data newData : newDataList){
+				if(!oldData.getValue().equals(newData.getValue())){
+					System.out.println("Update Tablename SET "+ oldData.getColumnName() + " = " + newData.getValue() + " WHERE NR = " + oldData.getNr() );
 				}
-			} else {
-				System.out.println(
-						"The row with nr" + (Integer) oldDataRow.getValue("NR") + " is not found in the new DB");
+					
 			}
-		}
+			}
 	}
 
 	// Vergleichen basiert auf spalten name
