@@ -25,7 +25,7 @@ public class DataCrawler {
 	public List<Data> crawlData(Connection conn, String columnName, String tablename, String datatype) throws SQLException{
 		List<Data> dataInsideTable = new ArrayList<Data>();
 		Statement stmt = conn.createStatement();
-		String sqlStmt = "SELECT NR, NAME " +  " FROM " + tablename;
+		String sqlStmt = "SELECT NR "+ columnName +  " FROM " + tablename;
 		ResultSet rs = stmt.executeQuery(sqlStmt);
 		
 		
@@ -35,48 +35,21 @@ public class DataCrawler {
 			Data tableData = new Data();
 			tableData.setNr( rs.getBigDecimal(1).intValueExact());
 
-			// Überprüfung des Datentyps 
-//			if (StringUtils.equals(datatype, "NUMBER")) {
-//				tableData.setValue( String.valueOf(rs.getInt(2)));
-//			}
+			//Überprüfung des Datentyps 
+			if (StringUtils.equals(datatype, "NUMBER")) {
+				tableData.setValue( String.valueOf(rs.getInt(2)));
+			}
 			if (StringUtils.equals(datatype, "VARCHAR2")) {
 				tableData.setValue( rs.getString(2));
 			}
 			if (StringUtils.equals(datatype, "DATE")) {
 				tableData.setValue( df.format(rs.getDate(2)));
 			}	
-
 				tableData.setColumnName(columnName);
 				//ystem.out.println(tableData.getColumnName() + " = " +  tableData.getNr() + " = " + tableData.getValue());
-				dataInsideTable.add(tableData);
-				
-		
+				dataInsideTable.add(tableData);	
 	}
-		
 		return dataInsideTable;
 	}
-	/**
-	 * Hier wird ein String erstellt für das SQL Statement, es sollen nicht alle Spalten gezogen werden sondern nur die
-	 * die auch in dem neuen Schema enthalten sind.
-	 * @param allColumnNames
-	 * @param tablename
-	 * @return
-	 */
-	public String createSQLStmt(List<String> allColumnNames, String tablename){
-		String columnNameString = "";
-		String sqlStmt;
-		int i = 0;
-		
-		for(String name : allColumnNames){	
-			columnNameString = columnNameString + name;
-			if( i < allColumnNames.size()-1){
-				columnNameString = columnNameString + " , ";
-			}
-			i++;
-		}
-	
-		sqlStmt = "SELECT " + columnNameString + " FROM " + tablename;
-		
-		return sqlStmt;
-	}
+
 }

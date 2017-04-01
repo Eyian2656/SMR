@@ -55,11 +55,13 @@ DataCrawler dataCrawler = new DataCrawler();
 	protected void unwantedColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema) throws SQLException {
 		boolean columnNotThere = false;
 		for (Column columnNameOld : columnOld) {
-			dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName, columnNameOld.getType());
+
 			for (Column columnNameNew : columnNew) {
 				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
 					columnNotThere = false;
-					
+					if(columnNameOld.equals("name") ){
+						dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName, columnNameOld.getType());
+						}
 					break;
 				} else {
 					columnNotThere = true;
