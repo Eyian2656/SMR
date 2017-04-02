@@ -52,7 +52,7 @@ public class SQLStatements {
 	 * @param bool
 	 */
 	public void modifyNullable(String tableName, String columnName, String datatyp, Boolean bool) {
-		if (bool = true) {
+		if (bool == true) {
 			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " " + datatyp + " null");
 			scriptwriter.writeScript(statement);
 		} else {
