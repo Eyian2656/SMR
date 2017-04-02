@@ -9,6 +9,12 @@ import model.Data;
 public class DataComparer {
 	SQLStatements sentStmt = new SQLStatements();
 	
+	/**
+	 * Funktion um inkongruente Daten von bestehenden Spalten zu korrigieren.
+	 * @param oldDataList
+	 * @param newDataList
+	 * @param tableName
+	 */
 	public void compareData(List<Data> oldDataList, List<Data> newDataList, String tableName) {
 		for (Data oldData : oldDataList ) {
 			for (Data newData : newDataList) {
@@ -20,7 +26,7 @@ public class DataComparer {
 	}
 
 	/**
-	 * Hier werden die Daten einer kürzlich erstellten Reihe hizugefügt.
+	 * Funktion um  Daten einer kürzlich erstellten Spalte hizuzufügen..
 	 */
 	public void newColumnData(List<Data> newDataList, String tableName) {
 		for (Data newData : newDataList) {

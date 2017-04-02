@@ -35,15 +35,18 @@ public class TableComparer {
 	public void differColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
 			Connection oldSchema, Connection newSchema) throws SQLException {
 		
-		unwantedColumn(columnOld, columnNew, tableName, oldSchema, newSchema);
 		missingColumn(columnOld, columnNew, tableName, newSchema);
 		wrongDatatypSize(columnOld, columnNew, tableName);
 		nullable(columnOld, columnNew,tableName);
+		unwantedColumn(columnOld, columnNew, tableName, oldSchema, newSchema);
+		
+		
+		
 	}
 
 	/**
-	 * Diese Funktion überprüft ob eine Spalte zuviel ist und löscht dieses
-	 * anschließend
+	 * STRUKTUR:  Funktion überprüft ob eine Spalte zuviel ist und löscht diese dann.
+	 * DATEN: Vergleichen der bestehenden Spaltendaten, anschließend inkongruente Daten ändern.
 	 * 
 	 * @param allColumnsOld
 	 * @param allColumnsNew
@@ -62,9 +65,7 @@ public class TableComparer {
 				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					columnNotThere = false;
 
-					// Nachdem die Struktur Änderung einer Tabelle abeschlossen
-					// sind werden
-					// die Daten geprüft.
+					// ÄNDERUNG DATEN: Vergleichen der bestehenden Spaltendaten, anschließend inkongruente Daten ändern.
 					listOfOldData = dataCrawler.crawlData(oldSchema, columnOld.getName(), tableName,
 							columnOld.getType());
 					listOfnewData = dataCrawler.crawlData(newSchema, columnNew.getName(), tableName,
@@ -76,13 +77,22 @@ public class TableComparer {
 					columnNotThere = true;
 				}
 			}
+			// ÄNDERUNG STRUKTUR: Überflüsige Zeile gelöscht
 			if (columnNotThere == true) {
-				// Übergabe der zuändernden Daten an SqlStatement
 				sentStmt.drop(tableName, columnOld.getName());
 			}
 		}
 	}
 
+	/**
+	 * STRUKTUR: Funktion die eine fehlende Spalte hinzufügt.
+	 * DATEN: Die zuvor hinzugefügte Spalte erhält die zugehörigen Daten
+	 * @param allColumnsOld
+	 * @param allColumnsNew
+	 * @param tableName
+	 * @param newSchema
+	 * @throws SQLException
+	 */
 	protected void missingColumn(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName, Connection newSchema)
 			throws SQLException {
 		boolean columnNotThere = false;
@@ -100,10 +110,10 @@ public class TableComparer {
 				}
 			}
 			if (columnNotThere == true) {
-				// hier kommt die Funktion zum hinzufügen eines Columns 
+				// ÄNDERUNG STRUKTUR: Fehlende Spalte wird hinzugefügt.
 				sentStmt.insert(tableName, columnNew.getName(), columnNew.getType(), columnNew.getSize());
 
-				// Hier werden zu der neuen Zeile die Daten hinzugefügt.
+				// ÄNDERUNG DATEN: Zuvor erstellte Spalte erhält jetzt die zugehörigen Daten.
 				listOfnewData = dataCrawler.crawlData(newSchema, columnNew.getName(), tableName,
 						columnNew.getType());
 				dataComparer.newColumnData(listOfnewData, tableName);
@@ -111,8 +121,12 @@ public class TableComparer {
 		}
 	}
 
-	// TODO hier muss nur die Größe veränder werden und NICHT der Datentyp noch
-	// anpassen
+/**
+ * Überprüfung und korrektur der Datentypgröße
+ * @param allColumnOld
+ * @param allColumnNew
+ * @param tableName
+ */
 	protected void wrongDatatypSize(List<Column> allColumnOld, List<Column> allColumnNew, String tableName) {
 		for (Column columnOld : allColumnOld) {
 			for (Column columnNew : allColumnNew) {
@@ -128,6 +142,12 @@ public class TableComparer {
 		}
 	}
 
+	/**
+	 * Überprüfen und korrektur des Feldes Nullable
+	 * @param allColumnsOld
+	 * @param allColumnsNew
+	 * @param tableName
+	 */
 	protected void nullable(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName) {
 
 		for (Column columnOld : allColumnsOld) {

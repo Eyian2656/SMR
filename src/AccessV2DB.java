@@ -1,9 +1,8 @@
 
-
 import java.sql.*;
 
 /**
- * Steuert die Datenbank zugriffe. Baut verbindung auf usw.
+ * Diese Klasse steuert den Datenbankzugriff. Stellt eine Connection zum alten Schema her.
  * 
  * @author inoack
  *
@@ -29,7 +28,7 @@ public class AccessV2DB {
 	}
 
 	public boolean connect() {
-	    System.setProperty("oracle.net.tns_admin", "C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
+		System.setProperty("oracle.net.tns_admin", "C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
 
 		connected = false;
 		try {
@@ -46,7 +45,7 @@ public class AccessV2DB {
 		System.out.println("DB 2 ist verbunden = " + connected);
 		return connected;
 	}
-	
+
 	public Connection getConnection() {
 		return this.connection;
 	}
@@ -59,7 +58,6 @@ public class AccessV2DB {
 			throw new SQLException("Database not connected");
 		}
 	}
-
 
 	public boolean close() {
 		if (connected) {

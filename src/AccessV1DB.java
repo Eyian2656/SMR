@@ -1,7 +1,7 @@
 import java.sql.*;
 
 /**
- * Steuert die Datenbank zugriffe. Baut verbindung auf usw.
+* Diese Klasse steuert den Datenbankzugriff. Stellt eine Connection zum alten Schema her.
  * 
  * @author inoack
  *

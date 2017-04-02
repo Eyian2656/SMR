@@ -35,7 +35,7 @@ public class DataCrawler {
 			Data tableData = new Data();
 			tableData.setNr(rs.getBigDecimal(1).intValueExact());
 
-			// Überprüfung des Datentyps
+			// Überprüfung des -auf der DB hinterlegten- Datentyps um diese als String in ein Objekt zu parsen.
 			if (StringUtils.equals(datatype, "NUMBER")) {
 				tableData.setValue(String.valueOf(rs.getInt(2)));
 			}
