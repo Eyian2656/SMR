@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import model.Column;
 import model.Data;
-import model.Difference;
 
 public class TableComparer {
 	List<Data> allTableData = new ArrayList<Data>();

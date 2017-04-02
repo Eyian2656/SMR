@@ -9,9 +9,6 @@ import model.Data;
 public class DataComparer {
 
 	public void compareData(List<Data> oldDataList, List<Data> newDataList, String tableName) {
-
-		
-		
 		for (Data oldData : oldDataList ) {
 			for (Data newData : newDataList) {
 				if (oldData.getNr() == newData.getNr() && !StringUtils.equals(oldData.getValue(), newData.getValue())) {
@@ -21,7 +18,6 @@ public class DataComparer {
 				}	
 			}
 		}
-		System.out.println(">>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<");
 	}
 
 	/**
