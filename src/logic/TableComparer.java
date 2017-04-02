@@ -31,46 +31,43 @@ public class TableComparer {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<String> differColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
+	public void differColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
 			Connection oldSchema, Connection newSchema) throws SQLException {
 
 		unwantedColumn(columnOld, columnNew, tableName, oldSchema, newSchema);
 		missingColumn(columnOld, columnNew, tableName, newSchema);
 		wrongDatatypSize(columnOld, columnNew);
 		nullable(columnOld, columnNew);
-
-		return dataCrawlerNames(columnNew);
-
 	}
 
 	/**
 	 * Diese Funktion überprüft ob eine Spalte zuviel ist und löscht dieses
 	 * anschließend
 	 * 
-	 * @param columnOld
-	 * @param columnNew
+	 * @param allColumnsOld
+	 * @param allColumnsNew
 	 * @throws SQLException
 	 */
-	protected void unwantedColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
+	protected void unwantedColumn(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName,
 			Connection oldSchema, Connection newSchema) throws SQLException {
 		boolean columnNotThere = false;
 		List<Data> listOfOldData = new ArrayList<Data>();
 		List<Data> listOfnewData = new ArrayList<Data>();
 		DataComparer dataComparer = new DataComparer();
 
-		for (Column columnNameOld : columnOld) {
+		for (Column columnOld : allColumnsOld) {
 
-			for (Column columnNameNew : columnNew) {
-				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
+			for (Column columnNew : allColumnsNew) {
+				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					columnNotThere = false;
 
 					// Nachdem die Struktur Änderung einer Tabelle abeschlossen
 					// sind werden
 					// die Daten geprüft.
-					listOfOldData = dataCrawler.crawlData(oldSchema, columnNameOld.getName(), tableName,
-							columnNameOld.getType());
-					listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName,
-							columnNameNew.getType());
+					listOfOldData = dataCrawler.crawlData(oldSchema, columnOld.getName(), tableName,
+							columnOld.getType());
+					listOfnewData = dataCrawler.crawlData(newSchema, columnNew.getName(), tableName,
+							columnNew.getType());
 					dataComparer.compareData(listOfOldData, listOfnewData, tableName);
 
 					break;
@@ -79,29 +76,26 @@ public class TableComparer {
 				}
 			}
 			if (columnNotThere == true) {
-				// hier kommt die Funktion zum löschen des Namens oder eine
-				// Übergabe des Columns als String um diese ins Skript zu
-				// schreiben
-				System.out.println("Die zu löschende Spalte ist: " + columnNameOld.getName());
+				// Übergabe der zuändernden Daten an SqlStatement
+				SQLStatements sentStmt = new SQLStatements();
+				sentStmt.drop(tableName, columnOld.getName());
 			}
 		}
-
 	}
 
-	protected void missingColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection newSchema)
+	protected void missingColumn(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName, Connection newSchema)
 			throws SQLException {
 		boolean columnNotThere = false;
 		List<Data> listOfnewData = new ArrayList<Data>();
 		DataComparer dataComparer = new DataComparer();
 
-		for (Column columnNameNew : columnNew) {
+		for (Column columnNew : allColumnsNew) {
 
-			for (Column columnNameOld : columnOld) {
-				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
+			for (Column columnOld : allColumnsOld) {
+				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					columnNotThere = false;
 					break;
 				} else {
-
 					columnNotThere = true;
 				}
 			}
@@ -109,14 +103,14 @@ public class TableComparer {
 				// hier kommt die Funktion zum hinzufügen des Namens oder eine
 				// Übergabe des Columns als String um diese ins Skript zu
 				// schreiben
-				System.out.println("Die anzuhängende Spalte ist: " + columnNameNew.getName() + " Mit dem Datentyp "
-						+ columnNameNew.getType() + " " + columnNameNew.getSize());
+				System.out.println("Die anzuhängende Spalte ist: " + columnNew.getName() + " Mit dem Datentyp "
+						+ columnNew.getType() + " " + columnNew.getSize());
 
 				// Die neue Zeile braucht Daten. oldColumn daten werden null
 				// sein ( da sie noch nicht existiert) und müssen mit newColumn
 				// Daten überschrieben werden.
-				listOfnewData = dataCrawler.crawlData(newSchema, columnNameNew.getName(), tableName,
-						columnNameNew.getType());
+				listOfnewData = dataCrawler.crawlData(newSchema, columnNew.getName(), tableName,
+						columnNew.getType());
 				dataComparer.newColumnData(listOfnewData, tableName);
 			}
 		}
@@ -124,17 +118,17 @@ public class TableComparer {
 
 	// TODO hier muss nur die Größe veränder werden und NICHT der Datentyp noch
 	// anpassen
-	protected void wrongDatatypSize(List<Column> columnOld, List<Column> columnNew) {
-		for (Column columnNameOld : columnOld) {
-			for (Column columnNameNew : columnNew) {
-				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
-					if (StringUtils.equals(columnNameNew.getType(), columnNameOld.getType())
-							&& (columnNameNew.getSize() != columnNameOld.getSize())) {
+	protected void wrongDatatypSize(List<Column> allColumnOld, List<Column> allColumnNew) {
+		for (Column columnOld : allColumnOld) {
+			for (Column columnNew : allColumnNew) {
+				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
+					if (StringUtils.equals(columnNew.getType(), columnOld.getType())
+							&& (columnNew.getSize() != columnOld.getSize())) {
 						// hier muss der columnName geholt werden und an der
 						// stelle den Datatyp geändert werden müssen
 						System.out
-								.println("Typ von: " + columnNameOld.getName() + " muss zu  " + columnNameNew.getType()
-										+ " mit der Größe " + columnNameNew.getSize() + " geändert werden");
+								.println("Typ von: " + columnOld.getName() + " muss zu  " + columnNew.getType()
+										+ " mit der Größe " + columnNew.getSize() + " geändert werden");
 						break;
 					}
 					break;
@@ -143,17 +137,17 @@ public class TableComparer {
 		}
 	}
 
-	protected void nullable(List<Column> columnOld, List<Column> columnNew) {
+	protected void nullable(List<Column> allColumnsOld, List<Column> allColumnsNew) {
 
-		for (Column columnNameOld : columnOld) {
-			for (Column columnNameNew : columnNew) {
-				if (StringUtils.equals(columnNameNew.getName(), columnNameOld.getName())) {
-					if (columnNameNew.isNullable() != columnNameOld.isNullable()) {
+		for (Column columnOld : allColumnsOld) {
+			for (Column columnNew : allColumnsNew) {
+				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
+					if (columnNew.isNullable() != columnOld.isNullable()) {
 						// der boolean check muss richtige gesetzt werden je
 						// nach dem soll die funktion nullable oder nciht
 						// nullabel sein
-						System.out.println("Typ von: " + columnNameNew.getName() + " muss zu "
-								+ columnNameNew.isNullable() + " geändert werden ");
+						System.out.println("Typ von: " + columnNew.getName() + " muss zu "
+								+ columnNew.isNullable() + " geändert werden ");
 						break;
 					}
 					break;
@@ -162,11 +156,4 @@ public class TableComparer {
 		}
 	}
 
-	protected List<String> dataCrawlerNames(List<Column> columnNew) {
-		List<String> allTableNames = new ArrayList<String>();
-		for (Column columnNameNew : columnNew) {
-			allTableNames.add(columnNameNew.getName());
-		}
-		return allTableNames;
-	}
 }
