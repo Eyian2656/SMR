@@ -23,10 +23,10 @@ public class SQLStatements {
 	
 	public void modifyNullable(String tableName , String columnName, String datatyp, Boolean bool){
 		if(bool = true){
-		String statement = ("ALTER TABLE "+ tableName + " MODIFY " + columnName + datatyp +" null");
+		String statement = ("ALTER TABLE "+ tableName + " MODIFY " + columnName + " " + datatyp +" null");
 		scriptwriter.writeScript(statement);
 		}else{
-		String statement = ("ALTER TABLE "+ tableName + " MODIFY " + columnName + datatyp +" not null");
+		String statement = ("ALTER TABLE "+ tableName + " MODIFY " + columnName +  " " + datatyp +" not null");
 		scriptwriter.writeScript(statement);
 		}
 	}

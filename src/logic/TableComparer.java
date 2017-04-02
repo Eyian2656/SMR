@@ -37,8 +37,8 @@ public class TableComparer {
 		
 		unwantedColumn(columnOld, columnNew, tableName, oldSchema, newSchema);
 		missingColumn(columnOld, columnNew, tableName, newSchema);
-		wrongDatatypSize(columnOld, columnNew);
-		nullable(columnOld, columnNew);
+		wrongDatatypSize(columnOld, columnNew, tableName);
+		nullable(columnOld, columnNew,tableName);
 	}
 
 	/**
