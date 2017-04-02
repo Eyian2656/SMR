@@ -27,7 +27,7 @@ public class AccessV1DB {
 	}
 
 	public boolean connect() {
-	    System.setProperty("oracle.net.tns_admin", "C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
+		System.setProperty("oracle.net.tns_admin", "C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
 
 		connected = false;
 		try {
@@ -44,7 +44,7 @@ public class AccessV1DB {
 		System.out.println("DB 1 ist verbunden = " + connected);
 		return connected;
 	}
-	
+
 	public Connection getConnection() {
 		return this.connection;
 	}
@@ -57,7 +57,6 @@ public class AccessV1DB {
 			throw new SQLException("Database not connected");
 		}
 	}
-
 
 	public boolean close() {
 		if (connected) {

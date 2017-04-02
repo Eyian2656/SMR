@@ -7,14 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import model.Data;
 
 public class DataComparer {
-
+	SQLStatements sentStmt = new SQLStatements();
+	
 	public void compareData(List<Data> oldDataList, List<Data> newDataList, String tableName) {
 		for (Data oldData : oldDataList ) {
 			for (Data newData : newDataList) {
 				if (oldData.getNr() == newData.getNr() && !StringUtils.equals(oldData.getValue(), newData.getValue())) {
-					System.out.println("Update "+ tableName + " SET " +
-					oldData.getColumnName() + " = " + newData.getValue()
-					+ " WHERE NR = " + oldData.getNr());	
+					sentStmt.updateData(tableName, newData.getColumnName() , newData.getValue(), oldData.getNr() );
 				}	
 			}
 		}
@@ -25,8 +24,7 @@ public class DataComparer {
 	 */
 	public void newColumnData(List<Data> newDataList, String tableName) {
 		for (Data newData : newDataList) {
-			System.out.println("INSERT INTO " + tableName + " (" + newData.getColumnName() + ") VALUES " + " ( "
-					+ newData.getValue() + " );");
+			sentStmt.insertIntoData(tableName, newData.getColumnName() , newData.getValue(), newData.getNr() );
 		}
 	}
 }

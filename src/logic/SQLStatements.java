@@ -31,6 +31,14 @@ public class SQLStatements {
 		}
 	}
 	
-
+	public void updateData(String tableName , String columnName, String value, int rowNr){
+		String statement = ("UPDATE "+ tableName + " SET " + columnName + " = " + value +" WHERE NR = " + rowNr );
+		scriptwriter.writeScript(statement);
+	}
+	
+	public void insertIntoData(String tableName , String columnName, String value, int rowNr){
+		String statement = ("INSERT INTO " + tableName + " (" + columnName + ") VALUES " + " ( "+ value + " );" );
+		scriptwriter.writeScript(statement);
+	}
 
 }
