@@ -23,20 +23,20 @@ public class TestDB {
 		TableComparer tableComparer = new TableComparer();
 		
 		List<String> toBeCheckedTable = new ArrayList<String>();
-		toBeCheckedTable.add("ATTRIBUT");
-		toBeCheckedTable.add("KANTENTYP");
-		toBeCheckedTable.add("KANTENTYP2ATTRIBUT");
-		toBeCheckedTable.add("KANTENTYP2PANEL");
-		toBeCheckedTable.add("KANTENTYP2ABATTRIBUT");
-		toBeCheckedTable.add("KNOTENTYP");
-		toBeCheckedTable.add("KNOTENTYP2ATTRIBUT");
-		toBeCheckedTable.add("KNOTENTYP2PANEL");
-		toBeCheckedTable.add("KANTENTYP2ABATTRIBUT");
+//		toBeCheckedTable.add("ATTRIBUT");
+//		toBeCheckedTable.add("KANTENTYP");
+//		toBeCheckedTable.add("KANTENTYP2ATTRIBUT");
+//		toBeCheckedTable.add("KANTENTYP2PANEL");
+//		toBeCheckedTable.add("KANTENTYP2ABATTRIBUT");
+//		toBeCheckedTable.add("KNOTENTYP");
+//		toBeCheckedTable.add("KNOTENTYP2ATTRIBUT");
+//		toBeCheckedTable.add("KNOTENTYP2PANEL");
+//		toBeCheckedTable.add("KANTENTYP2ABATTRIBUT");
 		toBeCheckedTable.add("PANEL");
-		toBeCheckedTable.add("PANEL2ATTRIBUT");
-		toBeCheckedTable.add("PANEL2PANEL");
-		toBeCheckedTable.add("PANEL2ABATTRIBUT");
-		toBeCheckedTable.add("TABELLENATTRIBUT");
+//		toBeCheckedTable.add("PANEL2ATTRIBUT");
+//		toBeCheckedTable.add("PANEL2PANEL");
+//		toBeCheckedTable.add("PANEL2ABATTRIBUT");
+//		toBeCheckedTable.add("TABELLENATTRIBUT");
 
 		try {
 			// Hier werden alle Tabellen durchiteriert um diese als string an die einzelnen Methoden zu übergeben

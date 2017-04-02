@@ -32,7 +32,7 @@ public class Skriptwriter {
 	
 	public void writeScript(String scriptCmd) {
 		try {
-			FileWriter outputStream = new FileWriter("C:/Users/Ian/Test/file.sql", true);
+			FileWriter outputStream = new FileWriter("C:/Users/Dev/Abschlussprüfung Ian/file.sql", true);
 			BufferedWriter bw = new BufferedWriter(outputStream);
 			String n = System.getProperty("line.separator");
 			
