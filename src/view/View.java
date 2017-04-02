@@ -15,6 +15,9 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+
+// Filechooser und Actionlistener hinzufügen https://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
+
 public class View extends JFrame{
 	
 	private JTextField txtUserOld, txtUserNew, txtURLOld, txtURLNew;
