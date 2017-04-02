@@ -4,8 +4,8 @@ import logic.Skriptwriter;
 public class SQLStatements {
 	Skriptwriter scriptwriter = new Skriptwriter();
 	//TODO hier muss noch size
-	public void insert(String tableName , String columnName , String datatype){
-		String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + datatype);
+	public void insert(String tableName , String columnName , String datatype, int datasize){
+		String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + " " + datasize);
 		scriptwriter.writeScript(statement);
 		
 	}
@@ -16,8 +16,8 @@ public class SQLStatements {
 		
 	}
 	//TODO hier muss noch size
-	public void modifyDatatyp(String tableName , String columnName, String datatype){
-		String statement = ("ALTER TABLE "+ tableName + " MODIFY " + columnName + datatype);
+	public void modifyDatasize(String tableName , String columnName, String datatype, int datasize){
+		String statement = ("ALTER TABLE "+ tableName + " MODIFY (" + columnName +" "+ datatype +" ("+ datasize + "));");
 		scriptwriter.writeScript(statement);
 	}
 	

@@ -13,7 +13,8 @@ import model.Data;
 public class TableComparer {
 	List<Data> allTableData = new ArrayList<Data>();
 	DataCrawler dataCrawler = new DataCrawler();
-
+	SQLStatements sentStmt = new SQLStatements();
+	
 	public String tablename;
 
 	/**
@@ -33,7 +34,7 @@ public class TableComparer {
 	 */
 	public void differColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
 			Connection oldSchema, Connection newSchema) throws SQLException {
-
+		
 		unwantedColumn(columnOld, columnNew, tableName, oldSchema, newSchema);
 		missingColumn(columnOld, columnNew, tableName, newSchema);
 		wrongDatatypSize(columnOld, columnNew);
@@ -77,7 +78,6 @@ public class TableComparer {
 			}
 			if (columnNotThere == true) {
 				// Übergabe der zuändernden Daten an SqlStatement
-				SQLStatements sentStmt = new SQLStatements();
 				sentStmt.drop(tableName, columnOld.getName());
 			}
 		}
@@ -100,15 +100,10 @@ public class TableComparer {
 				}
 			}
 			if (columnNotThere == true) {
-				// hier kommt die Funktion zum hinzufügen des Namens oder eine
-				// Übergabe des Columns als String um diese ins Skript zu
-				// schreiben
-				System.out.println("Die anzuhängende Spalte ist: " + columnNew.getName() + " Mit dem Datentyp "
-						+ columnNew.getType() + " " + columnNew.getSize());
+				// hier kommt die Funktion zum hinzufügen eines Columns 
+				sentStmt.insert(tableName, columnNew.getName(), columnNew.getType(), columnNew.getSize());
 
-				// Die neue Zeile braucht Daten. oldColumn daten werden null
-				// sein ( da sie noch nicht existiert) und müssen mit newColumn
-				// Daten überschrieben werden.
+				// Hier werden zu der neuen Zeile die Daten hinzugefügt.
 				listOfnewData = dataCrawler.crawlData(newSchema, columnNew.getName(), tableName,
 						columnNew.getType());
 				dataComparer.newColumnData(listOfnewData, tableName);
@@ -118,17 +113,13 @@ public class TableComparer {
 
 	// TODO hier muss nur die Größe veränder werden und NICHT der Datentyp noch
 	// anpassen
-	protected void wrongDatatypSize(List<Column> allColumnOld, List<Column> allColumnNew) {
+	protected void wrongDatatypSize(List<Column> allColumnOld, List<Column> allColumnNew, String tableName) {
 		for (Column columnOld : allColumnOld) {
 			for (Column columnNew : allColumnNew) {
 				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					if (StringUtils.equals(columnNew.getType(), columnOld.getType())
 							&& (columnNew.getSize() != columnOld.getSize())) {
-						// hier muss der columnName geholt werden und an der
-						// stelle den Datatyp geändert werden müssen
-						System.out
-								.println("Typ von: " + columnOld.getName() + " muss zu  " + columnNew.getType()
-										+ " mit der Größe " + columnNew.getSize() + " geändert werden");
+						sentStmt.modifyDatasize(tableName, columnNew.getName(), columnNew.getType(), columnNew.getSize());
 						break;
 					}
 					break;
@@ -137,17 +128,13 @@ public class TableComparer {
 		}
 	}
 
-	protected void nullable(List<Column> allColumnsOld, List<Column> allColumnsNew) {
+	protected void nullable(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName) {
 
 		for (Column columnOld : allColumnsOld) {
 			for (Column columnNew : allColumnsNew) {
 				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					if (columnNew.isNullable() != columnOld.isNullable()) {
-						// der boolean check muss richtige gesetzt werden je
-						// nach dem soll die funktion nullable oder nciht
-						// nullabel sein
-						System.out.println("Typ von: " + columnNew.getName() + " muss zu "
-								+ columnNew.isNullable() + " geändert werden ");
+						sentStmt.modifyNullable(tableName, columnNew.getName(), columnNew.getType(), columnNew.isNullable());
 						break;
 					}
 					break;
