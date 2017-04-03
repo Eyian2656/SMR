@@ -14,8 +14,13 @@ public class SQLStatements {
 	 * @param datasize
 	 */
 	public void insert(String tableName, String columnName, String datatype, int datasize) {
-		String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + " " + datasize);
+		if(datasize == 0){
+		String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + ";");
 		scriptwriter.writeScript(statement);
+		}else {
+		String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + " (" + datasize + ");");
+		scriptwriter.writeScript(statement);
+		}
 
 	}
 
@@ -26,7 +31,7 @@ public class SQLStatements {
 	 * @param columnName
 	 */
 	public void drop(String tableName, String columnName) {
-		String statement = ("ALTER TABLE " + tableName + " DROP COLUMN " + columnName);
+		String statement = ("ALTER TABLE " + tableName + " DROP COLUMN " + columnName+ " ;");
 		scriptwriter.writeScript(statement);
 	}
 
@@ -51,14 +56,21 @@ public class SQLStatements {
 	 * @param datatyp
 	 * @param bool
 	 */
-	public void modifyNullable(String tableName, String columnName, String datatyp, Boolean bool) {
+	public void modifyNullable(String tableName, String columnName, String datatyp, Boolean bool, int datasize) {
 		if (bool == true) {
-			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " " + datatyp + " null");
+			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + "  null" + " ;");
 			scriptwriter.writeScript(statement);
 		} else {
-			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " " + datatyp + " not null");
+			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " not null" + " ;");
 			scriptwriter.writeScript(statement);
 		}
+//		if (bool == true) {
+//			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " " + datatyp + " ("+ datasize+ ") " + "  null" + " ;");
+//			scriptwriter.writeScript(statement);
+//		} else {
+//			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " " + datatyp + " ("+ datasize+ ") " + " not null" + " ;");
+//			scriptwriter.writeScript(statement);
+//		}
 	}
 
 	/**
@@ -69,20 +81,13 @@ public class SQLStatements {
 	 * @param rowNr
 	 */
 	public void updateData(String tableName, String columnName, String value, int rowNr) {
-		String statement = ("UPDATE " + tableName + " SET " + columnName + " = " + value + " WHERE NR = " + rowNr);
+	
+		if(value == null){
+		String statement = ("UPDATE " + tableName + " SET " + columnName + " = " + value + " WHERE NR = " + rowNr + " ;");
 		scriptwriter.writeScript(statement);
-	}
-
-	/**
-	 * Funktion um Daten einer neuerstellten Spalte hinzuzufügen.
-	 * @param tableName
-	 * @param columnName
-	 * @param value
-	 * @param rowNr
-	 */
-	public void insertIntoData(String tableName, String columnName, String value, int rowNr) {
-		String statement = ("INSERT INTO " + tableName + " (" + columnName + ") VALUES " + " ( " + value + " );");
+		}else{
+		String statement = ("UPDATE " + tableName + " SET " + columnName + " = '" + value + "' WHERE NR = " + rowNr + " ;");
 		scriptwriter.writeScript(statement);
+		}
 	}
-
 }

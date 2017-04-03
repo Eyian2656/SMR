@@ -30,7 +30,7 @@ public class DataComparer {
 	 */
 	public void newColumnData(List<Data> newDataList, String tableName) {
 		for (Data newData : newDataList) {
-			sentStmt.insertIntoData(tableName, newData.getColumnName() , newData.getValue(), newData.getNr() );
+			sentStmt.updateData(tableName, newData.getColumnName() , newData.getValue(), newData.getNr() );
 		}
 	}
 }

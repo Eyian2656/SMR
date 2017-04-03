@@ -154,7 +154,7 @@ public class TableComparer {
 			for (Column columnNew : allColumnsNew) {
 				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					if (columnNew.isNullable() != columnOld.isNullable()) {
-						sentStmt.modifyNullable(tableName, columnNew.getName(), columnNew.getType(), columnNew.isNullable());
+						sentStmt.modifyNullable(tableName, columnNew.getName(), columnNew.getType(), columnNew.isNullable(), columnNew.getSize());
 						break;
 					}
 					break;
