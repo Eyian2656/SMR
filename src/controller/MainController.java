@@ -74,10 +74,7 @@ public class MainController {
 				List<Column> oldColumn = tableCrawler.crawlColumns(oldSchema, string);
 				List<Column> newColumn = tableCrawler.crawlColumns(newSchema, string);
 				tableComparer.differColumn(oldColumn, newColumn, string, oldSchema, newSchema);
-				// was raus aus dem differcolumn
-				// - Löschen
-				// - Addieren
-				// - Column Namen änderung bzw löschen und addieren
+
 				System.out.println("=============================");
 			}
 

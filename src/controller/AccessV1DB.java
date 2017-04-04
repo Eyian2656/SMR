@@ -48,6 +48,7 @@ public class AccessV1DB {
 	}
 
 	public Connection getConnection() {
+		System.out.println("DB 1 ist verbunden = " + connected);
 		return this.connection;
 	}
 

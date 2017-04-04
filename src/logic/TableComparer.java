@@ -32,7 +32,7 @@ public class TableComparer {
 	 * @return
 	 * @throws SQLException
 	 */
-	public void differColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
+	protected void differColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
 			Connection oldSchema, Connection newSchema) throws SQLException {
 		
 		missingColumn(columnOld, columnNew, tableName, newSchema);

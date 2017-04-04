@@ -109,7 +109,7 @@ public class MainView extends JFrame {
 		this.add(pnlHead);
 	}
 
-	// Inner Classes für Action Listener\\
+	// Innere Klasse für den Action Listener\\
 	private class onLogin implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
@@ -132,7 +132,7 @@ public class MainView extends JFrame {
 		}
 	}
 
-	// Inner Classes für Action Listener\\
+	// Innere Klasse für den Action Listener\\
 	private class onCancel implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
