@@ -1,39 +1,41 @@
+package controller;
 
 import java.sql.*;
 
+import model.config.DbConfig;
+
 /**
- * Diese Klasse steuert den Datenbankzugriff. Stellt eine Connection zum alten Schema her.
+ * Diese Klasse steuert den Datenbankzugriff. Stellt eine Connection zum alten
+ * Schema her.
  * 
  * @author inoack
  *
  */
-public class AccessV2DB {
-	private static final String URL = "jdbc:oracle:thin:@//localhost:1521/xe";
-	private static final String USER = "IAN_NEW_EPOSDB";
-	private static final String PASSWORT = "EPOSDev";
+public class AccessV1DB {
 	private Connection connection;
 	private boolean connected;
 
-	private static AccessV2DB instance;
+	private static AccessV1DB instance;
 
-	public static AccessV2DB getInstance() {
+	public static AccessV1DB getInstance() {
 		if (instance == null) {
-			instance = new AccessV2DB();
+			instance = new AccessV1DB();
 		}
 		return instance;
 	}
 
-	private AccessV2DB() {
+	private AccessV1DB() {
 		super();
 	}
 
-	public boolean connect() {
+	public boolean connect(DbConfig config) {
 		System.setProperty("oracle.net.tns_admin", "C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
 
 		connected = false;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			connection = DriverManager.getConnection(URL, USER, PASSWORT);
+			connection = DriverManager.getConnection("jdbc:oracle:thin:@" + config.getUrl(), config.getUsername(),
+					config.getPassword());
 			connected = true;
 		} catch (ClassNotFoundException e1) {
 			connected = false;
@@ -42,7 +44,6 @@ public class AccessV2DB {
 			connected = false;
 			e.printStackTrace();
 		}
-		System.out.println("DB 2 ist verbunden = " + connected);
 		return connected;
 	}
 
