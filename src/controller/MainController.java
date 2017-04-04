@@ -36,7 +36,7 @@ public class MainController {
 		mainView.setVisible(true);
 	}
 
-	public void start(DbConfig oldDbConfig, DbConfig newDbConfig) {
+	public boolean start(DbConfig oldDbConfig, DbConfig newDbConfig) {
 		AccessV1DB.getInstance().connect(oldDbConfig);
 		AccessV2DB.getInstance().connect(newDbConfig);
 
@@ -83,8 +83,24 @@ public class MainController {
 
 			oldSchema.close();
 			newSchema.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} 
+	}
+
+	public void closeConnection() {
+		try {
+			if (AccessV1DB.getInstance().getConnection() != null) {
+				AccessV1DB.getInstance().getConnection().close();
+			}
+			if (AccessV2DB.getInstance().getConnection() != null) {
+				AccessV2DB.getInstance().getConnection().close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 	}
 }

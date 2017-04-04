@@ -19,7 +19,7 @@ public class Skriptwriter {
 	 * @throws IOException
 	 */
 	public void findScript() throws IOException{
-		Path path = Paths.get("C:/Users/Dev/Abschlussprüfung Ian/file.sql");
+		Path path = Paths.get("C:/Users/k4t/Output.sql");
 		if(Files.notExists(path)){
 			this.createScript();
 		}
@@ -30,7 +30,7 @@ public class Skriptwriter {
 	 * @throws IOException
 	 */
 	public void createScript() throws IOException {
-		File file = new File("C:/Users/Dev/Abschlussprüfung Ian/file.sql");
+		File file = new File("C:/Users/k4t/Output.sql");
 		file.createNewFile();
 		System.out.println("File wurde erstellt");
 	}
@@ -43,7 +43,7 @@ public class Skriptwriter {
 	 */
 	public void writeScript(String scriptCmd) {
 		try {
-			FileWriter outputStream = new FileWriter("C:/Users/Dev/Abschlussprüfung Ian/file.sql", true);
+			FileWriter outputStream = new FileWriter("C:/Users/k4t/Output.sql", true);
 			BufferedWriter bw = new BufferedWriter(outputStream);
 			String n = System.getProperty("line.separator");
 			

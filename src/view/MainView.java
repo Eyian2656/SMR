@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -115,14 +116,19 @@ public class MainView extends JFrame {
 			DbConfig oldConfig = new DbConfig();
 			oldConfig.setUrl(txtURLOld.getText());
 			oldConfig.setUsername(txtUserOld.getText());
-			oldConfig.setPassword(pwSchemaOld.getPassword().toString());
+			oldConfig.setPassword(new String(pwSchemaOld.getPassword()));
 
 			DbConfig newConfig = new DbConfig();
 			newConfig.setUrl(txtURLNew.getText());
 			newConfig.setUsername(txtUserNew.getText());
-			newConfig.setPassword(pwSchemaNew.getPassword().toString());
+			newConfig.setPassword(new String(pwSchemaNew.getPassword()));
 
-			MainController.getInstance().start(oldConfig, newConfig);
+			boolean isSuccess = MainController.getInstance().start(oldConfig, newConfig);
+			if (isSuccess) {
+				JOptionPane.showMessageDialog(null, "Erfolgreich durchgeführt", "", JOptionPane.OK_OPTION);
+			} else{
+				JOptionPane.showMessageDialog(null, "Fehler. Überprüfe nochmal den log", "", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
@@ -130,7 +136,8 @@ public class MainView extends JFrame {
 	private class onCancel implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-		    System.exit(0); 
+			MainController.getInstance().closeConnection();
+			System.exit(0);
 		}
 	}
 
