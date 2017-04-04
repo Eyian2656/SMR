@@ -127,7 +127,7 @@ public class MainView extends JFrame {
 			if (isSuccess) {
 				JOptionPane.showMessageDialog(null, "Erfolgreich durchgeführt", "", JOptionPane.OK_OPTION);
 			} else{
-				JOptionPane.showMessageDialog(null, "Fehler. Überprüfe nochmal den log", "", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Fehler.", "", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
