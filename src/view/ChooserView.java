@@ -2,7 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -45,6 +44,7 @@ public class ChooserView extends JFrame {
 
 		execute = new JButton("Ausführen");
 		execute.addActionListener(new onExecute());
+		execute.setEnabled(false);
 
 		selectFile = new JButton("Datei auswählen");
 		selectFile.addActionListener(new onSelectFile());
@@ -59,15 +59,14 @@ public class ChooserView extends JFrame {
 		JPanel inputNorthPanel = new JPanel(new BorderLayout());
 		inputNorthPanel.add(selectFile, BorderLayout.WEST);
 		inputNorthPanel.add(lblFilePath, BorderLayout.CENTER);
-		
-		JPanel inputSouthPanel = new JPanel(new GridLayout(3, 2));
+		inputNorthPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 0));
 
 		JPanel inputCenterPanel = new JPanel(new BorderLayout());
 		inputCenterPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 0));
 
 		JPanel inputPanel = new JPanel(new BorderLayout());
 		inputPanel.add(inputNorthPanel, BorderLayout.NORTH);
-//		inputPanel.add(inputCenterPanel, BorderLayout.CENTER);
+		inputPanel.add(inputCenterPanel, BorderLayout.CENTER);
 //		inputPanel.add(inputSouthPanel, BorderLayout.SOUTH);
 		inputPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 15));
 
@@ -110,7 +109,8 @@ public class ChooserView extends JFrame {
 				outputFile = newMapFile;
 				lblFilePath.setText(newMapFile.getAbsolutePath());
 				String path = newMapFile.getAbsolutePath();
-				System.out.println(path);
+				
+				execute.setEnabled(true);
 			} else if (result == JFileChooser.CANCEL_OPTION) {
 				JOptionPane.showMessageDialog(null, "Es wurde keine Datei ausgewählt.", "Keine Datei ausgewählt.",
 						JOptionPane.PLAIN_MESSAGE);

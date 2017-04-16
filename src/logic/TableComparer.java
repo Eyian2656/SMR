@@ -1,5 +1,6 @@
 package logic;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,11 +12,18 @@ import model.Column;
 import model.Data;
 
 public class TableComparer {
-	List<Data> allTableData = new ArrayList<Data>();
-	DataCrawler dataCrawler = new DataCrawler();
-	SQLStatements sentStmt = new SQLStatements();
-	
-	public String tablename;
+	private DataCrawler dataCrawler;
+	private SQLStatements sentStmt;
+
+	public TableComparer(File outputFile) {
+		this.dataCrawler = new DataCrawler();
+		this.sentStmt = new SQLStatements(outputFile);
+	}
+
+	public TableComparer(DataCrawler dataCrawler, SQLStatements sentStmt) {
+		this.dataCrawler = dataCrawler;
+		this.sentStmt = sentStmt;
+	}
 
 	/**
 	 * Die aufzurufende Funktion der Klasse TableComparer zu starten. Sie
@@ -32,21 +40,20 @@ public class TableComparer {
 	 * @return
 	 * @throws SQLException
 	 */
-	public void differColumn(List<Column> columnOld, List<Column> columnNew, String tableName,
-			Connection oldSchema, Connection newSchema) throws SQLException {
-		
+	public void differColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema,
+			Connection newSchema) throws SQLException {
+
 		missingColumn(columnOld, columnNew, tableName, newSchema);
 		wrongDatatypSize(columnOld, columnNew, tableName);
-		nullable(columnOld, columnNew,tableName);
+		nullable(columnOld, columnNew, tableName);
 		unwantedColumn(columnOld, columnNew, tableName, oldSchema, newSchema);
-		
-		
-		
+
 	}
 
 	/**
-	 * STRUKTUR:  Funktion überprüft ob eine Spalte zuviel ist und löscht diese dann.
-	 * DATEN: Vergleichen der bestehenden Spaltendaten, anschließend inkongruente Daten ändern.
+	 * STRUKTUR: Funktion überprüft ob eine Spalte zuviel ist und löscht diese
+	 * dann. DATEN: Vergleichen der bestehenden Spaltendaten, anschließend
+	 * inkongruente Daten ändern.
 	 * 
 	 * @param allColumnsOld
 	 * @param allColumnsNew
@@ -57,7 +64,7 @@ public class TableComparer {
 		boolean columnNotThere = false;
 		List<Data> listOfOldData = new ArrayList<Data>();
 		List<Data> listOfnewData = new ArrayList<Data>();
-		DataComparer dataComparer = new DataComparer();
+		DataComparer dataComparer = new DataComparer(sentStmt);
 
 		for (Column columnOld : allColumnsOld) {
 
@@ -65,7 +72,8 @@ public class TableComparer {
 				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					columnNotThere = false;
 
-					// ÄNDERUNG DATEN: Vergleichen der bestehenden Spaltendaten, anschließend inkongruente Daten ändern.
+					// ÄNDERUNG DATEN: Vergleichen der bestehenden Spaltendaten,
+					// anschließend inkongruente Daten ändern.
 					listOfOldData = dataCrawler.crawlData(oldSchema, columnOld.getName(), tableName,
 							columnOld.getType());
 					listOfnewData = dataCrawler.crawlData(newSchema, columnNew.getName(), tableName,
@@ -85,19 +93,20 @@ public class TableComparer {
 	}
 
 	/**
-	 * STRUKTUR: Funktion die eine fehlende Spalte hinzufügt.
-	 * DATEN: Die zuvor hinzugefügte Spalte erhält die zugehörigen Daten
+	 * STRUKTUR: Funktion die eine fehlende Spalte hinzufügt. DATEN: Die zuvor
+	 * hinzugefügte Spalte erhält die zugehörigen Daten
+	 * 
 	 * @param allColumnsOld
 	 * @param allColumnsNew
 	 * @param tableName
 	 * @param newSchema
 	 * @throws SQLException
 	 */
-	protected void missingColumn(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName, Connection newSchema)
-			throws SQLException {
+	protected void missingColumn(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName,
+			Connection newSchema) throws SQLException {
 		boolean columnNotThere = false;
 		List<Data> listOfnewData = new ArrayList<Data>();
-		DataComparer dataComparer = new DataComparer();
+		DataComparer dataComparer = new DataComparer(sentStmt);
 
 		for (Column columnNew : allColumnsNew) {
 
@@ -113,27 +122,29 @@ public class TableComparer {
 				// ÄNDERUNG STRUKTUR: Fehlende Spalte wird hinzugefügt.
 				sentStmt.insert(tableName, columnNew.getName(), columnNew.getType(), columnNew.getSize());
 
-				// ÄNDERUNG DATEN: Zuvor erstellte Spalte erhält jetzt die zugehörigen Daten.
-				listOfnewData = dataCrawler.crawlData(newSchema, columnNew.getName(), tableName,
-						columnNew.getType());
+				// ÄNDERUNG DATEN: Zuvor erstellte Spalte erhält jetzt die
+				// zugehörigen Daten.
+				listOfnewData = dataCrawler.crawlData(newSchema, columnNew.getName(), tableName, columnNew.getType());
 				dataComparer.newColumnData(listOfnewData, tableName);
 			}
 		}
 	}
 
-/**
- * Überprüfung und korrektur der Datentypgröße
- * @param allColumnOld
- * @param allColumnNew
- * @param tableName
- */
+	/**
+	 * Überprüfung und korrektur der Datentypgröße
+	 * 
+	 * @param allColumnOld
+	 * @param allColumnNew
+	 * @param tableName
+	 */
 	protected void wrongDatatypSize(List<Column> allColumnOld, List<Column> allColumnNew, String tableName) {
 		for (Column columnOld : allColumnOld) {
 			for (Column columnNew : allColumnNew) {
 				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					if (StringUtils.equals(columnNew.getType(), columnOld.getType())
 							&& (columnNew.getSize() != columnOld.getSize())) {
-						sentStmt.modifyDatasize(tableName, columnNew.getName(), columnNew.getType(), columnNew.getSize());
+						sentStmt.modifyDatasize(tableName, columnNew.getName(), columnNew.getType(),
+								columnNew.getSize());
 						break;
 					}
 					break;
@@ -144,6 +155,7 @@ public class TableComparer {
 
 	/**
 	 * Überprüfen und korrektur des Feldes Nullable
+	 * 
 	 * @param allColumnsOld
 	 * @param allColumnsNew
 	 * @param tableName
@@ -154,7 +166,8 @@ public class TableComparer {
 			for (Column columnNew : allColumnsNew) {
 				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
 					if (columnNew.isNullable() != columnOld.isNullable()) {
-						sentStmt.modifyNullable(tableName, columnNew.getName(), columnNew.getType(), columnNew.isNullable(), columnNew.getSize());
+						sentStmt.modifyNullable(tableName, columnNew.getName(), columnNew.getType(),
+								columnNew.isNullable(), columnNew.getSize());
 						break;
 					}
 					break;

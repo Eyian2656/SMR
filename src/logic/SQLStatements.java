@@ -1,10 +1,15 @@
 package logic;
 
+import java.io.File;
+
 import logic.Skriptwriter;
 
 public class SQLStatements {
-	Skriptwriter scriptwriter = new Skriptwriter();
-
+	private Skriptwriter scriptwriter;
+	
+	public SQLStatements (File outputFile){
+		this.scriptwriter = new Skriptwriter(outputFile);
+	}
 	/**
 	 * Funktion die eine Spalte hinzufügt.
 	 * 

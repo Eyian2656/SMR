@@ -9,8 +9,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Skriptwriter {
+	private File outputFile;
 
-	public Skriptwriter() {
+	public Skriptwriter(File outputFile) {
+		this.outputFile = outputFile;
 	}
 
 	/**
@@ -32,8 +34,7 @@ public class Skriptwriter {
 	 * @throws IOException
 	 */
 	public void createScript() throws IOException {
-		File file = new File("C:/Users/Dev/Abschlussprüfung Ian/file.sql");
-		file.createNewFile();
+		outputFile.createNewFile();
 		System.out.println("File wurde erstellt");
 	}
 
@@ -46,7 +47,7 @@ public class Skriptwriter {
 	 */
 	public void writeScript(String scriptCmd) {
 		try {
-			FileWriter outputStream = new FileWriter("C:/Users/Dev/Abschlussprüfung Ian/file.sql", true);
+			FileWriter outputStream = new FileWriter(outputFile, true);
 			BufferedWriter bw = new BufferedWriter(outputStream);
 			String n = System.getProperty("line.separator");
 

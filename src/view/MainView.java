@@ -57,7 +57,7 @@ public class MainView extends JFrame {
 		ok = new JButton("Verbinden");
 		ok.addActionListener(new onConnect());
 
-		cancel = new JButton("Cancel");
+		cancel = new JButton("Abbrechen");
 		cancel.addActionListener(new onCancel());
 
 		JPanel buttonPanel = new JPanel(new BorderLayout());
@@ -103,7 +103,7 @@ public class MainView extends JFrame {
 		titleNew = BorderFactory.createTitledBorder(loweredetched, "Neues DB");
 		titleNew.setTitleJustification(TitledBorder.CENTER);
 		inputSouthPanel.setBorder(titleNew);
-
+		
 		pack();
 		this.setLocationRelativeTo(null);
 		this.add(pnlHead);

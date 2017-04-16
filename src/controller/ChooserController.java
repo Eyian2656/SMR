@@ -53,7 +53,7 @@ public class ChooserController {
 	public void execute(File file){
 
 		TableCrawler tableCrawler = new TableCrawler();
-		TableComparer tableComparer = new TableComparer();
+		TableComparer tableComparer = new TableComparer(file);
 
 		List<String> toBeCheckedTable = new ArrayList<String>();
 		toBeCheckedTable.add("ATTRIBUT");
