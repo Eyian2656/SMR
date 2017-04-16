@@ -37,10 +37,7 @@ public class AccessV1DB {
 			connection = DriverManager.getConnection("jdbc:oracle:thin:@" + config.getUrl(), config.getUsername(),
 					config.getPassword());
 			connected = true;
-		} catch (ClassNotFoundException e1) {
-			connected = false;
-			e1.printStackTrace();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			connected = false;
 			e.printStackTrace();
 		}

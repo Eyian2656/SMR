@@ -52,15 +52,6 @@ public class AccessV2DB {
 		return this.connection;
 	}
 
-	public ResultSet executeQuery(String query) throws SQLException {
-		if (connected) {
-			Statement stmt = connection.createStatement();
-			return stmt.executeQuery(query);
-		} else {
-			throw new SQLException("Database not connected");
-		}
-	}
-
 	public boolean close() {
 		if (connected) {
 			try {

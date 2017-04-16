@@ -10,7 +10,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -55,8 +54,8 @@ public class MainView extends JFrame {
 		pwSchemaOld = new JPasswordField(20);
 		pwSchemaNew = new JPasswordField(20);
 
-		ok = new JButton("Starten");
-		ok.addActionListener(new onLogin());
+		ok = new JButton("Verbinden");
+		ok.addActionListener(new onConnect());
 
 		cancel = new JButton("Cancel");
 		cancel.addActionListener(new onCancel());
@@ -96,21 +95,22 @@ public class MainView extends JFrame {
 		pnlHead.add(buttonPanel, BorderLayout.SOUTH);
 
 		TitledBorder titleOld;
-		titleOld = BorderFactory.createTitledBorder(loweredetched, "Schema Old");
+		titleOld = BorderFactory.createTitledBorder(loweredetched, "Altes DB");
 		titleOld.setTitleJustification(TitledBorder.CENTER);
 		inputNorthPanel.setBorder(titleOld);
 
 		TitledBorder titleNew;
-		titleNew = BorderFactory.createTitledBorder(loweredetched, "Schema New");
+		titleNew = BorderFactory.createTitledBorder(loweredetched, "Neues DB");
 		titleNew.setTitleJustification(TitledBorder.CENTER);
 		inputSouthPanel.setBorder(titleNew);
 
 		pack();
+		this.setLocationRelativeTo(null);
 		this.add(pnlHead);
 	}
 
 	// Innere Klasse für den Action Listener\\
-	private class onLogin implements ActionListener {
+	private class onConnect implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			DbConfig oldConfig = new DbConfig();
@@ -123,12 +123,7 @@ public class MainView extends JFrame {
 			newConfig.setUsername(txtUserNew.getText());
 			newConfig.setPassword(new String(pwSchemaNew.getPassword()));
 
-			boolean isSuccess = MainController.getInstance().start(oldConfig, newConfig);
-			if (isSuccess) {
-				JOptionPane.showMessageDialog(null, "Erfolgreich durchgeführt", "", JOptionPane.OK_OPTION);
-			} else{
-				JOptionPane.showMessageDialog(null, "Fehler.", "", JOptionPane.ERROR_MESSAGE);
-			}
+			MainController.getInstance().start(oldConfig, newConfig);
 		}
 	}
 
