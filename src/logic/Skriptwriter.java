@@ -27,7 +27,6 @@ public class Skriptwriter {
 
 			bw.flush();
 			bw.write(n);
-			bw.write("------");
 			bw.write(scriptCmd);
 			bw.close();
 

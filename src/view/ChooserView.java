@@ -79,6 +79,8 @@ public class ChooserView extends JFrame {
 		titleFileChooser.setTitleJustification(TitledBorder.CENTER);
 		inputNorthPanel.setBorder(titleFileChooser);
 
+		selectFile();
+
 		pack();
 		this.setLocationRelativeTo(null);
 		this.add(pnlHead);
@@ -103,17 +105,6 @@ public class ChooserView extends JFrame {
 
 		public void actionPerformed(ActionEvent ae) {
 			selectFile();
-			File newMapFile = outputFileChooser.getSelectedFile();
-
-			if (result == JFileChooser.APPROVE_OPTION) {
-				outputFile = newMapFile;
-				System.out.println(outputFile);
-				lblFilePath.setText(newMapFile.getAbsolutePath());
-				execute.setEnabled(true);
-			} else if (result == JFileChooser.CANCEL_OPTION) {
-				JOptionPane.showMessageDialog(null, "Es wurde keine Datei ausgewählt.", "Keine Datei ausgewählt.",
-						JOptionPane.PLAIN_MESSAGE);
-			}
 		}
 	}
 
@@ -125,6 +116,31 @@ public class ChooserView extends JFrame {
 		outputFileChooser.addChoosableFileFilter(new FileNameExtensionFilter(".sql", "sql"));
 		outputFileChooser.setAcceptAllFileFilterUsed(false);
 		result = outputFileChooser.showDialog(null, "Datei Auswählen");
+
+		File updateFile = outputFileChooser.getSelectedFile();
+
+		// Loesche wenn file existiert
+		if (updateFile.exists()) {
+			int showConfirmDialog = JOptionPane.showConfirmDialog(null,
+					"Die datei " + updateFile.getName()
+							+ " ist bereits vorhanden. Möchten Sie diese Datei überschreiben?",
+					"Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (showConfirmDialog == JOptionPane.NO_OPTION) {
+				selectFile();
+			} else if (showConfirmDialog == JOptionPane.YES_OPTION) {
+				updateFile.delete();
+			} 
+		} 
+
+		if (result == JFileChooser.APPROVE_OPTION) {
+			outputFile = updateFile;
+			System.out.println(outputFile);
+			lblFilePath.setText(updateFile.getAbsolutePath());
+			execute.setEnabled(true);
+		} else if (result == JFileChooser.CANCEL_OPTION) {
+			JOptionPane.showMessageDialog(null, "Es wurde keine Datei ausgewählt.", "Keine Datei ausgewählt.",
+					JOptionPane.PLAIN_MESSAGE);
+		}
 	}
 
 }
