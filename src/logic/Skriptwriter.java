@@ -4,38 +4,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Skriptwriter {
 	private File outputFile;
 
 	public Skriptwriter(File outputFile) {
 		this.outputFile = outputFile;
-	}
-
-	/**
-	 * Funktion die überprüft ob ein Updateskript im ausgewählten Pfad
-	 * existiert. Wenn nicht wird ein Updateskript erstellt.
-	 * 
-	 * @throws IOException
-	 */
-	public void findScript() throws IOException {
-		Path path = Paths.get("C:/Users/Dev/Abschlussprüfung Ian/file.sql");
-		if (Files.notExists(path)) {
-			this.createScript();
-		}
-	}
-
-	/**
-	 * Funkion um das Updateskript zu erstellen.
-	 * 
-	 * @throws IOException
-	 */
-	public void createScript() throws IOException {
-		outputFile.createNewFile();
-		System.out.println("File wurde erstellt");
 	}
 
 	/**
@@ -53,6 +27,7 @@ public class Skriptwriter {
 
 			bw.flush();
 			bw.write(n);
+			bw.write("------");
 			bw.write(scriptCmd);
 			bw.close();
 

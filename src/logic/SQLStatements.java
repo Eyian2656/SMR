@@ -6,10 +6,11 @@ import logic.Skriptwriter;
 
 public class SQLStatements {
 	private Skriptwriter scriptwriter;
-	
-	public SQLStatements (File outputFile){
+
+	public SQLStatements(File outputFile) {
 		this.scriptwriter = new Skriptwriter(outputFile);
 	}
+
 	/**
 	 * Funktion die eine Spalte hinzufügt.
 	 * 
@@ -19,12 +20,13 @@ public class SQLStatements {
 	 * @param datasize
 	 */
 	public void insert(String tableName, String columnName, String datatype, int datasize) {
-		if(datasize == 0){
-		String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + ";");
-		scriptwriter.writeScript(statement);
-		}else {
-		String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + " (" + datasize + ");");
-		scriptwriter.writeScript(statement);
+		if (datasize == 0) {
+			String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + ";");
+			scriptwriter.writeScript(statement);
+		} else {
+			String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + " (" + datasize
+					+ ");");
+			scriptwriter.writeScript(statement);
 		}
 
 	}
@@ -36,7 +38,7 @@ public class SQLStatements {
 	 * @param columnName
 	 */
 	public void drop(String tableName, String columnName) {
-		String statement = ("ALTER TABLE " + tableName + " DROP COLUMN " + columnName+ " ;");
+		String statement = ("ALTER TABLE " + tableName + " DROP COLUMN " + columnName + " ;");
 		scriptwriter.writeScript(statement);
 	}
 
@@ -56,6 +58,7 @@ public class SQLStatements {
 
 	/**
 	 * Funktion die das Feld Nullable korrigiert.
+	 * 
 	 * @param tableName
 	 * @param columnName
 	 * @param datatyp
@@ -69,30 +72,26 @@ public class SQLStatements {
 			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " not null" + " ;");
 			scriptwriter.writeScript(statement);
 		}
-//		if (bool == true) {
-//			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " " + datatyp + " ("+ datasize+ ") " + "  null" + " ;");
-//			scriptwriter.writeScript(statement);
-//		} else {
-//			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " " + datatyp + " ("+ datasize+ ") " + " not null" + " ;");
-//			scriptwriter.writeScript(statement);
-//		}
 	}
 
 	/**
 	 * Funktion um die Daten einer bestehenden Spalte zu korrigieren.
+	 * 
 	 * @param tableName
 	 * @param columnName
 	 * @param value
 	 * @param rowNr
 	 */
 	public void updateData(String tableName, String columnName, String value, int rowNr) {
-	
-		if(value == null){
-		String statement = ("UPDATE " + tableName + " SET " + columnName + " = " + value + " WHERE NR = " + rowNr + " ;");
-		scriptwriter.writeScript(statement);
-		}else{
-		String statement = ("UPDATE " + tableName + " SET " + columnName + " = '" + value + "' WHERE NR = " + rowNr + " ;");
-		scriptwriter.writeScript(statement);
+
+		if (value == null) {
+			String statement = ("UPDATE " + tableName + " SET " + columnName + " = " + value + " WHERE NR = " + rowNr
+					+ " ;");
+			scriptwriter.writeScript(statement);
+		} else {
+			String statement = ("UPDATE " + tableName + " SET " + columnName + " = '" + value + "' WHERE NR = " + rowNr
+					+ " ;");
+			scriptwriter.writeScript(statement);
 		}
 	}
 }

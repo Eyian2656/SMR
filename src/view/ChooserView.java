@@ -107,6 +107,7 @@ public class ChooserView extends JFrame {
 
 			if (result == JFileChooser.APPROVE_OPTION) {
 				outputFile = newMapFile;
+				System.out.println(outputFile);
 				lblFilePath.setText(newMapFile.getAbsolutePath());
 				execute.setEnabled(true);
 			} else if (result == JFileChooser.CANCEL_OPTION) {

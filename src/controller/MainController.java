@@ -36,8 +36,6 @@ public class MainController {
 	}
 
 	public void start(DbConfig oldDbConfig, DbConfig newDbConfig) {
-		// TODO Validation if the schema have the same crednetial
-
 		try {
 			AccessV1DB.getInstance().connect(oldDbConfig);
 			AccessV2DB.getInstance().connect(newDbConfig);
@@ -45,7 +43,7 @@ public class MainController {
 			e.printStackTrace();
 			closeConnection();
 			JOptionPane.showMessageDialog(null,
-					"Verbindung mit der DB wurde abgelehnt. Details : " + e.getMessage());
+					"Verbindung mit der DB wurde abgelehnt. Log : " + e.getMessage());
 		}
 
 		AccessV1DB.getInstance().getConnection();

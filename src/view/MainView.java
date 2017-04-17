@@ -98,12 +98,12 @@ public class MainView extends JFrame {
 		pnlHead.add(buttonPanel, BorderLayout.SOUTH);
 
 		TitledBorder titleOld;
-		titleOld = BorderFactory.createTitledBorder(loweredetched, "Altes DB");
+		titleOld = BorderFactory.createTitledBorder(loweredetched, "Schema Old");
 		titleOld.setTitleJustification(TitledBorder.CENTER);
 		inputNorthPanel.setBorder(titleOld);
 
 		TitledBorder titleNew;
-		titleNew = BorderFactory.createTitledBorder(loweredetched, "Neues DB");
+		titleNew = BorderFactory.createTitledBorder(loweredetched, "Schema New");
 		titleNew.setTitleJustification(TitledBorder.CENTER);
 		inputSouthPanel.setBorder(titleNew);
 
