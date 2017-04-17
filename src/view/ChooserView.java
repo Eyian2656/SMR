@@ -117,7 +117,6 @@ public class ChooserView extends JFrame {
 		outputFileChooser.setAcceptAllFileFilterUsed(false);
 		result = outputFileChooser.showDialog(null, "Datei Auswählen");
 
-		System.out.println("++++++++++" + result);
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File updateFile = outputFileChooser.getSelectedFile();
 
