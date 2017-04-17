@@ -117,22 +117,24 @@ public class ChooserView extends JFrame {
 		outputFileChooser.setAcceptAllFileFilterUsed(false);
 		result = outputFileChooser.showDialog(null, "Datei Auswählen");
 
-		File updateFile = outputFileChooser.getSelectedFile();
-
-		// Loesche wenn file existiert
-		if (updateFile.exists()) {
-			int showConfirmDialog = JOptionPane.showConfirmDialog(null,
-					"Die datei " + updateFile.getName()
-							+ " ist bereits vorhanden. Möchten Sie diese Datei überschreiben?",
-					"Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if (showConfirmDialog == JOptionPane.NO_OPTION) {
-				selectFile();
-			} else if (showConfirmDialog == JOptionPane.YES_OPTION) {
-				updateFile.delete();
-			} 
-		} 
-
+		System.out.println("++++++++++" + result);
 		if (result == JFileChooser.APPROVE_OPTION) {
+			File updateFile = outputFileChooser.getSelectedFile();
+
+			// Loesche wenn file existiert
+			if (updateFile.exists()) {
+				int showConfirmDialog = JOptionPane.showConfirmDialog(null,
+						"Die datei " + updateFile.getName()
+								+ " ist bereits vorhanden. Möchten Sie diese Datei überschreiben?",
+						"Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			
+				if (showConfirmDialog == JOptionPane.NO_OPTION) {
+					selectFile();
+				} else if (showConfirmDialog == JOptionPane.YES_OPTION) {
+					updateFile.delete();
+				}
+			}
+
 			outputFile = updateFile;
 			System.out.println(outputFile);
 			lblFilePath.setText(updateFile.getAbsolutePath());
@@ -141,6 +143,7 @@ public class ChooserView extends JFrame {
 			JOptionPane.showMessageDialog(null, "Es wurde keine Datei ausgewählt.", "Keine Datei ausgewählt.",
 					JOptionPane.PLAIN_MESSAGE);
 		}
+
 	}
 
 }

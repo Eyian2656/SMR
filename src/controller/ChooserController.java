@@ -80,10 +80,13 @@ public class ChooserController {
 			
 			JOptionPane.showMessageDialog(null, "Erfolgreich ausgeführt. Die Update Skripte werden in '"
 					+ file.getAbsolutePath() + "' gespeichert");
+			
+			System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null,
 					"Error Message : " + e.getMessage());
+			System.exit(1);
 		}
 	}
 
