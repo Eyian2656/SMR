@@ -2,7 +2,6 @@ package logic;
 
 import java.io.File;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +37,10 @@ public class TableComparer {
 	 * @param tableName
 	 * @param getColNames
 	 * @return
-	 * @throws SQLException
+	 * @throws Exception 
 	 */
 	public void differColumn(List<Column> columnOld, List<Column> columnNew, String tableName, Connection oldSchema,
-			Connection newSchema) throws SQLException {
+			Connection newSchema) throws Exception {
 
 		missingColumn(columnOld, columnNew, tableName, newSchema);
 		wrongDatatypSize(columnOld, columnNew, tableName);
@@ -57,10 +56,10 @@ public class TableComparer {
 	 * 
 	 * @param allColumnsOld
 	 * @param allColumnsNew
-	 * @throws SQLException
+	 * @throws Exception 
 	 */
 	protected void unwantedColumn(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName,
-			Connection oldSchema, Connection newSchema) throws SQLException {
+			Connection oldSchema, Connection newSchema) throws Exception {
 		boolean columnNotThere = false;
 		List<Data> listOfOldData = new ArrayList<Data>();
 		List<Data> listOfnewData = new ArrayList<Data>();
@@ -100,10 +99,10 @@ public class TableComparer {
 	 * @param allColumnsNew
 	 * @param tableName
 	 * @param newSchema
-	 * @throws SQLException
+	 * @throws Exception 
 	 */
 	protected void missingColumn(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName,
-			Connection newSchema) throws SQLException {
+			Connection newSchema) throws Exception {
 		boolean columnNotThere = false;
 		List<Data> listOfnewData = new ArrayList<Data>();
 		DataComparer dataComparer = new DataComparer(sentStmt);

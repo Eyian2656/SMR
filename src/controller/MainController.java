@@ -1,6 +1,5 @@
 package controller;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
@@ -37,24 +36,26 @@ public class MainController {
 	}
 
 	public void start(DbConfig oldDbConfig, DbConfig newDbConfig) {
-		AccessV1DB.getInstance().connect(oldDbConfig);
-		AccessV2DB.getInstance().connect(newDbConfig);
-
-		Connection oldSchema = AccessV1DB.getInstance().getConnection();
-		Connection newSchema = AccessV2DB.getInstance().getConnection();
-
 		// TODO Validation if the schema have the same crednetial
-		// TODO Check if the connection both successfull, then continue
-		// Validate the connection
-		if (oldSchema != null && !AccessV1DB.getInstance().isConnected()) {
-			JOptionPane.showMessageDialog(null, "Verbindung mit der alten DB wurde abgelehnt");
-		} else if (newSchema != null && !AccessV2DB.getInstance().isConnected()) {
-			JOptionPane.showMessageDialog(null, "Verbindung mit der neuen DB wurde abgelehnt");
-		} else if (AccessV1DB.getInstance().isConnected() && AccessV2DB.getInstance().isConnected()) {
-			hideMainView();
-			ChooserController.getInstance().showChooserView(oldSchema, newSchema);
+
+		try {
+			AccessV1DB.getInstance().connect(oldDbConfig);
+			AccessV2DB.getInstance().connect(newDbConfig);
+		} catch (Exception e) {
+			e.printStackTrace();
+			closeConnection();
+			JOptionPane.showMessageDialog(null,
+					"Verbindung mit der DB wurde abgelehnt. Details : " + e.getMessage());
 		}
 
+		AccessV1DB.getInstance().getConnection();
+		AccessV2DB.getInstance().getConnection();
+
+		// Validate the connection
+		if (AccessV1DB.getInstance().isConnected() && AccessV2DB.getInstance().isConnected()) {
+			hideMainView();
+			ChooserController.getInstance().showChooserView();
+		}
 	}
 
 	public void closeConnection() {
@@ -69,5 +70,4 @@ public class MainController {
 			e.printStackTrace();
 		}
 	}
-
 }

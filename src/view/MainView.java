@@ -10,12 +10,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import org.apache.commons.lang3.StringUtils;
 
 import controller.MainController;
 import model.config.DbConfig;
@@ -103,7 +106,7 @@ public class MainView extends JFrame {
 		titleNew = BorderFactory.createTitledBorder(loweredetched, "Neues DB");
 		titleNew.setTitleJustification(TitledBorder.CENTER);
 		inputSouthPanel.setBorder(titleNew);
-		
+
 		pack();
 		this.setLocationRelativeTo(null);
 		this.add(pnlHead);
@@ -114,16 +117,22 @@ public class MainView extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 			DbConfig oldConfig = new DbConfig();
+			DbConfig newConfig = new DbConfig();
+
 			oldConfig.setUrl(txtURLOld.getText());
 			oldConfig.setUsername(txtUserOld.getText());
-			oldConfig.setPassword(new String(pwSchemaOld.getPassword()));
 
-			DbConfig newConfig = new DbConfig();
 			newConfig.setUrl(txtURLNew.getText());
 			newConfig.setUsername(txtUserNew.getText());
-			newConfig.setPassword(new String(pwSchemaNew.getPassword()));
 
-			MainController.getInstance().start(oldConfig, newConfig);
+			if (StringUtils.isBlank(new String(pwSchemaOld.getPassword()))
+					|| StringUtils.isBlank(new String(pwSchemaNew.getPassword()))) {
+				JOptionPane.showMessageDialog(null, "Passwort kann nicht leer sein");
+			} else {
+				oldConfig.setPassword(new String(pwSchemaOld.getPassword()));
+				newConfig.setPassword(new String(pwSchemaNew.getPassword()));
+				MainController.getInstance().start(oldConfig, newConfig);
+			}
 		}
 	}
 
@@ -135,5 +144,4 @@ public class MainView extends JFrame {
 			System.exit(0);
 		}
 	}
-
 }

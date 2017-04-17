@@ -34,7 +34,7 @@ public class ChooserView extends JFrame {
 	private int result;
 	private File outputFile;
 
-	public ChooserView() {
+	public ChooserView(int tableNameSize) {
 		this.setMinimumSize(new Dimension(700, 300));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
@@ -48,7 +48,7 @@ public class ChooserView extends JFrame {
 
 		selectFile = new JButton("Datei auswählen");
 		selectFile.addActionListener(new onSelectFile());
-		
+
 		lblFilePath = new JLabel("");
 
 		JPanel buttonPanel = new JPanel(new BorderLayout());
@@ -67,7 +67,7 @@ public class ChooserView extends JFrame {
 		JPanel inputPanel = new JPanel(new BorderLayout());
 		inputPanel.add(inputNorthPanel, BorderLayout.NORTH);
 		inputPanel.add(inputCenterPanel, BorderLayout.CENTER);
-//		inputPanel.add(inputSouthPanel, BorderLayout.SOUTH);
+		// inputPanel.add(inputSouthPanel, BorderLayout.SOUTH);
 		inputPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 15));
 
 		JPanel pnlHead = new JPanel(new BorderLayout());
@@ -108,8 +108,6 @@ public class ChooserView extends JFrame {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				outputFile = newMapFile;
 				lblFilePath.setText(newMapFile.getAbsolutePath());
-				String path = newMapFile.getAbsolutePath();
-				
 				execute.setEnabled(true);
 			} else if (result == JFileChooser.CANCEL_OPTION) {
 				JOptionPane.showMessageDialog(null, "Es wurde keine Datei ausgewählt.", "Keine Datei ausgewählt.",

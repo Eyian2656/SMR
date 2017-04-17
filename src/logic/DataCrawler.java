@@ -2,7 +2,6 @@ package logic;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,34 +24,44 @@ public class DataCrawler {
 	DateFormat df = new SimpleDateFormat("dd-mmm-yyyy");
 
 	public List<Data> crawlData(Connection conn, String columnName, String tablename, String datatype)
-			throws SQLException {
+			throws Exception {
 		List<Data> dataInsideTable = new ArrayList<Data>();
 		Statement stmt = conn.createStatement();
 		String sqlStmt = "SELECT NR , " + columnName + " FROM " + tablename;
-		ResultSet rs = stmt.executeQuery(sqlStmt);
+		try {
+			ResultSet rs = stmt.executeQuery(sqlStmt);
 
-		while (rs.next()) {
-			Data tableData = new Data();
-			tableData.setNr(rs.getBigDecimal(1).intValueExact());
+			while (rs.next()) {
+				Data tableData = new Data();
+				tableData.setNr(rs.getBigDecimal(1).intValueExact());
 
-			// Überprüfung des -auf der DB hinterlegten- Datentyps um diese als String in ein Objekt zu parsen.
-			if (StringUtils.equals(datatype, "NUMBER")) {
-				tableData.setValue(String.valueOf(rs.getInt(2)));
-			}
-			if (StringUtils.equals(datatype, "VARCHAR2")) {
-				tableData.setValue(rs.getString(2));
-			}
-			if (StringUtils.equals(datatype, "DATE")) {
-				if(rs.getDate(2)== null){
-					tableData.setValue("null");
-				}else {
-				tableData.setValue(df.format(rs.getDate(2)));
+				// Überprüfung des -auf der DB hinterlegten- Datentyps um diese
+				// als String in ein Objekt zu parsen.
+				if (StringUtils.equals(datatype, "NUMBER")) {
+					tableData.setValue(String.valueOf(rs.getInt(2)));
 				}
+				if (StringUtils.equals(datatype, "VARCHAR2")) {
+					tableData.setValue(rs.getString(2));
+				}
+				if (StringUtils.equals(datatype, "DATE")) {
+					if (rs.getDate(2) == null) {
+						tableData.setValue("null");
+					} else {
+						tableData.setValue(df.format(rs.getDate(2)));
+					}
+				}
+				tableData.setColumnName(columnName);
+				dataInsideTable.add(tableData);
 			}
-			tableData.setColumnName(columnName);
-			dataInsideTable.add(tableData);
+			return dataInsideTable;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (Exception e) {
+				throw e;
+			};
 		}
-		return dataInsideTable;
 	}
 
 }
