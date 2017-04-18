@@ -76,16 +76,18 @@ public class ChooserController {
 				System.out.println("=============================");
 			}
 
-			System.out.println(file.getTotalSpace());
-			
-			JOptionPane.showMessageDialog(null, "Erfolgreich ausgeführt. Die Update Skripte werden in '"
-					+ file.getAbsolutePath() + "' gespeichert");
-			
+			if (file.exists()) {
+				JOptionPane.showMessageDialog(null, "Erfolgreich ausgeführt. Das Updateskript wurde in '"
+						+ file.getAbsolutePath() + "' gespeichert");
+
+			} else {
+				JOptionPane.showMessageDialog(null, "Schemas sind kongruent. Es wurde kein Updateskript erstellt.");
+			}
+
 			System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null,
-					"Error Message : " + e.getMessage());
+			JOptionPane.showMessageDialog(null, "Error Message : " + e.getMessage());
 			System.exit(1);
 		}
 	}
