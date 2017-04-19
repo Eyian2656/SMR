@@ -18,9 +18,9 @@ public class AccessDB {
 	private boolean connected;
 
 	public boolean connect(DbConfig config) throws Exception {
-		System.setProperty("oracle.net.tns_admin", "C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
 
-		connected = false;
+
+		connected = false;	
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			connection = DriverManager.getConnection("jdbc:oracle:thin:@" + config.getUrl(), config.getUsername(),

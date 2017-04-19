@@ -3,9 +3,12 @@ package controller;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLRecoverableException;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import org.apache.commons.lang3.StringUtils;
 
 import model.Column;
 import model.TableName;
@@ -51,7 +54,11 @@ public class MainController {
 	 * @throws SQLException
 	 */
 
-	public void start(DbConfig oldDbConfig, DbConfig newDbConfig, File file) {
+	public boolean connect(DbConfig oldDbConfig, DbConfig newDbConfig, String tnsPath) {
+		if (!StringUtils.isBlank(tnsPath)) {
+			System.setProperty("oracle.net.tns_admin", tnsPath);
+		}
+
 		Connection oldConnection = null;
 		Connection newConnection = null;
 		try {
@@ -63,27 +70,38 @@ public class MainController {
 
 			// Validierung von der Verbindung
 			if (accessOldDb.isConnected() && accessNewDb.isConnected()) {
-				this.execute(file);
-				hideMainView();
+				return true;
 			}
+		} catch (SQLRecoverableException e) {
+			System.out.println("1");
+			JOptionPane.showMessageDialog(null, "Verbindung mit der Datenbank konnte nicht hergestellt werden. \n" + e.getMessage()
+					+ "\nÜberprüfen Sie den Oracle Admin Pfad an.");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Verbindung mit der DB wurde abgelehnt. Log : " + e.getMessage());
+			System.out.println("2");
+			JOptionPane.showMessageDialog(null, "Verbindung mit der Datenbank konnte nicht hergestellt werden. \n" + e.getMessage());
 		} finally {
+			System.out.println("3");
+
 			if (oldConnection != null) {
 				try {
+					System.out.println("4");
 					oldConnection.close();
+
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(null, "Error bei alte DB mit der Nachricht: " + e.getMessage());
 				}
 			}
 			if (newConnection != null) {
 				try {
+					System.out.println("5");
+
 					newConnection.close();
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(null, "Error bei neue DB mit der Nachricht : " + e.getMessage());
 				}
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -93,7 +111,7 @@ public class MainController {
 	 * 
 	 * @param file
 	 */
-	private void execute(File file) {
+	public void execute(File file) {
 		TableCrawler tableCrawler = new TableCrawler();
 		TableComparer tableComparer = new TableComparer(file);
 		List<String> toBeCheckedTable = TableName.list;

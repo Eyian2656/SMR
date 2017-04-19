@@ -30,16 +30,16 @@ public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JFileChooser outputFileChooser;
 	private int result;
-	private JTextField txtUserOld, txtUserNew, txtURLOld, txtURLNew;
+	private JTextField txtUserOld, txtUserNew, txtURLOld, txtURLNew, txtTnsPath;
 	private JPasswordField pwSchemaOld, pwSchemaNew;
 	private JButton ok, cancel;
-	private JLabel lblUser, lblPw, lblUserB, lblPwB, lblURLA, lblURLB;
+	private JLabel lblUser, lblPw, lblUserB, lblPwB, lblURLA, lblURLB, lblTnsPath;
 	private Border loweredetched;
 	private MainController mainController;
 
 	public MainView(MainController mainController) {
 		this.mainController = mainController;
-		this.setMinimumSize(new Dimension(700, 300));
+		this.setMinimumSize(new Dimension(700, 310));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
 
@@ -49,11 +49,13 @@ public class MainView extends JFrame {
 		lblPwB = new JLabel("Passwort:");
 		lblURLA = new JLabel("URL:");
 		lblURLB = new JLabel("URL: ");
+		lblTnsPath = new JLabel("Oracle Admin Pfad: ");
 
 		txtUserOld = new JTextField(20);
 		txtUserNew = new JTextField(20);
 		txtURLOld = new JTextField(20);
 		txtURLNew = new JTextField(20);
+		txtTnsPath = new JTextField(50);
 
 		pwSchemaOld = new JPasswordField(20);
 		pwSchemaNew = new JPasswordField(20);
@@ -77,16 +79,18 @@ public class MainView extends JFrame {
 		inputNorthPanel.add(lblURLA);
 		inputNorthPanel.add(txtURLOld);
 
-		JPanel inputSouthPanel = new JPanel(new GridLayout(3, 2));
-		inputSouthPanel.add(lblUser);
-		inputSouthPanel.add(txtUserNew);
-		inputSouthPanel.add(lblPw);
-		inputSouthPanel.add(pwSchemaNew);
-		inputSouthPanel.add(lblURLB);
-		inputSouthPanel.add(txtURLNew);
+		JPanel inputCenterPanel = new JPanel(new GridLayout(3, 2));
+		inputCenterPanel.add(lblUser);
+		inputCenterPanel.add(txtUserNew);
+		inputCenterPanel.add(lblPw);
+		inputCenterPanel.add(pwSchemaNew);
+		inputCenterPanel.add(lblURLB);
+		inputCenterPanel.add(txtURLNew);
 
-		JPanel inputCenterPanel = new JPanel(new BorderLayout());
-		inputCenterPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 0));
+		JPanel inputSouthPanel = new JPanel(new GridLayout(1, 2));
+		inputSouthPanel.add(lblTnsPath);
+		inputSouthPanel.add(txtTnsPath);
+		inputSouthPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 0));
 
 		JPanel inputPanel = new JPanel(new BorderLayout());
 		inputPanel.add(inputNorthPanel, BorderLayout.NORTH);
@@ -106,7 +110,7 @@ public class MainView extends JFrame {
 		TitledBorder titleNew;
 		titleNew = BorderFactory.createTitledBorder(loweredetched, "Schema New");
 		titleNew.setTitleJustification(TitledBorder.CENTER);
-		inputSouthPanel.setBorder(titleNew);
+		inputCenterPanel.setBorder(titleNew);
 
 		pack();
 		this.setLocationRelativeTo(null);
@@ -117,28 +121,30 @@ public class MainView extends JFrame {
 	private class onConnect implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			File file = selectFile(); // outputfile wird ausgewählt
 
-			if (file != null) {
-				DbConfig oldConfig = new DbConfig();
-				DbConfig newConfig = new DbConfig();
+			DbConfig oldConfig = new DbConfig();
+			DbConfig newConfig = new DbConfig();
 
-				oldConfig.setUrl(txtURLOld.getText());
-				oldConfig.setUsername(txtUserOld.getText());
+			oldConfig.setUrl(txtURLOld.getText());
+			oldConfig.setUsername(txtUserOld.getText());
 
-				newConfig.setUrl(txtURLNew.getText());
-				newConfig.setUsername(txtUserNew.getText());
+			newConfig.setUrl(txtURLNew.getText());
+			newConfig.setUsername(txtUserNew.getText());
 
-				if (StringUtils.isBlank(new String(pwSchemaOld.getPassword()))
-						|| StringUtils.isBlank(new String(pwSchemaNew.getPassword()))) {
-					JOptionPane.showMessageDialog(null, "Passwort kann nicht leer sein");
-				} else {
-					oldConfig.setPassword(new String(pwSchemaOld.getPassword()));
-					newConfig.setPassword(new String(pwSchemaNew.getPassword()));
-					mainController.start(oldConfig, newConfig, file);
+			if (StringUtils.isBlank(new String(pwSchemaOld.getPassword()))
+					|| StringUtils.isBlank(new String(pwSchemaNew.getPassword()))) {
+				JOptionPane.showMessageDialog(null, "Passwort kann nicht leer sein");
+			} else {
+				oldConfig.setPassword(new String(pwSchemaOld.getPassword()));
+				newConfig.setPassword(new String(pwSchemaNew.getPassword()));
+
+				if (mainController.connect(oldConfig, newConfig, txtTnsPath.getText())) {
+					File file = selectFile();
+					if (file != null) {
+						mainController.execute(file);
+					}
 				}
 			}
-
 		}
 	}
 
