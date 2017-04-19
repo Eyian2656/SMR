@@ -59,47 +59,20 @@ public class MainController {
 			System.setProperty("oracle.net.tns_admin", tnsPath);
 		}
 
-		Connection oldConnection = null;
-		Connection newConnection = null;
 		try {
 			accessOldDb.connect(oldDbConfig);
 			accessNewDb.connect(newDbConfig);
-
-			oldConnection = accessOldDb.getConnection();
-			newConnection = accessNewDb.getConnection();
 
 			// Validierung von der Verbindung
 			if (accessOldDb.isConnected() && accessNewDb.isConnected()) {
 				return true;
 			}
 		} catch (SQLRecoverableException e) {
-			System.out.println("1");
-			JOptionPane.showMessageDialog(null, "Verbindung mit der Datenbank konnte nicht hergestellt werden. \n" + e.getMessage()
-					+ "\nÜberprüfen Sie den Oracle Admin Pfad an.");
+			JOptionPane.showMessageDialog(null, "Verbindung mit der Datenbank konnte nicht hergestellt werden. \n"
+					+ e.getMessage() + "\nÜberprüfen Sie den Oracle Admin Pfad an.");
 		} catch (Exception e) {
-			System.out.println("2");
-			JOptionPane.showMessageDialog(null, "Verbindung mit der Datenbank konnte nicht hergestellt werden. \n" + e.getMessage());
-		} finally {
-			System.out.println("3");
-
-			if (oldConnection != null) {
-				try {
-					System.out.println("4");
-					oldConnection.close();
-
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Error bei alte DB mit der Nachricht: " + e.getMessage());
-				}
-			}
-			if (newConnection != null) {
-				try {
-					System.out.println("5");
-
-					newConnection.close();
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Error bei neue DB mit der Nachricht : " + e.getMessage());
-				}
-			}
+			JOptionPane.showMessageDialog(null,
+					"Verbindung mit der Datenbank konnte nicht hergestellt werden. \n" + e.getMessage());
 		}
 		return false;
 	}
@@ -149,23 +122,21 @@ public class MainController {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Error Message : " + e.getMessage());
 			System.exit(1);
+		} finally {
+			if (oldConnection != null) {
+				try {
+					oldConnection.close();
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, "Error bei alte DB mit der Nachricht: " + e.getMessage());
+				}
+			}
+			if (newConnection != null) {
+				try {
+					newConnection.close();
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, "Error bei neue DB mit der Nachricht : " + e.getMessage());
+				}
+			}
 		}
 	}
-
-	/**
-	 * Schließt die DB verbindung
-	 */
-	public void closeConnection() {
-		try {
-			if (accessOldDb.getConnection() != null) {
-				accessOldDb.close();
-			}
-			if (accessNewDb.getConnection() != null) {
-				accessNewDb.getConnection().close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 }
