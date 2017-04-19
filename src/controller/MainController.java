@@ -40,13 +40,6 @@ public class MainController {
 	}
 
 	/**
-	 * Versteckt die View
-	 */
-	public void hideMainView() {
-		mainView.setVisible(false);
-	}
-
-	/**
 	 * Verbindet die Datenbank und startet der die nächste View
 	 * 
 	 * @param oldDbConfig

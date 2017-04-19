@@ -1,9 +1,10 @@
 package controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
+
 import model.Data;
 
 /**
@@ -13,10 +14,6 @@ import model.Data;
  */
 public class DataComparer {
 	private SQLStatements sentStmt;
-
-	public DataComparer(File outputFile) {
-		this.sentStmt = new SQLStatements(outputFile);
-	}
 
 	public DataComparer(SQLStatements sentStmt) {
 		this.sentStmt = sentStmt;

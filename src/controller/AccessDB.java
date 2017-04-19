@@ -2,7 +2,6 @@ package controller;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import model.config.DbConfig;
 
@@ -19,8 +18,7 @@ public class AccessDB {
 
 	public boolean connect(DbConfig config) throws Exception {
 
-
-		connected = false;	
+		connected = false;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			connection = DriverManager.getConnection("jdbc:oracle:thin:@" + config.getUrl(), config.getUsername(),
@@ -35,18 +33,6 @@ public class AccessDB {
 
 	public Connection getConnection() {
 		return this.connection;
-	}
-
-	public boolean close() {
-		if (connected) {
-			try {
-				connection.close();
-				connected = false;
-			} catch (SQLException e) {
-				connected = false;
-			}
-		}
-		return connected;
 	}
 
 	public boolean isConnected() {
