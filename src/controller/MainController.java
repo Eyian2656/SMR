@@ -8,8 +8,12 @@ import javax.swing.JOptionPane;
 import model.config.DbConfig;
 import view.MainView;
 
+/**
+ * Steuert die MainView und die Informationen
+ * @author Ian
+ *
+ */
 public class MainController {
-
 	private JFrame mainView;
 	private static MainController mainController;
 
@@ -31,10 +35,19 @@ public class MainController {
 		mainView.setVisible(true);
 	}
 
+	/**
+	 * Versteckt die View
+	 */
 	public void hideMainView() {
 		mainView.setVisible(false);
 	}
-
+	
+	/**
+	 * Verbindet die Datenbank und startet der die n‰chste View
+	 * @param oldDbConfig
+	 * @param newDbConfig
+	 */
+	
 	public void start(DbConfig oldDbConfig, DbConfig newDbConfig) {
 		try {
 			AccessV1DB.getInstance().connect(oldDbConfig);
@@ -52,10 +65,13 @@ public class MainController {
 		// Validate the connection
 		if (AccessV1DB.getInstance().isConnected() && AccessV2DB.getInstance().isConnected()) {
 			hideMainView();
-			ChooserController.getInstance().showChooserView();
+			FileController.getInstance().showChooserView();
 		}
 	}
 
+	/**
+	 * Schlieﬂt die DB verbindung
+	 */
 	public void closeConnection() {
 		try {
 			if (AccessV1DB.getInstance().getConnection() != null) {

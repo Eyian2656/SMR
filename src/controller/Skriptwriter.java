@@ -1,10 +1,15 @@
-package logic;
+package controller;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Erstellt und schreibt SQL Statements in das Updateskript
+ * @author Ian
+ *
+ */
 public class Skriptwriter {
 	private File outputFile;
 

@@ -1,8 +1,8 @@
-package logic;
+package controller;
 
 import java.io.File;
 
-import logic.Skriptwriter;
+import controller.Skriptwriter;
 
 public class SQLStatements {
 	private Skriptwriter scriptwriter;

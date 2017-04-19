@@ -18,7 +18,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import controller.ChooserController;
+import controller.FileController;
 
 public class ChooserView extends JFrame {
 
@@ -90,14 +90,14 @@ public class ChooserView extends JFrame {
 	private class onCancel implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			ChooserController.getInstance().navigateToMainController();
+			FileController.getInstance().navigateToMainController();
 		}
 	}
 
 	private class onExecute implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			ChooserController.getInstance().execute(outputFile);
+			FileController.getInstance().execute(outputFile);
 		}
 	}
 
