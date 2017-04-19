@@ -1,4 +1,4 @@
-package logic;
+package controller;
 
 import java.io.File;
 import java.sql.Connection;
@@ -10,6 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 import model.Column;
 import model.Data;
 
+/**
+ * Vergleicht die Metastruktur einer Tabelle von zwei Schemas
+ * @author Ian
+ *
+ */
 public class TableComparer {
 	private DataCrawler dataCrawler;
 	private SQLStatements sentStmt;
