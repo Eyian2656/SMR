@@ -5,9 +5,11 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,23 +19,26 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.lang3.StringUtils;
 
 import controller.MainController;
 import model.config.DbConfig;
 
-
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
-
+	private JFileChooser outputFileChooser;
+	private int result;
 	private JTextField txtUserOld, txtUserNew, txtURLOld, txtURLNew;
 	private JPasswordField pwSchemaOld, pwSchemaNew;
 	private JButton ok, cancel;
 	private JLabel lblUser, lblPw, lblUserB, lblPwB, lblURLA, lblURLB;
 	private Border loweredetched;
+	private MainController mainController;
 
-	public MainView() {
+	public MainView(MainController mainController) {
+		this.mainController = mainController;
 		this.setMinimumSize(new Dimension(700, 300));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
@@ -112,23 +117,28 @@ public class MainView extends JFrame {
 	private class onConnect implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			DbConfig oldConfig = new DbConfig();
-			DbConfig newConfig = new DbConfig();
+			File file = selectFile(); // outputfile wird ausgewählt
 
-			oldConfig.setUrl(txtURLOld.getText());
-			oldConfig.setUsername(txtUserOld.getText());
+			if (file != null) {
+				DbConfig oldConfig = new DbConfig();
+				DbConfig newConfig = new DbConfig();
 
-			newConfig.setUrl(txtURLNew.getText());
-			newConfig.setUsername(txtUserNew.getText());
+				oldConfig.setUrl(txtURLOld.getText());
+				oldConfig.setUsername(txtUserOld.getText());
 
-			if (StringUtils.isBlank(new String(pwSchemaOld.getPassword()))
-					|| StringUtils.isBlank(new String(pwSchemaNew.getPassword()))) {
-				JOptionPane.showMessageDialog(null, "Passwort kann nicht leer sein");
-			} else {
-				oldConfig.setPassword(new String(pwSchemaOld.getPassword()));
-				newConfig.setPassword(new String(pwSchemaNew.getPassword()));
-				MainController.getInstance().start(oldConfig, newConfig);
+				newConfig.setUrl(txtURLNew.getText());
+				newConfig.setUsername(txtUserNew.getText());
+
+				if (StringUtils.isBlank(new String(pwSchemaOld.getPassword()))
+						|| StringUtils.isBlank(new String(pwSchemaNew.getPassword()))) {
+					JOptionPane.showMessageDialog(null, "Passwort kann nicht leer sein");
+				} else {
+					oldConfig.setPassword(new String(pwSchemaOld.getPassword()));
+					newConfig.setPassword(new String(pwSchemaNew.getPassword()));
+					mainController.start(oldConfig, newConfig, file);
+				}
 			}
+
 		}
 	}
 
@@ -136,8 +146,36 @@ public class MainView extends JFrame {
 	private class onCancel implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			MainController.getInstance().closeConnection();
 			System.exit(0);
 		}
+	}
+
+	public File selectFile() {
+		File outputFile = null;
+		outputFileChooser = new JFileChooser();
+		outputFileChooser.addChoosableFileFilter(new FileNameExtensionFilter(".sql", "sql"));
+		outputFileChooser.setAcceptAllFileFilterUsed(false);
+		result = outputFileChooser.showDialog(null, "Datei Auswählen");
+
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File updateFile = outputFileChooser.getSelectedFile();
+
+			// Loesche wenn file existiert
+			if (updateFile.exists()) {
+				int showConfirmDialog = JOptionPane.showConfirmDialog(null,
+						"Die datei " + updateFile.getName()
+								+ " ist bereits vorhanden. Möchten Sie diese Datei überschreiben?",
+						"Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+				if (showConfirmDialog == JOptionPane.NO_OPTION) {
+					selectFile();
+				} else if (showConfirmDialog == JOptionPane.YES_OPTION) {
+					updateFile.delete();
+				}
+			}
+
+			outputFile = updateFile;
+		}
+		return outputFile;
 	}
 }

@@ -6,10 +6,17 @@ import java.sql.SQLException;
 
 import model.config.DbConfig;
 
-public class BasicDBAccess {
+/**
+ * Diese Klasse steuert den Datenbankzugriff. Stellt eine Connection zum alten
+ * Schema her.
+ * 
+ * @author inoack
+ *
+ */
+public class AccessDB {
 	private Connection connection;
 	private boolean connected;
-	
+
 	public boolean connect(DbConfig config) throws Exception {
 		System.setProperty("oracle.net.tns_admin", "C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
 
