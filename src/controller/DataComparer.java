@@ -1,12 +1,15 @@
-package logic;
+package controller;
 
 import java.io.File;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
-
 import model.Data;
 
+/**
+ * Vergleicht die Daten einer Tabelle von den zwei Schemas.
+ * @author Ian
+ *
+ */
 public class DataComparer {
 	private SQLStatements sentStmt;
 

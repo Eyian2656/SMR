@@ -8,25 +8,28 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import logic.TableComparer;
-import logic.TableCrawler;
 import model.Column;
 import model.TableName;
 import view.ChooserView;
 
-public class ChooserController {
+/**
+ * Diese Klasse steuert die Informationen aus der FileChooser view
+ * @author Ian
+ *
+ */
+public class FileController {
 	private JFrame chooserView;
-	private static ChooserController chooserController;
+	private static FileController chooserController;
 	private Connection oldSchema;
 	private Connection newSchema;
 
-	public ChooserController() {
+	public FileController() {
 		this.chooserView = new ChooserView(TableName.list.size());
 	}
 
-	public static ChooserController getInstance() {
+	public static FileController getInstance() {
 		if (chooserController == null) {
-			chooserController = new ChooserController();
+			chooserController = new FileController();
 		}
 		return chooserController;
 	}
@@ -47,28 +50,35 @@ public class ChooserController {
 		chooserView.setVisible(false);
 	}
 
+	/**
+	 * Funktion die die View schließt durch den Cancel Button
+	 */
 	public void navigateToMainController() {
 		this.hideChooserView();
 		this.closeConnection();
 		MainController.getInstance().showMainView();
 	}
 
+	/**
+	 * Erstellt TableCrawler und TableComparer. Hier wird die Funktion aufgerufen
+	 * um die Tabellen zu kontrollieren. Die Tabellennamen werden aus dem Klasse TableName 
+	 * gezogen.
+	 * @param file
+	 */
 	public void execute(File file) {
-
 		TableCrawler tableCrawler = new TableCrawler();
 		TableComparer tableComparer = new TableComparer(file);
-
 		List<String> toBeCheckedTable = TableName.list;
 
+		// Hier werden alle Tabellen durchiteriert um diese als string an
+		// die einzelnen Methoden zu übergeben
 		try {
-			// Hier werden alle Tabellen durchiteriert um diese als string an
-			// die einzelnen Methoden zu übergeben
 			for (String string : toBeCheckedTable) {
 				System.out.println("Now checking table " + string);
 
 				// mittels TableCrawler werden die Metadaten aus einer Tabelle
 				// gezogen in in ein Objekt gespeicher welches
-				// dann verglichen werden kann um die unterschiede festzustellen
+				// dann vergleichen werden kann um die unterschiede festzustellen
 				List<Column> oldColumn = tableCrawler.crawlColumns(oldSchema, string);
 				List<Column> newColumn = tableCrawler.crawlColumns(newSchema, string);
 				tableComparer.differColumn(oldColumn, newColumn, string, oldSchema, newSchema);
@@ -92,6 +102,9 @@ public class ChooserController {
 		}
 	}
 
+	/**
+	 * Schließen der Datenbankverbindung
+	 */
 	public void closeConnection() {
 		try {
 			if (AccessV1DB.getInstance().getConnection() != null) {

@@ -23,12 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import controller.MainController;
 import model.config.DbConfig;
 
-// Filechooser und Actionlistener hinzufügen https://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
-public class MainView extends JFrame {
 
-	/**
-	 * 
-	 */
+public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JTextField txtUserOld, txtUserNew, txtURLOld, txtURLNew;
