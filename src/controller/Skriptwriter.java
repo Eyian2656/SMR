@@ -7,6 +7,7 @@ import java.io.IOException;
 
 /**
  * Erstellt und schreibt SQL Statements in das Updateskript
+ * 
  * @author Ian
  *
  */
@@ -23,22 +24,17 @@ public class Skriptwriter {
 	 * steht eine SQL Anweisung.
 	 * 
 	 * @param scriptCmd
+	 * @throws IOException
 	 */
-	public void writeScript(String scriptCmd) {
-		try {
-			FileWriter outputStream = new FileWriter(outputFile, true);
-			BufferedWriter bw = new BufferedWriter(outputStream);
-			String n = System.getProperty("line.separator");
+	public void writeScript(String scriptCmd) throws IOException {
+		FileWriter outputStream = new FileWriter(outputFile, true);
+		BufferedWriter bw = new BufferedWriter(outputStream);
+		String n = System.getProperty("line.separator");
 
-			bw.flush();
-			bw.write(n);
-			bw.write(scriptCmd);
-			bw.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		bw.flush();
+		bw.write(n);
+		bw.write(scriptCmd);
+		bw.close();
 	}
 
 }

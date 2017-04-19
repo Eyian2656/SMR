@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import model.Data;
@@ -27,8 +28,9 @@ public class DataComparer {
 	 * @param oldDataList
 	 * @param newDataList
 	 * @param tableName
+	 * @throws IOException 
 	 */
-	public void compareData(List<Data> oldDataList, List<Data> newDataList, String tableName) {
+	public void compareData(List<Data> oldDataList, List<Data> newDataList, String tableName) throws IOException {
 		for (Data oldData : oldDataList) {
 			for (Data newData : newDataList) {
 				if (oldData.getNr() == newData.getNr() && !StringUtils.equals(oldData.getValue(), newData.getValue())) {
@@ -40,8 +42,9 @@ public class DataComparer {
 
 	/**
 	 * Funktion um Daten einer kürzlich erstellten Spalte hizuzufügen..
+	 * @throws IOException 
 	 */
-	public void newColumnData(List<Data> newDataList, String tableName) {
+	public void newColumnData(List<Data> newDataList, String tableName) throws IOException {
 		for (Data newData : newDataList) {
 			sentStmt.updateData(tableName, newData.getColumnName(), newData.getValue(), newData.getNr());
 		}

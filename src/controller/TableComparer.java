@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,8 +141,9 @@ public class TableComparer {
 	 * @param allColumnOld
 	 * @param allColumnNew
 	 * @param tableName
+	 * @throws IOException 
 	 */
-	protected void wrongDatatypSize(List<Column> allColumnOld, List<Column> allColumnNew, String tableName) {
+	protected void wrongDatatypSize(List<Column> allColumnOld, List<Column> allColumnNew, String tableName) throws IOException {
 		for (Column columnOld : allColumnOld) {
 			for (Column columnNew : allColumnNew) {
 				if (StringUtils.equals(columnNew.getName(), columnOld.getName())) {
@@ -163,8 +165,9 @@ public class TableComparer {
 	 * @param allColumnsOld
 	 * @param allColumnsNew
 	 * @param tableName
+	 * @throws IOException 
 	 */
-	protected void nullable(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName) {
+	protected void nullable(List<Column> allColumnsOld, List<Column> allColumnsNew, String tableName) throws IOException {
 
 		for (Column columnOld : allColumnsOld) {
 			for (Column columnNew : allColumnsNew) {

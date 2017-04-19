@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+import java.io.IOException;
 
 import controller.Skriptwriter;
 
@@ -18,8 +19,9 @@ public class SQLStatements {
 	 * @param columnName
 	 * @param datatype
 	 * @param datasize
+	 * @throws IOException 
 	 */
-	public void insert(String tableName, String columnName, String datatype, int datasize) {
+	public void insert(String tableName, String columnName, String datatype, int datasize) throws IOException {
 		if (datasize == 0) {
 			String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + ";");
 			scriptwriter.writeScript(statement);
@@ -36,8 +38,9 @@ public class SQLStatements {
 	 * 
 	 * @param tableName
 	 * @param columnName
+	 * @throws IOException 
 	 */
-	public void drop(String tableName, String columnName) {
+	public void drop(String tableName, String columnName) throws IOException {
 		String statement = ("ALTER TABLE " + tableName + " DROP COLUMN " + columnName + " ;");
 		scriptwriter.writeScript(statement);
 	}
@@ -49,8 +52,9 @@ public class SQLStatements {
 	 * @param columnName
 	 * @param datatype
 	 * @param datasize
+	 * @throws IOException 
 	 */
-	public void modifyDatasize(String tableName, String columnName, String datatype, int datasize) {
+	public void modifyDatasize(String tableName, String columnName, String datatype, int datasize) throws IOException {
 		String statement = ("ALTER TABLE " + tableName + " MODIFY (" + columnName + " " + datatype + " (" + datasize
 				+ "));");
 		scriptwriter.writeScript(statement);
@@ -63,8 +67,9 @@ public class SQLStatements {
 	 * @param columnName
 	 * @param datatyp
 	 * @param bool
+	 * @throws IOException 
 	 */
-	public void modifyNullable(String tableName, String columnName, String datatyp, Boolean bool, int datasize) {
+	public void modifyNullable(String tableName, String columnName, String datatyp, Boolean bool, int datasize) throws IOException {
 		if (bool == true) {
 			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + "  null" + " ;");
 			scriptwriter.writeScript(statement);
@@ -81,8 +86,9 @@ public class SQLStatements {
 	 * @param columnName
 	 * @param value
 	 * @param rowNr
+	 * @throws IOException 
 	 */
-	public void updateData(String tableName, String columnName, String value, int rowNr) {
+	public void updateData(String tableName, String columnName, String value, int rowNr) throws IOException {
 
 		if (value == null) {
 			String statement = ("UPDATE " + tableName + " SET " + columnName + " = " + value + " WHERE NR = " + rowNr

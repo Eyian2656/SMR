@@ -114,13 +114,13 @@ public class MainController {
 						+ file.getAbsolutePath() + "' gespeichert");
 
 			} else {
+				file.delete();
 				JOptionPane.showMessageDialog(null, "Schemas sind kongruent. Es wurde kein Updateskript erstellt.");
 			}
 
 			System.exit(0);
 		} catch (Exception e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error Message : " + e.getMessage());
+			JOptionPane.showMessageDialog(null, "Error \n" + e.getMessage());
 			System.exit(1);
 		} finally {
 			if (oldConnection != null) {
