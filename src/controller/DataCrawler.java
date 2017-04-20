@@ -17,7 +17,7 @@ import model.Data;
  * Liste enthält alle Daten einer Tabelle. Sie wird gemappt und besser
  * navigieren zu können und um später die zu änderende Stelle zu identifizieren.
  * 
- * @author Dev
+ * @author Ian Noack
  *
  */
 public class DataCrawler {

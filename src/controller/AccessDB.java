@@ -8,7 +8,7 @@ import model.config.DbConfig;
 /**
  * Diese Klasse steuert den Datenbankzugriff. Stellt eine Connection zu einem Schema.
  * 
- * @author inoack
+ * @author Ian Noack
  *
  */
 public class AccessDB {

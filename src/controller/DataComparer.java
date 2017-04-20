@@ -9,7 +9,7 @@ import model.Data;
 
 /**
  * Vergleicht die Daten einer Tabelle vom Ziel und Quelle Schema.
- * @author Ian
+ * @author Ian Noack
  *
  */
 public class DataComparer {

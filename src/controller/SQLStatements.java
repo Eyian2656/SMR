@@ -5,6 +5,12 @@ import java.io.IOException;
 
 import controller.Skriptwriter;
 
+/**
+ * Klasse die SQL Statements an den Skriptwriter schickt. Die Klasse wird vom 
+ * Datacomparer und Tablecomparer aufgerufen.
+ * @author Ian Noack
+ *
+ */
 public class SQLStatements {
 	private Skriptwriter scriptwriter;
 

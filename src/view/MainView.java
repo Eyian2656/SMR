@@ -30,7 +30,7 @@ import model.config.DbConfig;
  * Die View die sich öffnet wenn das Programm gestartet wird.
  * Diese View öffnet später den JFileChooser.
  * Es werden URL, Passwörter, User und TNS Adressen an den Controller MainController weitergegeben.
- * @author Dev
+ * @author Ian Noack
  *
  */
 public class MainView extends JFrame {

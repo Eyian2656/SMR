@@ -13,7 +13,7 @@ import model.Data;
 
 /**
  * Vergleicht die Metastruktur einer Tabelle von zwei Schemas.
- * @author Ian
+ * @author Ian Noack
  *
  */
 public class TableComparer {

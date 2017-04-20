@@ -9,7 +9,7 @@ import java.io.IOException;
  * Erstellt ein Updateskript und schreibt SQL Statements hinein. 
  * Die SQL Statements erhält das Programm über die Klasse SQLStatments.
  * 
- * @author Ian
+ * @author Ian Noack 
  *
  */
 public class Skriptwriter {

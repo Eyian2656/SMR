@@ -18,7 +18,7 @@ import view.MainView;
 /**
  * Steuert die MainView und führt das Programm aus in dem es die Funktionen der anderen Klassen aufruft.
  * 
- * @author Ian
+ * @author Ian Noack
  *
  */
 public class MainController {

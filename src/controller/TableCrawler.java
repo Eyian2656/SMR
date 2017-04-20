@@ -13,7 +13,7 @@ import model.Column;
  * Die Klasse Tablecrawler hat nur eine Funktion und damit auch nur eine Methode. 
  * Sie dient zur erstellen einer Liste mit dem Typen Column. Der Datentyp Column beschreibt 
  * die Struktur einer Spalte.
- * @author Ian
+ * @author Ian Noack
  *
  */
 public class TableCrawler {
