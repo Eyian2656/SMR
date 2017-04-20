@@ -62,7 +62,7 @@ public class MainController {
 			}
 		} catch (SQLRecoverableException e) {
 			JOptionPane.showMessageDialog(null, "Verbindung mit der Datenbank konnte nicht hergestellt werden. \n"
-					+ e.getMessage() + "\nÜberprüfen Sie den Oracle Admin Pfad oder die URL.");
+					+ e.getMessage() + "\nÜberprüfen Sie den Oracle TNS Pfad oder die URL.");
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
 					"Verbindung mit der Datenbank konnte nicht hergestellt werden. \n" + e.getMessage());
