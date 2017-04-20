@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import model.Data;
 
 /**
- * Vergleicht die Daten einer Tabelle von den zwei Schemas.
+ * Vergleicht die Daten einer Tabelle vom Ziel und Quelle Schema.
  * @author Ian
  *
  */
@@ -22,16 +22,16 @@ public class DataComparer {
 	/**
 	 * Funktion um inkongruente Daten von bestehenden Spalten zu korrigieren.
 	 * 
-	 * @param oldDataList
-	 * @param newDataList
+	 * @param targetDataList
+	 * @param sourceDataList
 	 * @param tableName
 	 * @throws IOException 
 	 */
-	public void compareData(List<Data> oldDataList, List<Data> newDataList, String tableName) throws IOException {
-		for (Data oldData : oldDataList) {
-			for (Data newData : newDataList) {
-				if (oldData.getNr() == newData.getNr() && !StringUtils.equals(oldData.getValue(), newData.getValue())) {
-					sentStmt.updateData(tableName, newData.getColumnName(), newData.getValue(), oldData.getNr());
+	public void compareData(List<Data> targetDataList, List<Data> sourceDataList, String tableName) throws IOException {
+		for (Data targetData : targetDataList) {
+			for (Data sourceData : sourceDataList) {
+				if (targetData.getNr() == sourceData.getNr() && !StringUtils.equals(targetData.getValue(), sourceData.getValue())) {
+					sentStmt.updateData(tableName, sourceData.getColumnName(), sourceData.getValue(), targetData.getNr());
 				}
 			}
 		}
@@ -41,9 +41,9 @@ public class DataComparer {
 	 * Funktion um Daten einer kürzlich erstellten Spalte hizuzufügen..
 	 * @throws IOException 
 	 */
-	public void newColumnData(List<Data> newDataList, String tableName) throws IOException {
-		for (Data newData : newDataList) {
-			sentStmt.updateData(tableName, newData.getColumnName(), newData.getValue(), newData.getNr());
+	public void newColumnData(List<Data> targetDataList, String tableName) throws IOException {
+		for (Data targetData : targetDataList) {
+			sentStmt.updateData(tableName, targetData.getColumnName(), targetData.getValue(), targetData.getNr());
 		}
 	}
 }

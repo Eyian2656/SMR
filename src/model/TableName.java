@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Model Klasse der Tabellennamen.
+ * Dient als Speicher der Tabellennamen.
+ */
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

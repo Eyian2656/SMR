@@ -26,6 +26,13 @@ import org.apache.commons.lang3.StringUtils;
 import controller.MainController;
 import model.config.DbConfig;
 
+/**
+ * Die View die sich öffnet wenn das Programm gestartet wird.
+ * Diese View öffnet später den JFileChooser.
+ * Es werden URL, Passwörter, User und TNS Adressen an den Controller MainController weitergegeben.
+ * @author Dev
+ *
+ */
 public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JFileChooser outputFileChooser;
@@ -40,6 +47,7 @@ public class MainView extends JFrame {
 	public MainView(MainController mainController) {
 		this.mainController = mainController;
 		this.setMinimumSize(new Dimension(700, 310));
+		this.setTitle("EPOS Synch-Tool");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
 
@@ -49,7 +57,7 @@ public class MainView extends JFrame {
 		lblPwB = new JLabel("Passwort:");
 		lblURLA = new JLabel("URL:");
 		lblURLB = new JLabel("URL: ");
-		lblTnsPath = new JLabel("Oracle Admin Pfad: ");
+		lblTnsPath = new JLabel("Oracle TNS Pfad: ");
 
 		txtUserOld = new JTextField(20);
 		txtUserNew = new JTextField(20);
@@ -103,12 +111,12 @@ public class MainView extends JFrame {
 		pnlHead.add(buttonPanel, BorderLayout.SOUTH);
 
 		TitledBorder titleOld;
-		titleOld = BorderFactory.createTitledBorder(loweredetched, "Schema Old");
+		titleOld = BorderFactory.createTitledBorder(loweredetched, "Ziel Schema");
 		titleOld.setTitleJustification(TitledBorder.CENTER);
 		inputNorthPanel.setBorder(titleOld);
 
 		TitledBorder titleNew;
-		titleNew = BorderFactory.createTitledBorder(loweredetched, "Schema New");
+		titleNew = BorderFactory.createTitledBorder(loweredetched, "Quelle Schema");
 		titleNew.setTitleJustification(TitledBorder.CENTER);
 		inputCenterPanel.setBorder(titleNew);
 
@@ -131,6 +139,7 @@ public class MainView extends JFrame {
 			newConfig.setUrl(txtURLNew.getText());
 			newConfig.setUsername(txtUserNew.getText());
 
+			// Prüft ob das Passwort befüllt ist
 			if (StringUtils.isBlank(new String(pwSchemaOld.getPassword()))
 					|| StringUtils.isBlank(new String(pwSchemaNew.getPassword()))) {
 				JOptionPane.showMessageDialog(null, "Passwort kann nicht leer sein");
@@ -156,12 +165,13 @@ public class MainView extends JFrame {
 		}
 	}
 
+	// FileChooser Klasse
 	public File selectFile() {
 		File outputFile = null;
 		outputFileChooser = new JFileChooser();
 		outputFileChooser.addChoosableFileFilter(new FileNameExtensionFilter(".sql", "sql"));
 		outputFileChooser.setAcceptAllFileFilterUsed(false);
-		result = outputFileChooser.showDialog(null, "Datei Auswählen");
+		result = outputFileChooser.showDialog(null, "Starten");
 
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File updateFile = outputFileChooser.getSelectedFile();

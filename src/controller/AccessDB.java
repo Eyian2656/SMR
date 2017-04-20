@@ -6,8 +6,7 @@ import java.sql.DriverManager;
 import model.config.DbConfig;
 
 /**
- * Diese Klasse steuert den Datenbankzugriff. Stellt eine Connection zum alten
- * Schema her.
+ * Diese Klasse steuert den Datenbankzugriff. Stellt eine Connection zu einem Schema.
  * 
  * @author inoack
  *

@@ -6,7 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Erstellt und schreibt SQL Statements in das Updateskript
+ * Erstellt ein Updateskript und schreibt SQL Statements hinein. 
+ * Die SQL Statements erhält das Programm über die Klasse SQLStatments.
  * 
  * @author Ian
  *

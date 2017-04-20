@@ -1,5 +1,11 @@
 package model.config;
-
+/**
+ * Model Klasse von DbConfig.
+ * Die Klasse speichert, durch Eingabe in der View, URL, Username und Passwort in ein Objekt.
+ * Dieses Objekt kann dann genutzt werden um eine Verbindung zu einem Schema aufzubauen.
+ * @author Dev
+ *
+ */
 public class DbConfig {
 	private String url;
 	private String username;

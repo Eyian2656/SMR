@@ -16,19 +16,19 @@ import model.config.DbConfig;
 import view.MainView;
 
 /**
- * Steuert die MainView und die Informationen
+ * Steuert die MainView und führt das Programm aus in dem es die Funktionen der anderen Klassen aufruft.
  * 
  * @author Ian
  *
  */
 public class MainController {
-	private AccessDB accessNewDb;
-	private AccessDB accessOldDb;
+	private AccessDB accessSourceDb;
+	private AccessDB accessTargetDb;
 	private MainView mainView;
 
 	public MainController() {
-		this.accessNewDb = new AccessDB();
-		this.accessOldDb = new AccessDB();
+		this.accessSourceDb = new AccessDB();
+		this.accessTargetDb = new AccessDB();
 		this.mainView = new MainView(this);
 	}
 
@@ -40,29 +40,29 @@ public class MainController {
 	}
 
 	/**
-	 * Verbindet die Datenbank und startet der die nächste View
+	 * Erstellt mittels Objekt eine Verbindung zu Ziel und Quellen Schema
 	 * 
-	 * @param oldDbConfig
-	 * @param newDbConfig
+	 * @param targetDbConfig
+	 * @param sourceDbConfig
 	 * @throws SQLException
 	 */
-
-	public boolean connect(DbConfig oldDbConfig, DbConfig newDbConfig, String tnsPath) {
+	public boolean connect(DbConfig targetDbConfig, DbConfig sourceDbConfig, String tnsPath) {
+		// Wird benötigt wenn kein localhost verwendet wird sondern nur localhost.
 		if (!StringUtils.isBlank(tnsPath)) {
 			System.setProperty("oracle.net.tns_admin", tnsPath);
 		}
 
 		try {
-			accessOldDb.connect(oldDbConfig);
-			accessNewDb.connect(newDbConfig);
+			accessTargetDb.connect(targetDbConfig);
+			accessSourceDb.connect(sourceDbConfig);
 
 			// Validierung von der Verbindung
-			if (accessOldDb.isConnected() && accessNewDb.isConnected()) {
+			if (accessTargetDb.isConnected() && accessSourceDb.isConnected()) {
 				return true;
 			}
 		} catch (SQLRecoverableException e) {
 			JOptionPane.showMessageDialog(null, "Verbindung mit der Datenbank konnte nicht hergestellt werden. \n"
-					+ e.getMessage() + "\nÜberprüfen Sie den Oracle Admin Pfad an.");
+					+ e.getMessage() + "\nÜberprüfen Sie den Oracle Admin Pfad oder die URL.");
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
 					"Verbindung mit der Datenbank konnte nicht hergestellt werden. \n" + e.getMessage());
@@ -73,17 +73,18 @@ public class MainController {
 	/**
 	 * Erstellt TableCrawler und TableComparer. Hier wird die Funktion
 	 * aufgerufen um die Tabellen zu kontrollieren. Die Tabellennamen werden aus
-	 * dem Klasse TableName gezogen.
+	 * der Klasse TableName gezogen.
 	 * 
 	 * @param file
 	 */
 	public void execute(File file) {
+		SQLStatements sqlStatements = new SQLStatements(file);
 		TableCrawler tableCrawler = new TableCrawler();
 		TableComparer tableComparer = new TableComparer(file);
 		List<String> toBeCheckedTable = TableName.list;
 
-		Connection oldConnection = accessOldDb.getConnection();
-		Connection newConnection = accessNewDb.getConnection();
+		Connection targetConnection = accessTargetDb.getConnection();
+		Connection sourceConnection = accessSourceDb.getConnection();
 
 		// Hier werden alle Tabellen durchiteriert um diese als string an
 		// die einzelnen Methoden zu übergeben
@@ -93,21 +94,22 @@ public class MainController {
 
 				// mittels TableCrawler werden die Metadaten aus einer Tabelle
 				// gezogen in in ein Objekt gespeicher welches
-				// dann vergleichen werden kann um die unterschiede
+				// dann verglichen werden kann um die unterschiede
 				// festzustellen
-				List<Column> oldColumn = tableCrawler.crawlColumns(oldConnection, string);
-				List<Column> newColumn = tableCrawler.crawlColumns(newConnection, string);
-				tableComparer.differColumn(oldColumn, newColumn, string, oldConnection, newConnection);
-
+				List<Column> oldColumn = tableCrawler.crawlColumns(targetConnection, string);
+				List<Column> newColumn = tableCrawler.crawlColumns(sourceConnection, string);
+				tableComparer.differColumn(oldColumn, newColumn, string, targetConnection, sourceConnection);
 				System.out.println("=============================");
 			}
+			
 
 			if (file.exists()) {
+				sqlStatements.transaction();
 				JOptionPane.showMessageDialog(null, "Erfolgreich ausgeführt. Das Updateskript wurde in '"
 						+ file.getAbsolutePath() + "' gespeichert");
 
 			} else {
-				file.delete();
+				//file.delete();
 				JOptionPane.showMessageDialog(null, "Schemas sind kongruent. Es wurde kein Updateskript erstellt.");
 			}
 
@@ -116,18 +118,18 @@ public class MainController {
 			JOptionPane.showMessageDialog(null, "Error \n" + e.getMessage());
 			System.exit(1);
 		} finally {
-			if (oldConnection != null) {
+			if (targetConnection != null) {
 				try {
-					oldConnection.close();
+					targetConnection.close();
 				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Error bei alte DB mit der Nachricht: " + e.getMessage());
+					JOptionPane.showMessageDialog(null, "Ziel DB Error: \n" + e.getMessage());
 				}
 			}
-			if (newConnection != null) {
+			if (sourceConnection != null) {
 				try {
-					newConnection.close();
+					sourceConnection.close();
 				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Error bei neue DB mit der Nachricht : " + e.getMessage());
+					JOptionPane.showMessageDialog(null, "Quelle DB Error: \n" + e.getMessage());
 				}
 			}
 		}

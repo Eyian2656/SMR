@@ -100,4 +100,13 @@ public class SQLStatements {
 			scriptwriter.writeScript(statement);
 		}
 	}
+	
+	/**
+	 * Funktion die das Sql Skript zu einer Transaction macht.
+	 * @throws IOException
+	 */
+	public void transaction() throws IOException{
+		String statement = ("COMMIT;");
+		scriptwriter.writeScript(statement);
+	}
 }

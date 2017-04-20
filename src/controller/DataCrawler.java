@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import model.Data;
 
 /**
- * Diese Klasse dient zur Erstellung eine Liste welche ein mapping enthält. Die
+ * Diese Klasse dient zur Erstellung eine Liste mit mapping. Die
  * Liste enthält alle Daten einer Tabelle. Sie wird gemappt und besser
  * navigieren zu können und um später die zu änderende Stelle zu identifizieren.
  * 
