@@ -90,7 +90,6 @@ public class MainController {
 		// die einzelnen Methoden zu übergeben
 		try {
 			for (String string : toBeCheckedTable) {
-				System.out.println("Now checking table " + string);
 
 				// mittels TableCrawler werden die Metadaten aus einer Tabelle
 				// gezogen in in ein Objekt gespeicher welches
@@ -99,7 +98,6 @@ public class MainController {
 				List<Column> oldColumn = tableCrawler.crawlColumns(targetConnection, string);
 				List<Column> newColumn = tableCrawler.crawlColumns(sourceConnection, string);
 				tableComparer.differColumn(oldColumn, newColumn, string, targetConnection, sourceConnection);
-				System.out.println("=============================");
 			}
 			
 
