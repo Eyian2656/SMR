@@ -18,6 +18,14 @@ import model.Column;
  */
 public class TableCrawler {
 
+	/**
+	 * Hier wird die Funktion der Klasse gestartet. Es werdem die Tabellen eines Schemas gemappt.
+	 * 
+	 * @param conn Verbindung zu einer Datenbank.
+	 * @param tableName Name der Tabelle.
+	 * @return returned wird eine Liste mit den Daten einer Tabelle.
+	 * @throws SQLException
+	 */
 	public List<Column> crawlColumns(Connection conn, String tableName) throws SQLException {
 		DatabaseMetaData meta = conn.getMetaData();
 		ResultSet rsColumns = meta.getColumns(null, null, tableName, null);

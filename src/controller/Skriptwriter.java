@@ -24,7 +24,7 @@ public class Skriptwriter {
 	 * ein SQL-Statement und kommt aus der SQLStatements Klasse. Im Statement
 	 * steht eine SQL Anweisung.
 	 * 
-	 * @param scriptCmd
+	 * @param scriptCmd Erhält die SQL-Anweisung aus SQLStatements Klasse.
 	 * @throws IOException
 	 */
 	public void writeScript(String scriptCmd) throws IOException {

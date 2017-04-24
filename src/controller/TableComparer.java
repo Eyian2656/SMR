@@ -33,11 +33,10 @@ public class TableComparer {
 	 * an die Klasse SQLStatements geschickt. Returned werden die TableNames der
 	 * neuen Tabelle welches gebraucht wird um den Daten zu vergleiche.
 	 * 
-	 * @param columnTarget
-	 * @param columnSource
-	 * @param conn
-	 * @param tableName
-	 * @param getColNames
+	 * @param columnTarget  Liste der Ziel Spalten.
+	 * @param columnSource Liste der Quelle Spalten.
+	 * @param conn Verbindung zu der Datenbank.
+	 * @param tableName Name der Tabelle
 	 * @return
 	 * @throws Exception 
 	 */
@@ -56,8 +55,8 @@ public class TableComparer {
 	 * dann. DATEN: Vergleichen der bestehenden Spaltendaten, anschließend
 	 * werden inkongruente Daten ändern.
 	 * 
-	 * @param allColumnsTarget
-	 * @param allColumnsSource
+	 * @param allColumnsTarget Liste mit allen Spaltennamen der Ziel Tabelle.
+	 * @param allColumnsSource Liste mit allen Spaltennamen der Quelle Tabelle.
 	 * @throws Exception 
 	 */
 	protected void unwantedColumn(List<Column> allColumnsTarget, List<Column> allColumnsSource, String tableName,
@@ -97,10 +96,10 @@ public class TableComparer {
 	 * STRUKTUR: Funktion die eine fehlende Spalte hinzufügt. DATEN: Die zuvor
 	 * hinzugefügte Spalte erhält die zugehörigen Daten
 	 * 
-	 * @param allColumnsTarget
-	 * @param allColumnsSource
-	 * @param tableName
-	 * @param sourceSchema
+	 * @param allColumnsTarget Liste mit allen Spaltennamen der Ziel Tabelle.
+	 * @param allColumnsSource Liste mit allen Spaltennamen der Quelle Tabelle.
+	 * @param tableName name der Tabelle.
+	 * @param sourceSchema Verbindung mit der Quelle DB.
 	 * @throws Exception 
 	 */
 	protected void missingColumn(List<Column> allColumnsTarget, List<Column> allColumnsSource, String tableName,
@@ -134,9 +133,9 @@ public class TableComparer {
 	/**
 	 * Überprüfung und korrektur der Datentypgröße
 	 * 
-	 * @param allColumnTarget
-	 * @param allColumnSource
-	 * @param tableName
+	 * @param allColumnTarget Liste mit allen Spaltennamen der Ziel Tabelle
+	 * @param allColumnSource Liste mit allen Spaltennamen der Quelle Tabelle
+	 * @param tableName Name der Tabelle
 	 * @throws IOException 
 	 */
 	protected void wrongDatatypSize(List<Column> allColumnTarget, List<Column> allColumnSource, String tableName) throws IOException {
@@ -158,9 +157,9 @@ public class TableComparer {
 	/**
 	 * Überprüfen und korrektur des Feldes Nullable
 	 * 
-	 * @param allColumnsTarget
-	 * @param allColumnsSource
-	 * @param tableName
+	 * @param allColumnsTarget Liste mit allen Spaltennamen der Ziel Tabelle
+	 * @param allColumnsSource Liste mit allen Spaltennamen der Quelle Tabelle
+	 * @param tableName Name der Tabelle
 	 * @throws IOException 
 	 */
 	protected void nullable(List<Column> allColumnsTarget, List<Column> allColumnsSource, String tableName) throws IOException {

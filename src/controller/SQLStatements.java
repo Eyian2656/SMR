@@ -21,10 +21,10 @@ public class SQLStatements {
 	/**
 	 * Funktion die eine Spalte hinzufügt.
 	 * 
-	 * @param tableName
-	 * @param columnName
-	 * @param datatype
-	 * @param datasize
+	 * @param tableName Enthält den Tabellennamen.
+	 * @param columnName Enthält den Spaltennamen.
+	 * @param datatype Enthält den Datentypen.
+	 * @param datasize Enthält die Grüße eines Datentyps.
 	 * @throws IOException 
 	 */
 	public void insert(String tableName, String columnName, String datatype, int datasize) throws IOException {
@@ -42,8 +42,8 @@ public class SQLStatements {
 	/**
 	 * Funktion die eine Spalte löscht.
 	 * 
-	 * @param tableName
-	 * @param columnName
+	 * @param tableName Enthält den Tabellennamen.
+	 * @param columnName Enthält den Spaltennamen.
 	 * @throws IOException 
 	 */
 	public void drop(String tableName, String columnName) throws IOException {
@@ -54,10 +54,10 @@ public class SQLStatements {
 	/**
 	 * Funktion die die Datentypgröße anpasst.
 	 * 
-	 * @param tableName
-	 * @param columnName
-	 * @param datatype
-	 * @param datasize
+	 * @param tableName Enthält den Tabellennamen.
+	 * @param columnName Enthält den Spaltennamen.
+	 * @param datatype Enthält den Datentypen.
+	 * @param datasize Enthält die Grüße eines Datentyps.
 	 * @throws IOException 
 	 */
 	public void modifyDatasize(String tableName, String columnName, String datatype, int datasize) throws IOException {
@@ -69,10 +69,10 @@ public class SQLStatements {
 	/**
 	 * Funktion die das Feld Nullable korrigiert.
 	 * 
-	 * @param tableName
-	 * @param columnName
-	 * @param datatyp
-	 * @param bool
+	 * @param tableName Enthält den Tabellennamen.
+	 * @param columnName Enthält den Spaltennamen.
+	 * @param datatyp Enthält die Grüße eines Datentyps.
+	 * @param bool bestimmt ob der Wert eines Feldes Nullable sein darf.
 	 * @throws IOException 
 	 */
 	public void modifyNullable(String tableName, String columnName, String datatyp, Boolean bool, int datasize) throws IOException {
@@ -88,10 +88,10 @@ public class SQLStatements {
 	/**
 	 * Funktion um die Daten einer bestehenden Spalte zu korrigieren.
 	 * 
-	 * @param tableName
-	 * @param columnName
-	 * @param value
-	 * @param rowNr
+	 * @param tableName Enthält den Tabellennamen.
+	 * @param columnName Enthält den Spaltennamen.
+	 * @param value Enthält den Wert eines Feldes.
+	 * @param rowNr Enthält den Zeilennummer.
 	 * @throws IOException 
 	 */
 	public void updateData(String tableName, String columnName, String value, int rowNr) throws IOException {

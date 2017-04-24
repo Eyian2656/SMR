@@ -42,8 +42,8 @@ public class MainController {
 	/**
 	 * Erstellt mittels Objekt eine Verbindung zu Ziel und Quellen Schema
 	 * 
-	 * @param targetDbConfig
-	 * @param sourceDbConfig
+	 * @param targetDbConfig Model Klasse enthält Ziel DB Daten.
+	 * @param sourceDbConfig Model Klasse enthält Quelle DB Daten.
 	 * @throws SQLException
 	 */
 	public boolean connect(DbConfig targetDbConfig, DbConfig sourceDbConfig, String tnsPath) {
@@ -75,7 +75,7 @@ public class MainController {
 	 * aufgerufen um die Tabellen zu kontrollieren. Die Tabellennamen werden aus
 	 * der Klasse TableName gezogen.
 	 * 
-	 * @param file
+	 * @param file Enthält das im FileChooser erstellte File
 	 */
 	public void execute(File file) {
 		SQLStatements sqlStatements = new SQLStatements(file);
