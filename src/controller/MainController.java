@@ -93,11 +93,13 @@ public class MainController {
 		// die einzelnen Methoden zu übergeben
 		try {
 			progressView.setVisible(true);
-			int percentage = 100/toBeCheckedTable.size();
+			
+			//@TODO
+			//int percentage = 100/toBeCheckedTable.size();
 			
 			for (String string : toBeCheckedTable) {
 
-				progressView.iterate(percentage);
+				//progressView.iterate(percentage);
 				
 				// mittels TableCrawler werden die Metadaten aus einer Tabelle
 				// gezogen in in ein Objekt gespeicher welches
@@ -107,7 +109,7 @@ public class MainController {
 				List<Column> newColumn = tableCrawler.crawlColumns(sourceConnection, string);
 				tableComparer.differColumn(oldColumn, newColumn, string, targetConnection, sourceConnection);
 				
-				percentage= percentage+percentage;
+				//percentage= percentage+percentage;
 			}
 			progressView.dispose();
 

@@ -12,8 +12,10 @@ public class ProgressBarView extends JFrame {
     JPanel pane = new JPanel();
     current.setValue(0);
     current.setStringPainted(true);
-    pane.add(current);
     setContentPane(pane);
+    current.setIndeterminate(true);
+    pane.add(current);
+    pack();
   }
 
   public void iterate(int percentage) {
