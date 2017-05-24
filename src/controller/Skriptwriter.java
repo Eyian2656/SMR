@@ -6,8 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Erstellt und schreibt SQL Statements in das Updateskript
- * @author Ian
+ * Erstellt ein Updateskript und schreibt SQL Statements hinein. 
+ * Die SQL Statements erhält das Programm über die Klasse SQLStatments.
+ * 
+ * @author Ian Noack 
  *
  */
 public class Skriptwriter {
@@ -22,23 +24,18 @@ public class Skriptwriter {
 	 * ein SQL-Statement und kommt aus der SQLStatements Klasse. Im Statement
 	 * steht eine SQL Anweisung.
 	 * 
-	 * @param scriptCmd
+	 * @param scriptCmd Erhält die SQL-Anweisung aus SQLStatements Klasse.
+	 * @throws IOException
 	 */
-	public void writeScript(String scriptCmd) {
-		try {
-			FileWriter outputStream = new FileWriter(outputFile, true);
-			BufferedWriter bw = new BufferedWriter(outputStream);
-			String n = System.getProperty("line.separator");
+	public void writeScript(String scriptCmd) throws IOException {
+		FileWriter outputStream = new FileWriter(outputFile, true);
+		BufferedWriter bw = new BufferedWriter(outputStream);
+		String n = System.getProperty("line.separator");
 
-			bw.flush();
-			bw.write(n);
-			bw.write(scriptCmd);
-			bw.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		bw.flush();
+		bw.write(n);
+		bw.write(scriptCmd);
+		bw.close();
 	}
 
 }

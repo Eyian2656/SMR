@@ -1,5 +1,11 @@
 package model;
 
+/**
+ * Model Klasse des Typs Column.
+ * Der Datentyp Column beschreibt  die Struktur einer Spalte.
+ * @author Ian Noack
+ *
+ */
 public class Column {
 	private String name;
 	private String type;

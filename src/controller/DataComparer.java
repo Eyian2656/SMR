@@ -1,49 +1,57 @@
 package controller;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
+
 import model.Data;
 
 /**
- * Vergleicht die Daten einer Tabelle von den zwei Schemas.
- * @author Ian
+ * Der DataComparer funktioniert ähnlich wie der TableComparer, hat aber weniger
+ * Anweisungen. Hier werden die Daten einer Tabelle auf Inkongruenz geprüft.
+ * Wenn differrenzen identifiziert werden, wird über die Klasse SQLStatements
+ * die nötigen Anweisungen in das Updateskript geschrieben.
+ * 
+ * DataCrawler formatierte Objekte, welche die Funktionen compareData() und newColumnData() vearbeiten. 
+ * @author Ian Noack
  *
  */
 public class DataComparer {
 	private SQLStatements sentStmt;
-
-	public DataComparer(File outputFile) {
-		this.sentStmt = new SQLStatements(outputFile);
-	}
 
 	public DataComparer(SQLStatements sentStmt) {
 		this.sentStmt = sentStmt;
 	}
 
 	/**
-	 * Funktion um inkongruente Daten von bestehenden Spalten zu korrigieren.
+	 * Die Funktion compareData() vergleicht alle Daten einer Tabelle und bei differenzen schickt sie die zu korrigierende Stelle an die Klasse SQLStatements. 
 	 * 
-	 * @param oldDataList
-	 * @param newDataList
-	 * @param tableName
+	 * @param targetDataList Liste der Ziel Werte.
+	 * @param sourceDataList Liste der Quelle Werte.
+	 * @param tableName Tabellenname der momentan geprüft wird
+	 * @throws IOException
 	 */
-	public void compareData(List<Data> oldDataList, List<Data> newDataList, String tableName) {
-		for (Data oldData : oldDataList) {
-			for (Data newData : newDataList) {
-				if (oldData.getNr() == newData.getNr() && !StringUtils.equals(oldData.getValue(), newData.getValue())) {
-					sentStmt.updateData(tableName, newData.getColumnName(), newData.getValue(), oldData.getNr());
+	public void compareData(List<Data> targetDataList, List<Data> sourceDataList, String tableName) throws IOException {
+		for (Data targetData : targetDataList) {
+			for (Data sourceData : sourceDataList) {
+				if (targetData.getNr() == sourceData.getNr()
+						&& !StringUtils.equals(targetData.getValue(), sourceData.getValue())) {
+					sentStmt.updateData(tableName, sourceData.getColumnName(), sourceData.getValue(),
+							targetData.getNr());
 				}
 			}
 		}
 	}
 
 	/**
-	 * Funktion um Daten einer kürzlich erstellten Spalte hizuzufügen..
+	 * Die Funktion newColumnData() wird nur aufgerufen wenn eine neue Spalte hinzukommt. Dann müssen keine Daten verglichen werden, sondern nur Daten von Quelle Schema auf das Ziel Schema kopiert werden.
+	 * 
+	 * @throws IOException
 	 */
-	public void newColumnData(List<Data> newDataList, String tableName) {
-		for (Data newData : newDataList) {
-			sentStmt.updateData(tableName, newData.getColumnName(), newData.getValue(), newData.getNr());
+	public void newColumnData(List<Data> targetDataList, String tableName) throws IOException {
+		for (Data targetData : targetDataList) {
+			sentStmt.updateData(tableName, targetData.getColumnName(), targetData.getValue(), targetData.getNr());
 		}
 	}
 }

@@ -13,11 +13,19 @@ import model.Column;
  * Die Klasse Tablecrawler hat nur eine Funktion und damit auch nur eine Methode. 
  * Sie dient zur erstellen einer Liste mit dem Typen Column. Der Datentyp Column beschreibt 
  * die Struktur einer Spalte.
- * @author Ian
+ * @author Ian Noack
  *
  */
 public class TableCrawler {
 
+	/**
+	 * Hier wird die Funktion der Klasse gestartet. Es werdem die Tabellen eines Schemas gemappt.
+	 * 
+	 * @param conn Verbindung zu einer Datenbank.
+	 * @param tableName Name der Tabelle.
+	 * @return returned wird eine Liste mit den Daten einer Tabelle.
+	 * @throws SQLException
+	 */
 	public List<Column> crawlColumns(Connection conn, String tableName) throws SQLException {
 		DatabaseMetaData meta = conn.getMetaData();
 		ResultSet rsColumns = meta.getColumns(null, null, tableName, null);

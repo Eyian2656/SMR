@@ -13,16 +13,26 @@ import org.apache.commons.lang3.StringUtils;
 import model.Data;
 
 /**
- * Diese Klasse dient zur Erstellung eine Liste welche ein mapping enthält. Die
+ * Diese Klasse dient zur Erstellung eine Liste mit mapping. Die
  * Liste enthält alle Daten einer Tabelle. Sie wird gemappt und besser
  * navigieren zu können und um später die zu änderende Stelle zu identifizieren.
  * 
- * @author Dev
+ * @author Ian Noack
  *
  */
 public class DataCrawler {
 	DateFormat df = new SimpleDateFormat("dd-mmm-yyyy");
 
+	/**
+	 * Hier wird die Funktion der Klasse gestartet. Es werdem die Daten einer Tabelle gemappt.
+	 * 
+	 * @param conn Verbindung zu einer Datenbank
+	 * @param columnName Name der Spalte
+	 * @param tablename Name der Tabelle
+	 * @param datatype Datentyp des Werts. Wird gebraucht um ein Datenfeld richtig zu speichern.
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Data> crawlData(Connection conn, String columnName, String tablename, String datatype)
 			throws Exception {
 		List<Data> dataInsideTable = new ArrayList<Data>();

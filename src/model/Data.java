@@ -1,5 +1,12 @@
 package model;
 
+/**
+ * Model Klasse des Typs Data.
+ * Der Datentyp Data beschreibt die Daten einer Tabelle. 
+ * Gespeichert werden ein Wert und die zugehörige ID einer Zeile.
+ * @author Ian Noack
+ *
+ */
 public class Data {
 
 	private int nr;
