@@ -14,6 +14,7 @@ import model.Column;
 import model.TableName;
 import model.config.DbConfig;
 import view.MainView;
+import view.ProgressBarView;
 
 /**
  * Steuert die MainView und führt das Programm aus in dem es die Funktionen der anderen Klassen aufruft.
@@ -25,6 +26,7 @@ public class MainController {
 	private AccessDB accessSourceDb;
 	private AccessDB accessTargetDb;
 	private MainView mainView;
+	private ProgressBarView progressView;
 
 	public MainController() {
 		this.accessSourceDb = new AccessDB();
@@ -82,6 +84,7 @@ public class MainController {
 		TableCrawler tableCrawler = new TableCrawler();
 		TableComparer tableComparer = new TableComparer(file);
 		List<String> toBeCheckedTable = TableName.list;
+		progressView = new ProgressBarView();
 
 		Connection targetConnection = accessTargetDb.getConnection();
 		Connection sourceConnection = accessSourceDb.getConnection();
@@ -89,8 +92,13 @@ public class MainController {
 		// Hier werden alle Tabellen durchiteriert um diese als string an
 		// die einzelnen Methoden zu übergeben
 		try {
+			progressView.setVisible(true);
+			int percentage = 100/toBeCheckedTable.size();
+			
 			for (String string : toBeCheckedTable) {
 
+				progressView.iterate(percentage);
+				
 				// mittels TableCrawler werden die Metadaten aus einer Tabelle
 				// gezogen in in ein Objekt gespeicher welches
 				// dann verglichen werden kann um die unterschiede
@@ -98,8 +106,10 @@ public class MainController {
 				List<Column> oldColumn = tableCrawler.crawlColumns(targetConnection, string);
 				List<Column> newColumn = tableCrawler.crawlColumns(sourceConnection, string);
 				tableComparer.differColumn(oldColumn, newColumn, string, targetConnection, sourceConnection);
+				
+				percentage= percentage+percentage;
 			}
-			
+			progressView.dispose();
 
 			if (file.exists()) {
 				sqlStatements.transaction();
