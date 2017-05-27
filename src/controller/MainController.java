@@ -1,28 +1,28 @@
 package controller;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLRecoverableException;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.StringUtils;
 
-import model.Column;
-import model.TableName;
 import model.config.DbConfig;
 import view.MainView;
 import view.ProgressBarView;
 
 /**
- * Steuert die MainView und führt das Programm aus in dem es die Funktionen der anderen Klassen aufruft.
+ * Steuert die MainView und führt das Programm aus in dem es die Funktionen der
+ * anderen Klassen aufruft.
  * 
  * @author Ian Noack
  *
  */
-public class MainController {
+public class MainController implements PropertyChangeListener {
 	private AccessDB accessSourceDb;
 	private AccessDB accessTargetDb;
 	private MainView mainView;
@@ -44,12 +44,15 @@ public class MainController {
 	/**
 	 * Erstellt mittels Objekt eine Verbindung zu Ziel und Quellen Schema
 	 * 
-	 * @param targetDbConfig Model Klasse enthält Ziel DB Daten.
-	 * @param sourceDbConfig Model Klasse enthält Quelle DB Daten.
+	 * @param targetDbConfig
+	 *            Model Klasse enthält Ziel DB Daten.
+	 * @param sourceDbConfig
+	 *            Model Klasse enthält Quelle DB Daten.
 	 * @throws SQLException
 	 */
 	public boolean connect(DbConfig targetDbConfig, DbConfig sourceDbConfig, String tnsPath) {
-		// Wird benötigt wenn kein localhost verwendet wird sondern nur localhost.
+		// Wird benötigt wenn kein localhost verwendet wird sondern nur
+		// localhost.
 		if (!StringUtils.isBlank(tnsPath)) {
 			System.setProperty("oracle.net.tns_admin", tnsPath);
 		}
@@ -77,71 +80,30 @@ public class MainController {
 	 * aufgerufen um die Tabellen zu kontrollieren. Die Tabellennamen werden aus
 	 * der Klasse TableName gezogen.
 	 * 
-	 * @param file Enthält das im FileChooser erstellte File
+	 * @param file
+	 *            Enthält das im FileChooser erstellte File
 	 */
 	public void execute(File file) {
-		SQLStatements sqlStatements = new SQLStatements(file);
-		TableCrawler tableCrawler = new TableCrawler();
-		TableComparer tableComparer = new TableComparer(file);
-		List<String> toBeCheckedTable = TableName.list;
-		progressView = new ProgressBarView();
-
 		Connection targetConnection = accessTargetDb.getConnection();
 		Connection sourceConnection = accessSourceDb.getConnection();
 
-		// Hier werden alle Tabellen durchiteriert um diese als string an
-		// die einzelnen Methoden zu übergeben
-		try {
-			progressView.setVisible(true);
-			
-			//@TODO
-			//int percentage = 100/toBeCheckedTable.size();
-			
-			for (String string : toBeCheckedTable) {
+		progressView = new ProgressBarView();
+		progressView.setVisible(true);
 
-				//progressView.iterate(percentage);
-				
-				// mittels TableCrawler werden die Metadaten aus einer Tabelle
-				// gezogen in in ein Objekt gespeicher welches
-				// dann verglichen werden kann um die unterschiede
-				// festzustellen
-				List<Column> oldColumn = tableCrawler.crawlColumns(targetConnection, string);
-				List<Column> newColumn = tableCrawler.crawlColumns(sourceConnection, string);
-				tableComparer.differColumn(oldColumn, newColumn, string, targetConnection, sourceConnection);
-				
-				//percentage= percentage+percentage;
-			}
-			progressView.dispose();
+		mainView.setVisible(false);
+		// Long running task !!! Neue Thread wird erzeugt
+		// Refactorn !! Zu viel dependency
+		MainTask task = new MainTask(file, targetConnection, sourceConnection, progressView, mainView);
+		task.addPropertyChangeListener(this);
+		task.execute();
+	}
 
-			if (file.exists()) {
-				sqlStatements.transaction();
-				JOptionPane.showMessageDialog(null, "Erfolgreich ausgeführt. Das Updateskript wurde in '"
-						+ file.getAbsolutePath() + "' gespeichert");
-
-			} else {
-				//file.delete();
-				JOptionPane.showMessageDialog(null, "Schemas sind kongruent. Es wurde kein Updateskript erstellt.");
-			}
-
-			System.exit(0);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error \n" + e.getMessage());
-			System.exit(1);
-		} finally {
-			if (targetConnection != null) {
-				try {
-					targetConnection.close();
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Ziel DB Error: \n" + e.getMessage());
-				}
-			}
-			if (sourceConnection != null) {
-				try {
-					sourceConnection.close();
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Quelle DB Error: \n" + e.getMessage());
-				}
-			}
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+		if ("progress" == evt.getPropertyName()) {
+			int progress = (Integer) evt.getNewValue();
+			progressView.setValue(progress);
 		}
 	}
+
 }

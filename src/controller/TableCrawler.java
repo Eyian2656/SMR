@@ -10,19 +10,23 @@ import java.util.List;
 import model.Column;
 
 /**
- * Die Klasse Tablecrawler hat nur eine Funktion und damit auch nur eine Methode. 
- * Sie dient zur erstellen einer Liste mit dem Typen Column. Der Datentyp Column beschreibt 
- * die Struktur einer Spalte.
+ * Die Klasse Tablecrawler hat nur eine Funktion und damit auch nur eine
+ * Methode. Sie dient zur erstellen einer Liste mit dem Typen Column. Der
+ * Datentyp Column beschreibt die Struktur einer Spalte.
+ * 
  * @author Ian Noack
  *
  */
 public class TableCrawler {
 
 	/**
-	 * Hier wird die Funktion der Klasse gestartet. Es werdem die Tabellen eines Schemas gemappt.
+	 * Hier wird die Funktion der Klasse gestartet. Es werdem die Tabellen eines
+	 * Schemas gemappt.
 	 * 
-	 * @param conn Verbindung zu einer Datenbank.
-	 * @param tableName Name der Tabelle.
+	 * @param conn
+	 *            Verbindung zu einer Datenbank.
+	 * @param tableName
+	 *            Name der Tabelle.
 	 * @return returned wird eine Liste mit den Daten einer Tabelle.
 	 * @throws SQLException
 	 */
@@ -30,7 +34,7 @@ public class TableCrawler {
 		DatabaseMetaData meta = conn.getMetaData();
 		ResultSet rsColumns = meta.getColumns(null, null, tableName, null);
 		List<Column> result = new ArrayList<Column>();
-
+	
 		while (rsColumns.next()) {
 			String name = rsColumns.getString("COLUMN_NAME");
 			String type = rsColumns.getString("TYPE_NAME");

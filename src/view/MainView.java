@@ -68,6 +68,15 @@ public class MainView extends JFrame {
 		pwSchemaOld = new JPasswordField(20);
 		pwSchemaNew = new JPasswordField(20);
 
+		// TODO Delete !!!
+		txtTnsPath.setText("C:/oraclexe/app/oracle/product/11.2.0/server/network/ADMIN");
+		txtUserOld.setText("jinx");
+		txtUserNew.setText("kata");
+		txtURLOld.setText("xe");
+		txtURLNew.setText("xe");
+		pwSchemaNew.setText("123");
+		pwSchemaOld.setText("123");
+		
 		ok = new JButton("Verbinden");
 		ok.addActionListener(new onConnect());
 
