@@ -73,8 +73,8 @@ public class MainView extends JFrame {
 		txtUserNew.setText("kata");
 		txtURLOld.setText("xe");
 		txtURLNew.setText("xe");
-		pwSchemaNew.setText("EPOSDev");
-		pwSchemaOld.setText("EPOSDev");
+		pwSchemaNew.setText("123");
+		pwSchemaOld.setText("123");
 		
 		ok = new JButton("Skript erzeugen");
 		ok.addActionListener(new onConnect());

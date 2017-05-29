@@ -13,6 +13,7 @@ import model.Data;
 
 /**
  * Vergleicht die Metastruktur einer Tabelle von zwei Schemas.
+ * 
  * @author Ian Noack
  *
  */
@@ -20,11 +21,10 @@ public class TableComparer {
 	private DataCrawler dataCrawler;
 	private SQLStatements sentStmt;
 
-	public TableComparer(File outputFile) {
+	public TableComparer(File outputFile, String targetSchemaName) {
 		this.dataCrawler = new DataCrawler();
-		this.sentStmt = new SQLStatements(outputFile);
+		this.sentStmt = new SQLStatements(outputFile, targetSchemaName);
 	}
-
 
 	/**
 	 * Die aufzurufende Funktion der Klasse TableComparer zu starten. Sie
@@ -33,15 +33,19 @@ public class TableComparer {
 	 * an die Klasse SQLStatements geschickt. Returned werden die TableNames der
 	 * neuen Tabelle welches gebraucht wird um den Daten zu vergleiche.
 	 * 
-	 * @param columnTarget  Liste der Ziel Spalten.
-	 * @param columnSource Liste der Quelle Spalten.
-	 * @param conn Verbindung zu der Datenbank.
-	 * @param tableName Name der Tabelle
+	 * @param columnTarget
+	 *            Liste der Ziel Spalten.
+	 * @param columnSource
+	 *            Liste der Quelle Spalten.
+	 * @param conn
+	 *            Verbindung zu der Datenbank.
+	 * @param tableName
+	 *            Name der Tabelle
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public void differColumn(List<Column> columnTarget, List<Column> columnSource, String tableName, Connection targetSchema,
-			Connection sourceSchema) throws Exception {
+	public void differColumn(List<Column> columnTarget, List<Column> columnSource, String tableName,
+			Connection targetSchema, Connection sourceSchema) throws Exception {
 
 		missingColumn(columnTarget, columnSource, tableName, sourceSchema);
 		wrongDatatypSize(columnTarget, columnSource, tableName);
@@ -55,9 +59,11 @@ public class TableComparer {
 	 * dann. DATEN: Vergleichen der bestehenden Spaltendaten, anschließend
 	 * werden inkongruente Daten ändern.
 	 * 
-	 * @param allColumnsTarget Liste mit allen Spaltennamen der Ziel Tabelle.
-	 * @param allColumnsSource Liste mit allen Spaltennamen der Quelle Tabelle.
-	 * @throws Exception 
+	 * @param allColumnsTarget
+	 *            Liste mit allen Spaltennamen der Ziel Tabelle.
+	 * @param allColumnsSource
+	 *            Liste mit allen Spaltennamen der Quelle Tabelle.
+	 * @throws Exception
 	 */
 	protected void unwantedColumn(List<Column> allColumnsTarget, List<Column> allColumnsSource, String tableName,
 			Connection targetSchema, Connection sourceSchema) throws Exception {
@@ -96,11 +102,15 @@ public class TableComparer {
 	 * STRUKTUR: Funktion die eine fehlende Spalte hinzufügt. DATEN: Die zuvor
 	 * hinzugefügte Spalte erhält die zugehörigen Daten
 	 * 
-	 * @param allColumnsTarget Liste mit allen Spaltennamen der Ziel Tabelle.
-	 * @param allColumnsSource Liste mit allen Spaltennamen der Quelle Tabelle.
-	 * @param tableName name der Tabelle.
-	 * @param sourceSchema Verbindung mit der Quelle DB.
-	 * @throws Exception 
+	 * @param allColumnsTarget
+	 *            Liste mit allen Spaltennamen der Ziel Tabelle.
+	 * @param allColumnsSource
+	 *            Liste mit allen Spaltennamen der Quelle Tabelle.
+	 * @param tableName
+	 *            name der Tabelle.
+	 * @param sourceSchema
+	 *            Verbindung mit der Quelle DB.
+	 * @throws Exception
 	 */
 	protected void missingColumn(List<Column> allColumnsTarget, List<Column> allColumnsSource, String tableName,
 			Connection sourceSchema) throws Exception {
@@ -124,7 +134,8 @@ public class TableComparer {
 
 				// ÄNDERUNG DATEN: Zuvor erstellte Spalte erhält jetzt die
 				// zugehörigen Daten.
-				listOfnewData = dataCrawler.crawlData(sourceSchema, columnNew.getName(), tableName, columnNew.getType());
+				listOfnewData = dataCrawler.crawlData(sourceSchema, columnNew.getName(), tableName,
+						columnNew.getType());
 				dataComparer.newColumnData(listOfnewData, tableName);
 			}
 		}
@@ -133,12 +144,16 @@ public class TableComparer {
 	/**
 	 * Überprüfung und korrektur der Datentypgröße
 	 * 
-	 * @param allColumnTarget Liste mit allen Spaltennamen der Ziel Tabelle
-	 * @param allColumnSource Liste mit allen Spaltennamen der Quelle Tabelle
-	 * @param tableName Name der Tabelle
-	 * @throws IOException 
+	 * @param allColumnTarget
+	 *            Liste mit allen Spaltennamen der Ziel Tabelle
+	 * @param allColumnSource
+	 *            Liste mit allen Spaltennamen der Quelle Tabelle
+	 * @param tableName
+	 *            Name der Tabelle
+	 * @throws IOException
 	 */
-	protected void wrongDatatypSize(List<Column> allColumnTarget, List<Column> allColumnSource, String tableName) throws IOException {
+	protected void wrongDatatypSize(List<Column> allColumnTarget, List<Column> allColumnSource, String tableName)
+			throws IOException {
 		for (Column columnTarget : allColumnTarget) {
 			for (Column columnSource : allColumnSource) {
 				if (StringUtils.equals(columnSource.getName(), columnTarget.getName())) {
@@ -157,12 +172,16 @@ public class TableComparer {
 	/**
 	 * Überprüfen und korrektur des Feldes Nullable
 	 * 
-	 * @param allColumnsTarget Liste mit allen Spaltennamen der Ziel Tabelle
-	 * @param allColumnsSource Liste mit allen Spaltennamen der Quelle Tabelle
-	 * @param tableName Name der Tabelle
-	 * @throws IOException 
+	 * @param allColumnsTarget
+	 *            Liste mit allen Spaltennamen der Ziel Tabelle
+	 * @param allColumnsSource
+	 *            Liste mit allen Spaltennamen der Quelle Tabelle
+	 * @param tableName
+	 *            Name der Tabelle
+	 * @throws IOException
 	 */
-	protected void nullable(List<Column> allColumnsTarget, List<Column> allColumnsSource, String tableName) throws IOException {
+	protected void nullable(List<Column> allColumnsTarget, List<Column> allColumnsSource, String tableName)
+			throws IOException {
 
 		for (Column columnTarget : allColumnsTarget) {
 			for (Column columnSource : allColumnsSource) {

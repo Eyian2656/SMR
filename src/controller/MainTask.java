@@ -24,20 +24,20 @@ public class MainTask extends SwingWorker<Void, Void> {
 	private DbConfig targetDB;
 
 	public MainTask(File file, Connection targetConnection, Connection sourceConnection, ProgressBarView progressView,
-			MainView mainView, DbConfig getTargetDB) {
+			MainView mainView, DbConfig targetDB) {
 		this.file = file;
 		this.targetConnection = targetConnection;
 		this.sourceConnection = sourceConnection;
 		this.progressView = progressView;
 		this.mainView = mainView;
-		this.targetDB = getTargetDB;
+		this.targetDB = targetDB;
 	}
 
 	@Override
 	protected Void doInBackground() throws Exception {
 		try {
 			TableCrawler tableCrawler = new TableCrawler();
-			TableComparer tableComparer = new TableComparer(file);
+			TableComparer tableComparer = new TableComparer(file, targetDB.getUsername());
 			List<String> toBeCheckedTable = TableName.list;
 			double progress = 0;
 			setProgress(0);
@@ -59,10 +59,10 @@ public class MainTask extends SwingWorker<Void, Void> {
 				setProgress((int) progress);
 			}
 
-			SQLStatements sqlStatements = new SQLStatements(file);
+//			SQLStatements sqlStatements = new SQLStatements(file);
 			if (file.exists()) {
-				sqlStatements.infoIntoScript(targetDB.getUsername());
-				sqlStatements.transaction();
+//				sqlStatements.infoIntoScript(targetDB.getUsername());
+//				sqlStatements.transaction();
 				JOptionPane.showMessageDialog(null, "Erfolgreich ausgeführt. Das Updateskript wurde in '"
 						+ file.getAbsolutePath() + "' gespeichert");
 

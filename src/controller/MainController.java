@@ -94,6 +94,8 @@ public class MainController implements PropertyChangeListener {
 		progressView.setVisible(true);
 
 		mainView.setVisible(false);
+		
+		// TODO
 		// Long running task !!! Neue Thread wird erzeugt
 		// Refactorn !! Zu viel dependency
 		MainTask task = new MainTask(file, targetConnection, sourceConnection, progressView, mainView, targetDB);
@@ -102,7 +104,6 @@ public class MainController implements PropertyChangeListener {
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
 		if ("progress" == evt.getPropertyName()) {
 			int progress = (Integer) evt.getNewValue();
 			progressView.setValue(progress);

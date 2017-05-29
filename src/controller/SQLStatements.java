@@ -2,38 +2,44 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
 
 /**
- * Klasse die SQL Statements an den Skriptwriter schickt. Die Klasse wird vom 
+ * Klasse die SQL Statements an den Skriptwriter schickt. Die Klasse wird vom
  * Datacomparer und Tablecomparer aufgerufen.
+ * 
  * @author Ian Noack
  *
  */
 public class SQLStatements {
 	private Skriptwriter scriptwriter;
+	private String targetSchemaName;
 
-	public SQLStatements(File outputFile) {
+	public SQLStatements(File outputFile, String targetSchemaName) {
 		this.scriptwriter = new Skriptwriter(outputFile);
+		this.targetSchemaName = targetSchemaName;
 	}
 
 	/**
 	 * Funktion die eine Spalte hinzufügt.
 	 * 
-	 * @param tableName Enthält den Tabellennamen.
-	 * @param columnName Enthält den Spaltennamen.
-	 * @param datatype Enthält den Datentypen.
-	 * @param datasize Enthält die Grüße eines Datentyps.
-	 * @throws IOException 
+	 * @param tableName
+	 *            Enthält den Tabellennamen.
+	 * @param columnName
+	 *            Enthält den Spaltennamen.
+	 * @param datatype
+	 *            Enthält den Datentypen.
+	 * @param datasize
+	 *            Enthält die Grüße eines Datentyps.
+	 * @throws IOException
 	 */
 	public void insert(String tableName, String columnName, String datatype, int datasize) throws IOException {
 		if (datasize == 0) {
 			String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + ";");
-			scriptwriter.writeScript(statement);
+			scriptwriter.writeScript(statement, targetSchemaName);
 		} else {
 			String statement = ("ALTER TABLE " + tableName + " ADD " + columnName + " " + datatype + " (" + datasize
 					+ ");");
-			scriptwriter.writeScript(statement);
+			scriptwriter.writeScript(statement, targetSchemaName);
 		}
 
 	}
@@ -41,92 +47,94 @@ public class SQLStatements {
 	/**
 	 * Funktion die eine Spalte löscht.
 	 * 
-	 * @param tableName Enthält den Tabellennamen.
-	 * @param columnName Enthält den Spaltennamen.
-	 * @throws IOException 
+	 * @param tableName
+	 *            Enthält den Tabellennamen.
+	 * @param columnName
+	 *            Enthält den Spaltennamen.
+	 * @throws IOException
 	 */
 	public void drop(String tableName, String columnName) throws IOException {
 		String statement = ("ALTER TABLE " + tableName + " DROP COLUMN " + columnName + " ;");
-		scriptwriter.writeScript(statement);
+		scriptwriter.writeScript(statement, targetSchemaName);
 	}
 
 	/**
 	 * Funktion die die Datentypgröße anpasst.
 	 * 
-	 * @param tableName Enthält den Tabellennamen.
-	 * @param columnName Enthält den Spaltennamen.
-	 * @param datatype Enthält den Datentypen.
-	 * @param datasize Enthält die Grüße eines Datentyps.
-	 * @throws IOException 
+	 * @param tableName
+	 *            Enthält den Tabellennamen.
+	 * @param columnName
+	 *            Enthält den Spaltennamen.
+	 * @param datatype
+	 *            Enthält den Datentypen.
+	 * @param datasize
+	 *            Enthält die Grüße eines Datentyps.
+	 * @throws IOException
 	 */
 	public void modifyDatasize(String tableName, String columnName, String datatype, int datasize) throws IOException {
 		String statement = ("ALTER TABLE " + tableName + " MODIFY (" + columnName + " " + datatype + " (" + datasize
 				+ "));");
-		scriptwriter.writeScript(statement);
+		scriptwriter.writeScript(statement, targetSchemaName);
 	}
 
 	/**
 	 * Funktion die das Feld Nullable korrigiert.
 	 * 
-	 * @param tableName Enthält den Tabellennamen.
-	 * @param columnName Enthält den Spaltennamen.
-	 * @param datatyp Enthält die Grüße eines Datentyps.
-	 * @param bool bestimmt ob der Wert eines Feldes Nullable sein darf.
-	 * @throws IOException 
+	 * @param tableName
+	 *            Enthält den Tabellennamen.
+	 * @param columnName
+	 *            Enthält den Spaltennamen.
+	 * @param datatyp
+	 *            Enthält die Grüße eines Datentyps.
+	 * @param bool
+	 *            bestimmt ob der Wert eines Feldes Nullable sein darf.
+	 * @throws IOException
 	 */
-	public void modifyNullable(String tableName, String columnName, String datatyp, Boolean bool, int datasize) throws IOException {
+	public void modifyNullable(String tableName, String columnName, String datatyp, Boolean bool, int datasize)
+			throws IOException {
 		if (bool == true) {
 			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + "  null" + " ;");
-			scriptwriter.writeScript(statement);
+			scriptwriter.writeScript(statement, targetSchemaName);
 		} else {
 			String statement = ("ALTER TABLE " + tableName + " MODIFY " + columnName + " not null" + " ;");
-			scriptwriter.writeScript(statement);
+			scriptwriter.writeScript(statement, targetSchemaName);
 		}
 	}
 
 	/**
 	 * Funktion um die Daten einer bestehenden Spalte zu korrigieren.
 	 * 
-	 * @param tableName Enthält den Tabellennamen.
-	 * @param columnName Enthält den Spaltennamen.
-	 * @param value Enthält den Wert eines Feldes.
-	 * @param rowNr Enthält den Zeilennummer.
-	 * @throws IOException 
+	 * @param tableName
+	 *            Enthält den Tabellennamen.
+	 * @param columnName
+	 *            Enthält den Spaltennamen.
+	 * @param value
+	 *            Enthält den Wert eines Feldes.
+	 * @param rowNr
+	 *            Enthält den Zeilennummer.
+	 * @throws IOException
 	 */
 	public void updateData(String tableName, String columnName, String value, int rowNr) throws IOException {
 
 		if (value == null) {
 			String statement = ("UPDATE " + tableName + " SET " + columnName + " = " + value + " WHERE NR = " + rowNr
 					+ " ;");
-			scriptwriter.writeScript(statement);
+			scriptwriter.writeScript(statement, targetSchemaName);
 		} else {
 			String statement = ("UPDATE " + tableName + " SET " + columnName + " = '" + value + "' WHERE NR = " + rowNr
 					+ " ;");
-			scriptwriter.writeScript(statement);
+			scriptwriter.writeScript(statement, targetSchemaName);
 		}
 	}
-	
+
 	/**
 	 * Funktion die das Sql Skript zu einer Transaction macht.
+	 * 
 	 * @throws IOException
 	 */
-	public void transaction() throws IOException{
+	public void transaction() throws IOException {
 		String statement = ("COMMIT;");
-		scriptwriter.writeScript(statement);
+		scriptwriter.writeScript(statement, targetSchemaName);
 	}
-	
-/**
- * Schickt das Erstellungsdatum und die Nutzungsinformationen an den Skriptwriter.
- * Diese Informationen werden im Skriptwriter an die erste Stelle geschrieben.
- * @param targetConnection Name der Datenbank
- * @throws IOException
- */
-	public void infoIntoScript(String targetConnection) throws IOException{
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String time = timestamp.toString();
-		String manual = " Führen Sie das skript gegen das Zielschema: " + targetConnection + " aus.";
-		String info = time + manual;
-		
-		scriptwriter.writeInfo(info);
-	}
+
 }
