@@ -2,8 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-
-import controller.Skriptwriter;
+import java.sql.Timestamp;
 
 /**
  * Klasse die SQL Statements an den Skriptwriter schickt. Die Klasse wird vom 
@@ -114,5 +113,20 @@ public class SQLStatements {
 	public void transaction() throws IOException{
 		String statement = ("COMMIT;");
 		scriptwriter.writeScript(statement);
+	}
+	
+/**
+ * Schickt das Erstellungsdatum und die Nutzungsinformationen an den Skriptwriter.
+ * Diese Informationen werden im Skriptwriter an die erste Stelle geschrieben.
+ * @param targetConnection Name der Datenbank
+ * @throws IOException
+ */
+	public void infoIntoScript(String targetConnection) throws IOException{
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		String time = timestamp.toString();
+		String manual = " Führen Sie das skript gegen das Zielschema: " + targetConnection + " aus.";
+		String info = time + manual;
+		
+		scriptwriter.writeInfo(info);
 	}
 }

@@ -10,6 +10,7 @@ import javax.swing.SwingWorker;
 
 import model.Column;
 import model.TableName;
+import model.config.DbConfig;
 import view.MainView;
 import view.ProgressBarView;
 
@@ -20,14 +21,16 @@ public class MainTask extends SwingWorker<Void, Void> {
 	private Connection sourceConnection;
 	private ProgressBarView progressView;
 	private MainView mainView;
+	private DbConfig targetDB;
 
 	public MainTask(File file, Connection targetConnection, Connection sourceConnection, ProgressBarView progressView,
-			MainView mainView) {
+			MainView mainView, DbConfig getTargetDB) {
 		this.file = file;
 		this.targetConnection = targetConnection;
 		this.sourceConnection = sourceConnection;
 		this.progressView = progressView;
 		this.mainView = mainView;
+		this.targetDB = getTargetDB;
 	}
 
 	@Override
@@ -58,6 +61,7 @@ public class MainTask extends SwingWorker<Void, Void> {
 
 			SQLStatements sqlStatements = new SQLStatements(file);
 			if (file.exists()) {
+				sqlStatements.infoIntoScript(targetDB.getUsername());
 				sqlStatements.transaction();
 				JOptionPane.showMessageDialog(null, "Erfolgreich ausgeführt. Das Updateskript wurde in '"
 						+ file.getAbsolutePath() + "' gespeichert");

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * Erstellt ein Updateskript und schreibt SQL Statements hinein. 
@@ -36,6 +37,20 @@ public class Skriptwriter {
 		bw.write(n);
 		bw.write(scriptCmd);
 		bw.close();
+	}
+	
+	/**
+	 * Schreibt das Erstellungsdatum und Nutzungsinformationen in das Skript
+	 * @param info Enthält Timestap und Nutgunsinformationen
+	 * @throws IOException
+	 */
+	public void writeInfo(String info) throws IOException{
+        byte data[] = info.getBytes();
+		
+		RandomAccessFile f = new RandomAccessFile(outputFile, "rw");
+        f.getChannel().position(0);         
+        f.write(data);
+        f.close();
 	}
 
 }

@@ -27,6 +27,7 @@ public class MainController implements PropertyChangeListener {
 	private AccessDB accessTargetDb;
 	private MainView mainView;
 	private ProgressBarView progressView;
+	private static DbConfig targetDB;
 
 	public MainController() {
 		this.accessSourceDb = new AccessDB();
@@ -51,6 +52,8 @@ public class MainController implements PropertyChangeListener {
 	 * @throws SQLException
 	 */
 	public boolean connect(DbConfig targetDbConfig, DbConfig sourceDbConfig, String tnsPath) {
+		targetDB=sourceDbConfig;
+		
 		// Wird benötigt wenn kein localhost verwendet wird sondern nur
 		// localhost.
 		if (!StringUtils.isBlank(tnsPath)) {
@@ -93,7 +96,7 @@ public class MainController implements PropertyChangeListener {
 		mainView.setVisible(false);
 		// Long running task !!! Neue Thread wird erzeugt
 		// Refactorn !! Zu viel dependency
-		MainTask task = new MainTask(file, targetConnection, sourceConnection, progressView, mainView);
+		MainTask task = new MainTask(file, targetConnection, sourceConnection, progressView, mainView, targetDB);
 		task.addPropertyChangeListener(this);
 		task.execute();
 	}
