@@ -26,24 +26,25 @@ public class Skriptwriter {
 	/**
 	 * Funktion um ein String in ein File zu schreiben. Das nötige String ist
 	 * ein SQL-Statement und kommt aus der SQLStatements Klasse. Im Statement
-	 * steht eine SQL Anweisung.
+	 * steht eine SQL Anweisung. Desweiteren erhält das Skript am Anfang
+	 * Informationen zum Erstellungszeitraum und zur Nutzung.
 	 * 
-	 * @param scriptCmd
-	 *            Erhält die SQL-Anweisung aus SQLStatements Klasse.
+	 * @param scriptCmd Enthält die SQL-Anweisung aus SQLStatements Klasse.
+	 * @param targetSchemaName  Enthält den Namen des Zielschemas.
 	 * @throws IOException
 	 */
 	public void writeScript(String scriptCmd, String targetSchemaName) throws IOException {
 		FileWriter outputStream = new FileWriter(outputFile, true);
 		BufferedWriter bw = new BufferedWriter(outputStream);
 
-		if (!metaInfoExists) {
+		if (!metaInfoExists && targetSchemaName != null) {
 
-			// Schickt das Erstellungsdatum und die Nutzungsinformationen an den
-			// Skriptwriter. Diese Informationen werden im Skriptwriter an die
-			// erste Stelle geschrieben.
+			// Erstellungsdatum und die Nutzungsinformationen an die
+			// erste Stelle geschrieben. Das schreiben der Informationen ist
+			// einmalig.
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			String time = timestamp.toString();
-			String manual = " Führen Sie das skript gegen das Zielschema: " + targetSchemaName + " aus.";
+			String manual = " Führen Sie das Skript gegen das Zielschema: " + targetSchemaName + " aus.";
 			String info = time + manual;
 			bw.write(info);
 
@@ -51,28 +52,9 @@ public class Skriptwriter {
 		}
 
 		String n = System.getProperty("line.separator");
-
 		bw.flush();
-		for (int i = 0; i < 100; i++) {
-			bw.write(n);
-		}
+		bw.write(n);
 		bw.write(scriptCmd);
 		bw.close();
 	}
-
-	/**
-	 * Schreibt das Erstellungsdatum und Nutzungsinformationen in das Skript
-	 * 
-	 * @param info
-	 *            Enthält Timestap und Nutgunsinformationen
-	 * @throws IOException
-	 */
-	public void writeInfo(String info) throws IOException {
-
-		RandomAccessFile f = new RandomAccessFile(outputFile, "rw");
-		f.seek(0);
-		f.write(info.getBytes());
-		f.close();
-	}
-
 }

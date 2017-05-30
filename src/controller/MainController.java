@@ -54,8 +54,7 @@ public class MainController implements PropertyChangeListener {
 	public boolean connect(DbConfig targetDbConfig, DbConfig sourceDbConfig, String tnsPath) {
 		targetDB=sourceDbConfig;
 		
-		// Wird benötigt wenn kein localhost verwendet wird sondern nur
-		// localhost.
+		// Wird benötigt wenn kein localhost verwendet wird sondern TNS.
 		if (!StringUtils.isBlank(tnsPath)) {
 			System.setProperty("oracle.net.tns_admin", tnsPath);
 		}
@@ -79,10 +78,11 @@ public class MainController implements PropertyChangeListener {
 	}
 
 	/**
-	 * Erstellt TableCrawler und TableComparer. Hier wird die Funktion
-	 * aufgerufen um die Tabellen zu kontrollieren. Die Tabellennamen werden aus
-	 * der Klasse TableName gezogen.
-	 * 
+	 * Erstellt die Verbindung zum Ziel- und Quelleschema. 
+	 * Anschließend wird ein Thread aufgerufen um die Überprüfung zu starten.
+	 * Der Thread wird für die Progressbar benötigt. 
+	 * Infos aus:
+	 * https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
 	 * @param file
 	 *            Enthält das im FileChooser erstellte File
 	 */
@@ -95,14 +95,15 @@ public class MainController implements PropertyChangeListener {
 
 		mainView.setVisible(false);
 		
-		// TODO
-		// Long running task !!! Neue Thread wird erzeugt
-		// Refactorn !! Zu viel dependency
+		// Ein  Thread wird erzeugt um die Progressbar zu ermöglichen
 		MainTask task = new MainTask(file, targetConnection, sourceConnection, progressView, mainView, targetDB);
 		task.addPropertyChangeListener(this);
 		task.execute();
 	}
 
+	/**
+	 * Methode welche die Progressbar verwaltet.
+	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ("progress" == evt.getPropertyName()) {
 			int progress = (Integer) evt.getNewValue();

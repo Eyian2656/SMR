@@ -69,12 +69,12 @@ public class MainView extends JFrame {
 		pwSchemaNew = new JPasswordField(20);
 
 		
-		txtUserOld.setText("jinx");
-		txtUserNew.setText("kata");
-		txtURLOld.setText("xe");
-		txtURLNew.setText("xe");
-		pwSchemaNew.setText("123");
-		pwSchemaOld.setText("123");
+		txtUserOld.setText("IAN_OLD_EPOSDB");
+		txtUserNew.setText("IAN_NEW_EPOSDB");
+		txtURLOld.setText("//localhost:1521/xe");
+		txtURLNew.setText("//localhost:1521/xe");
+		pwSchemaNew.setText("EPOSDev");
+		pwSchemaOld.setText("EPOSDev ");
 		
 		ok = new JButton("Skript erzeugen");
 		ok.addActionListener(new onConnect());

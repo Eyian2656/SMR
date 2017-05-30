@@ -13,7 +13,13 @@ import model.TableName;
 import model.config.DbConfig;
 import view.MainView;
 import view.ProgressBarView;
-
+/**
+ * Notwendige Klasse um eine Progressbar mit Informationen zu versorgen.
+ * Hier wird der TableCrawler und TableComparer gestartet und damit die
+ * Struktur des Schematas überprüft.
+ * @author Dev
+ *
+ */
 public class MainTask extends SwingWorker<Void, Void> {
 
 	private File file;
@@ -33,6 +39,14 @@ public class MainTask extends SwingWorker<Void, Void> {
 		this.targetDB = targetDB;
 	}
 
+	/**
+	 * Standart Methode von der Progressbar um Threads im Hintergrund arbeiten zu lassen.
+	 * 
+	 * In der Funktion wird der TableCrawler und TableComparer erstellt. Es werden die Funktion
+	 * aufgerufen um die Tabellen zu kontrollieren. Die Tabellennamen werden aus
+	 * der Klasse TableName gezogen. Es wird nur dann ein Skript erzeugt wenn die Schematas inkongruent sind. 
+	 * Am Ende des wird die Methode transaction() ausgeführt dir ein Commit am Ende des Skripts schreibt.
+	 */
 	@Override
 	protected Void doInBackground() throws Exception {
 		try {
@@ -55,21 +69,23 @@ public class MainTask extends SwingWorker<Void, Void> {
 				List<Column> newColumn = tableCrawler.crawlColumns(sourceConnection, string);
 				tableComparer.differColumn(oldColumn, newColumn, string, targetConnection, sourceConnection);
 
+				//Rechnung um die Prozentzahl in der Progressbar zu bestimmen
 				progress = (i / (double) toBeCheckedTable.size()) * 100;
 				setProgress((int) progress);
-			}
-
-//			SQLStatements sqlStatements = new SQLStatements(file);
+			} 
+			
 			if (file.exists()) {
-//				sqlStatements.infoIntoScript(targetDB.getUsername());
-//				sqlStatements.transaction();
+				//String parameter muss null sein da ansonsten am Ende des Files nochmals die Informationen zum Erstellungzeitraum und Nutzung aufgeschrieben werden.
+				SQLStatements sqlStatements = new SQLStatements(file, null);
+				sqlStatements.transaction();
+				
 				JOptionPane.showMessageDialog(null, "Erfolgreich ausgeführt. Das Updateskript wurde in '"
 						+ file.getAbsolutePath() + "' gespeichert");
 
 			} else {
-				// file.delete();
 				JOptionPane.showMessageDialog(null, "Schemas sind kongruent. Es wurde kein Updateskript erstellt.");
 			}
+		// Error Handling
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error \n" + e.getMessage());
 			System.exit(1);
@@ -92,6 +108,9 @@ public class MainTask extends SwingWorker<Void, Void> {
 		return null;
 	}
 
+	/**
+	 * Standard Methode von der Progressbar, sie schließt die Progresbar und setzt die Mainview wieder sichtbar sobald der Thread durchgelaufen ist.
+	 */
 	@Override
 	public void done() {
 		this.progressView.dispose();

@@ -1,8 +1,5 @@
 package view;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -18,6 +15,7 @@ public class ProgressBarView extends JFrame {
 	int num = 0;
 
 	public ProgressBarView() {
+		this.setTitle("Bitte Warten");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel pane = new JPanel();
 		current.setValue(0);
