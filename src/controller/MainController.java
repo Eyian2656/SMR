@@ -16,8 +16,10 @@ import view.MainView;
 import view.ProgressBarView;
 
 /**
- * Steuert die MainView und führt das Programm aus in dem es die Funktionen der
- * anderen Klassen aufruft.
+ * Steuert die MainView und stellt die Verbindung zur Ziel- und Quellschema her
+ * und ruft dann einen Thread. Der Thread ist ein Objekt der Klasse MainTask und
+ * startet die Funktionen zur überprüfung von der Tabellenstruktur und den
+ * Tabellendaten
  * 
  * @author Ian Noack
  *
@@ -34,7 +36,7 @@ public class MainController implements PropertyChangeListener {
 		this.accessTargetDb = new AccessDB();
 		this.mainView = new MainView(this);
 	}
-
+	
 	/**
 	 * Startet das Abbilden der View
 	 */
@@ -52,7 +54,7 @@ public class MainController implements PropertyChangeListener {
 	 * @throws SQLException
 	 */
 	public boolean connect(DbConfig targetDbConfig, DbConfig sourceDbConfig, String tnsPath) {
-		targetDB=sourceDbConfig;
+		targetDB=targetDbConfig;
 		
 		// Wird benötigt wenn kein localhost verwendet wird sondern TNS.
 		if (!StringUtils.isBlank(tnsPath)) {
@@ -78,8 +80,7 @@ public class MainController implements PropertyChangeListener {
 	}
 
 	/**
-	 * Erstellt die Verbindung zum Ziel- und Quelleschema. 
-	 * Anschließend wird ein Thread aufgerufen um die Überprüfung zu starten.
+	 * Ein Thread aufgerufen um die Überprüfung zu starten.
 	 * Der Thread wird für die Progressbar benötigt. 
 	 * Infos aus:
 	 * https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
@@ -95,7 +96,7 @@ public class MainController implements PropertyChangeListener {
 
 		mainView.setVisible(false);
 		
-		// Ein  Thread wird erzeugt um die Progressbar zu ermöglichen
+		// Der Thread  ermöglicht die Progressbar
 		MainTask task = new MainTask(file, targetConnection, sourceConnection, progressView, mainView, targetDB);
 		task.addPropertyChangeListener(this);
 		task.execute();

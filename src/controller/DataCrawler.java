@@ -14,7 +14,7 @@ import model.Data;
 
 /**
  * Diese Klasse dient zur Erstellung eine Liste mit mapping. Die
- * Liste enthält alle Daten einer Tabelle. Sie wird gemappt und besser
+ * Liste enthält alle Daten einer Tabelle. Sie wird gemappt um besser
  * navigieren zu können und um später die zu änderende Stelle zu identifizieren.
  * 
  * @author Ian Noack
@@ -24,7 +24,7 @@ public class DataCrawler {
 	DateFormat df = new SimpleDateFormat("dd-mmm-yyyy");
 
 	/**
-	 * Hier wird die Funktion der Klasse gestartet. Es werdem die Daten einer Tabelle gemappt.
+	 * Hier wird die Funktion der Klasse gestartet. Es werden die Daten einer Tabelle gemappt.
 	 * 
 	 * @param conn Verbindung zu einer Datenbank
 	 * @param columnName Name der Spalte

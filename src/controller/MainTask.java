@@ -1,5 +1,6 @@
-package controller;
+package controller; 
 
+import java.awt.Cursor;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -55,6 +56,8 @@ public class MainTask extends SwingWorker<Void, Void> {
 			List<String> toBeCheckedTable = TableName.list;
 			double progress = 0;
 			setProgress(0);
+			this.progressView.setCursor(Cursor.WAIT_CURSOR);
+			this.progressView.setEnabled(false);
 			// Hier werden alle Tabellen durchiteriert um diese als string an
 			// die einzelnen Methoden zu übergeben
 			for (int i = 0; i < toBeCheckedTable.size(); i++) {
@@ -90,6 +93,8 @@ public class MainTask extends SwingWorker<Void, Void> {
 			JOptionPane.showMessageDialog(null, "Error \n" + e.getMessage());
 			System.exit(1);
 		} finally {
+			this.progressView.setCursor(Cursor.getDefaultCursor());
+			this.progressView.setEnabled(true);
 			if (targetConnection != null) {
 				try {
 					targetConnection.close();

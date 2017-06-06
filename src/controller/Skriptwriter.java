@@ -44,7 +44,7 @@ public class Skriptwriter {
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			String time = timestamp.toString();
 			String manual = " Führen Sie das Skript gegen das Zielschema: " + targetSchemaName + " aus.";
-			String info = time + manual;
+			String info = "/* "+time + manual+" */";
 			bw.write(info);
 
 			metaInfoExists = true;
