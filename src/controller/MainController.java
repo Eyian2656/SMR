@@ -31,10 +31,10 @@ public class MainController implements PropertyChangeListener {
 	private ProgressBarView progressView;
 	private static DbConfig targetDB;
 
-	public MainController() {
+	public MainController(String[] args) {
 		this.accessSourceDb = new AccessDB();
 		this.accessTargetDb = new AccessDB();
-		this.mainView = new MainView(this);
+		this.mainView = new MainView(this, args);
 	}
 	
 	/**

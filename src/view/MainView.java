@@ -27,9 +27,10 @@ import controller.MainController;
 import model.config.DbConfig;
 
 /**
- * Die View die sich öffnet wenn das Programm gestartet wird.
- * Diese View öffnet später den JFileChooser.
- * Es werden URL, Passwörter, User und TNS Adressen an den Controller MainController weitergegeben.
+ * Die View die sich öffnet wenn das Programm gestartet wird. Diese View öffnet
+ * später den JFileChooser. Es werden URL, Passwörter, User und TNS Adressen an
+ * den Controller MainController weitergegeben.
+ * 
  * @author Ian Noack
  *
  */
@@ -44,7 +45,7 @@ public class MainView extends JFrame {
 	private Border loweredetched;
 	private MainController mainController;
 
-	public MainView(MainController mainController) {
+	public MainView(MainController mainController, String[] args) {
 		this.mainController = mainController;
 		this.setMinimumSize(new Dimension(700, 310));
 		this.setTitle("EPOS Synch-Tool");
@@ -68,14 +69,16 @@ public class MainView extends JFrame {
 		pwSchemaOld = new JPasswordField(20);
 		pwSchemaNew = new JPasswordField(20);
 
-		
-		txtUserOld.setText("IAN_OLD_EPOSDB");
-		txtUserNew.setText("IAN_NEW_EPOSDB");
 		txtURLOld.setText("//localhost:1521/xe");
 		txtURLNew.setText("//localhost:1521/xe");
-		pwSchemaNew.setText("EPOSDev");
-		pwSchemaOld.setText("EPOSDev ");
-		
+
+		if (args != null && args.length == 4) {
+			txtUserOld.setText(args[0]);
+			txtUserNew.setText("IAN_NEW_EPOSDB");
+			pwSchemaNew.setText("EPOSDev");
+			pwSchemaOld.setText("EPOSDev ");
+		}
+
 		ok = new JButton("Skript erzeugen");
 		ok.addActionListener(new onConnect());
 
